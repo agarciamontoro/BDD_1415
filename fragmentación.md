@@ -93,6 +93,54 @@ La asignación la hacemos de la siguiente forma:
 3. Sevilla: Empleado5, Empleado6
 4. Málaga: Empleado7, Empleado8
 
+#####Reserva
+La hacemos a partir del Hotel.
+
+Resultan 8 fragmentos:
+
+1. Reserva1 = Reserva SJNCodH=CodH Hotel1
+2. Reserva2 = Reserva SJNCodH=CodH Hotel2
+3. Reserva3 = Reserva SJNCodH=CodH Hotel3
+4. Reserva4 = Reserva SJNCodH=CodH Hotel4
+5. Reserva5 = Reserva SJNCodH=CodH Hotel5
+6. Reserva6 = Reserva SJNCodH=CodH Hotel6
+7. Reserva7 = Reserva SJNCodH=CodH Hotel7
+8. Reserva8 = Reserva SJNCodH=CodH Hotel8
+
+La asignación la hacemos de la siguiente forma:
+
+1. Granada: Reserva1, Reserva2
+2. Cádiz: Reserva3, Reserva4
+3. Sevilla: Reserva5, Reserva6
+4. Málaga: Reserva7, Reserva8
+
+
+#####Siministro
+Lo hacemos a partir del Hotel
+
+Resultan 8 fragmentos:
+
+1. Siministro1 = Siministro SJNCodH=CodH Hotel1
+2. Siministro2 = Siministro SJNCodH=CodH Hotel2
+3. Siministro3 = Siministro SJNCodH=CodH Hotel3
+4. Siministro4 = Siministro SJNCodH=CodH Hotel4
+5. Siministro5 = Siministro SJNCodH=CodH Hotel5
+6. Siministro6 = Siministro SJNCodH=CodH Hotel6
+7. Siministro7 = Siministro SJNCodH=CodH Hotel7
+8. Siministro8 = Siministro SJNCodH=CodH Hotel8
+
+La asignación la hacemos de la siguiente forma:
+
+1. Granada: Siministro1, Siministro2
+2. Cádiz: Siministro, Siministro4
+3. Sevilla: Siministro5, Siministro6
+4. Málaga: Siministro7, Siministro8
+
+#####Tiene
+La hacemos a partir del Proveedor.
+
+Resultan 
+
 #####Cliente
 La replicamos en todos los puntos de almacenamiento. Lo hacemos así ya que un cliente no está intrínsicamente relacionado con ninguna zona geográfica a partir de la que hemos hecho las fragmentaciones. 
 
