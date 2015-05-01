@@ -17,6 +17,8 @@ Para este problema, es claro que hay que hacer una fragmentación horizontal con
 
 Cómo podemos observar las tablas que tienen los atributos de ciudad son: **Hotel y Proveedor**
 
+####Hotel
+
 Predicados simples:
 
     P = { Ciudad = Granada, Ciudad = Jaén, Ciudad = Cádiz, Ciudad = Huelva, Ciudad = Sevilla, Ciudad = Córdoba, Ciudad = Málaga, Ciudad = Almería } }
@@ -42,4 +44,71 @@ Los predicados verdaderos:
 6. y6 =  ¬Pgra ^ ¬Pjae ^ ¬Pcad ^ ¬Phue ^ ¬Psev ^ Pcor ^ ¬Pmal ^ ¬Palm 
 7. y7 =  ¬Pgra ^ ¬Pjae ^ ¬Pcad ^ ¬Phue ^ ¬Psev ^ ¬Pcor ^ Pmal ^ ¬Palm 
 8. y8 =  ¬Pgra ^ ¬Pjae ^ ¬Pcad ^ ¬Phue ^ ¬Psev ^ ¬Pcor ^ ¬Pmal ^ Palm 
+
+Entonces nos da cómo resultado 8 fragmentos:
+
+1. Hotel1 = SL1(Hotel)
+2. Hotel2 = SL2(Hotel)
+3. Hotel3 = SL3(Hotel)
+4. Hotel4 = SL4(Hotel)
+5. Hotel5 = SL5(Hotel)
+6. Hotel6 = SL6(Hotel)
+7. Hotel7 = SL7(Hotel)
+8. Hotel8 = SL8(Hotel)
+
+Entonces hacemos la asignación de tal forma que se adapte a la representación física que se proporciona
+
+1. Granada: Hotel1,Hotel2
+2. Cádiz: Hotel3,Hotel4
+3. Sevilla: Hotel5,Hotel6
+4. Málaga: Hotel7,Hotel8
+
+####Proveedor
+
+Ahora, tenemos también tablas que no usen directamente el atributo ciudad, pero indirectamente si puede que lo necesiten o lo usen.
+Para estas tablas entonces usaremos una fragmentación horizontal derivada
+
+#####Trabaja
+La hacemos a partir del Hotel.
+
+Resultan 8 fragmentos:
+
+1. Trabaja1 = Trabaja SJNCodH=CodH Hotel1
+2. Trabaja2 = Trabaja SJNCodH=CodH Hotel2
+3. Trabaja3 = Trabaja SJNCodH=CodH Hotel3
+4. Trabaja4 = Trabaja SJNCodH=CodH Hotel4
+5. Trabaja5 = Trabaja SJNCodH=CodH Hotel5
+6. Trabaja6 = Trabaja SJNCodH=CodH Hotel6
+7. Trabaja7 = Trabaja SJNCodH=CodH Hotel7
+8. Trabaja8 = Trabaja SJNCodH=CodH Hotel8
+
+La asignación la hacemos de la siguiente forma:
+
+1. Granada: Trabaja1, Trabaja2
+2. Cádiz: Trabaja3, Trabaja4
+3. Sevilla: Trabaja5, Trabaja6
+4. Málaga: Trabaja7, Trabaja8
+
+#####Dirige
+La hacemos a partir de Hotel.
+
+Resultan 8 fragmentos:
+
+1. Dirige1 = Dirige SJNCodH=CodH Hotel1  
+2. Dirige2 = Dirige SJNCodH=CodH Hotel2
+3. Dirige3 = Dirige SJNCodH=CodH Hotel3
+4. Dirige4 = Dirige SJNCodH=CodH Hotel4
+5. Dirige5 = Dirige SJNCodH=CodH Hotel5
+6. Dirige6 = Dirige SJNCodH=CodH Hotel6
+7. Dirige7 = Dirige SJNCodH=CodH Hotel7
+8. Dirige8 = Dirige SJNCodH=CodH Hotel8  
+
+La asignación la hacemos de la siguiente forma:
+
+1. Granada: Dirige1,Dirige2
+2. Cádiz: Dirige3,Dirige4 
+3. Sevilla: Dirige5,Dirige6 
+4. Málaga: Dirige7,Dirige8 
+
+
 
