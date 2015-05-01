@@ -96,7 +96,8 @@ La asignación la hacemos de la siguiente forma:
 #####Cliente
 La replicamos en todos los puntos de almacenamiento. Lo hacemos así ya que un cliente no está intrínsicamente relacionado con ninguna zona geográfica a partir de la que hemos hecho las fragmentaciones. 
 
-#####Empleado
+#####Artículo
+La replicamos en los puntos de almacenamiento de los proveedores. Lo hacemos así ya que un artículo no está intrínsicamente relacionado con ninguna zona geográfica, pero sólo serán usados por los proveedores.
 
 
 
