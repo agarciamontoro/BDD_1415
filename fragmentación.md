@@ -1,21 +1,27 @@
 #Diseño de la fragmentación y de la asignación
 ##Introducción
-La base de datos distribuida, tendrá sus datos físicos almacenados en cuatro localidades **Granada, Cádiz, Sevilla, Málaga**.
+La base de datos distribuida tendrá sus datos físicos almacenados en cuatro localidades: **Granada, Cádiz, Sevilla, Málaga**.
 
-Y cada una de estas localidades almacenará la información de los siguientes lugares:
+Cada una de estas localidades almacenará la información de los siguientes lugares:
 
 1. **Granada** = Granada y Jaén
 2. **Cádiz** = Cádiz y Huelva
 3. **Sevilla** = Sevilla y Córdoba
 4. **Málaga** = Málaga y Almería
 
-Ahora basándonos en el diagrama *Entidad Relación realizado anteriormente* y éstos datos, nos proponemos a hacer la fragmentación.
+Ahora, basándonos en el diagrama *Entidad Relación* realizado anteriormente y estos datos, hacemos la fragmentación.
 
 ##Fragmentación
 ###Tablas a fragmentar.
-Para este problema, es claro que hay que hacer una fragmentación horizontal con el atributo ciudad, ya que los datos se dividen en diferentes ciudades según la zona, y de esta manera, conseguiremos que los accesos en cada una de las zonas sean más probables locales ya que lo más normal es que la mayoría de las consultas en un hotel serán en los datos de su propia ciudad.
+La fragmentación la realizaremos en dos pasos:
 
-Cómo podemos observar las tablas que tienen los atributos de ciudad son: **Hotel y Proveedor**
+1. Fragmentaciones horizontales primarias de aquellas tablas cuyas tuplas tengan una relación directa con la localidad en la que se encuentran.
+2. Fragmentaciones horizontales, derivadas de las anteriores, de aquellas tablas que tengan una relación directa con los fragmentos. Tendremos en consideración el *grado de relación* de las tuplas con la localidad, de manera que en cada caso decidiremos entre fragmentación o replicación.
+
+####Fragmentaciones horizontales primarias
+Las dos únicas tablas cuyas tuplas tienen una relación directa -mediante un atributo de las mismas- de la localidad en la que se encuentran son **Hotel** y **Proveedor**.
+
+Es claro entonces que la fragmentación hay que realizarla en base al atributo *ciudad* de las mismas. Esta decisión tiene como principal objetivo maximizar los accesos locales: los accesos que involucren a las tablas Hotel y Proveedor se realizarán, en su mayoría, desde las ciudades cuyas tuplas se necesita consultar.
 
 ####Hotel
 
@@ -65,12 +71,45 @@ Entonces hacemos la asignación de tal forma que se adapte a la representación 
 
 ####Proveedor
 
+Los proveedores de la cadena están todos en Granada y en Sevilla, de manera que su área de acción es la siguiente:
 
+Proveedores en **Granada**: Suministran a Granada, Jaén, Málaga y Almería.
+Proveedores en **Sevilla**: Suministran a Sevilla, Córdoba, Cádiz y Huelva.
 
+Predicados simples:
 
+    P = { Ciudad = Granada, Ciudad = Sevilla }
 
-Ahora, tenemos también tablas que no usen directamente el atributo ciudad, pero indirectamente si puede que lo necesiten o lo usen.
-Para estas tablas entonces usaremos una fragmentación horizontal derivada
+Para facilitarnos la tarea, notemos cada predicado.
+
+1. Pgra = Ciudad = Granada
+2. Psev = Ciudad = Sevilla
+
+Los predicados verdaderos:
+
+1. y1 =   Pgra ^ ¬Psev
+2. y2 =  ¬Pgra ^ Psev
+
+Resultan entonces 2 fragmentos:
+
+1. Proveedor1 = SL1(Proveedor)
+2. Proveedor2 = SL2(Proveedor)
+
+La asignación de los fragmentos la hacemos de tal forma que se adapte a la representación física que se proporciona:
+
+1. Granada: Proveedor1
+2. Sevilla: Proveedor2
+
+####Fragmentaciones horizontales derivadas
+
+Derivadas de las fragmentaciones anteriormente realizadas, a continuación se presentan las fragmentaciones de tablas que, si bien no tienen un atributo *ciudad* explícito, tienen una relación indirecta con la ciudad en la que se encuentran. Estas tablas son:
+
+* Empleado
+* Reserva
+* Suministro
+* Tiene
+
+El objetivo de estas fragmentaciones horizontales derivadas es, igual que en las anteriores, maximizar los accesos locales; es lícito suponer que los accesos que involucren a estas tablas en sus consultas se realizarán en su gran mayoría desde las localidades donde se encuentren físicamente sus tuplas.
 
 #####Empleado
 La hacemos a partir del Hotel.
@@ -115,38 +154,48 @@ La asignación la hacemos de la siguiente forma:
 4. Málaga: Reserva7, Reserva8
 
 
-#####Siministro
+#####Suministro
 Lo hacemos a partir del Hotel
 
 Resultan 8 fragmentos:
 
-1. Siministro1 = Siministro SJNCodH=CodH Hotel1
-2. Siministro2 = Siministro SJNCodH=CodH Hotel2
-3. Siministro3 = Siministro SJNCodH=CodH Hotel3
-4. Siministro4 = Siministro SJNCodH=CodH Hotel4
-5. Siministro5 = Siministro SJNCodH=CodH Hotel5
-6. Siministro6 = Siministro SJNCodH=CodH Hotel6
-7. Siministro7 = Siministro SJNCodH=CodH Hotel7
-8. Siministro8 = Siministro SJNCodH=CodH Hotel8
+1. Suministro1 = Suministro SJNCodH=CodH Hotel1
+2. Suministro2 = Suministro SJNCodH=CodH Hotel2
+3. Suministro3 = Suministro SJNCodH=CodH Hotel3
+4. Suministro4 = Suministro SJNCodH=CodH Hotel4
+5. Suministro5 = Suministro SJNCodH=CodH Hotel5
+6. Suministro6 = Suministro SJNCodH=CodH Hotel6
+7. Suministro7 = Suministro SJNCodH=CodH Hotel7
+8. Suministro8 = Suministro SJNCodH=CodH Hotel8
 
 La asignación la hacemos de la siguiente forma:
 
-1. Granada: Siministro1, Siministro2
-2. Cádiz: Siministro, Siministro4
-3. Sevilla: Siministro5, Siministro6
-4. Málaga: Siministro7, Siministro8
+1. Granada: Suministro1, Suministro2
+2. Cádiz: Suministro, Suministro4
+3. Sevilla: Suministro5, Suministro6
+4. Málaga: Suministro7, Suministro8
 
 #####Tiene
-La hacemos a partir del Proveedor.
+La hacemos a partir de Proveedor.
 
-Resultan 
+Resultan 2 fragmentos:
+
+1. Tiene1 = Tiene SJNCodH=CodH Proveedor1
+2. Tiene2 = Tiene SJNCodH=CodH Proveedor2
+
+La asignación la hacemos de la siguiente forma:
+
+1. Granada: Tiene1
+2. Sevilla: Tiene2
+
+#### Replicaciones
+
+Las dos tablas restantes, **Cliente** y **Artículo**, no tienen una relación directa ni indirecta con la ciudad. Podríamos entonces optar por la asignación de todas las tuplas a una sola localidad o por la réplica de los datos en todas ellas.
+
+Podemos suponer que la cantidad de actualizaciones de estas dos tablas no es crítica, de manera que es mejor optimizar los accesos locales que las actualizaciones remotas. Por tanto, la réplica es la opción óptima.
 
 #####Cliente
-La replicamos en todos los puntos de almacenamiento. Lo hacemos así ya que un cliente no está intrínsicamente relacionado con ninguna zona geográfica a partir de la que hemos hecho las fragmentaciones. 
+La replicamos en todos los puntos de almacenamiento. Lo hacemos así ya que un cliente no está intrínsicamente relacionado con ninguna zona geográfica.
 
 #####Artículo
-La replicamos en los puntos de almacenamiento de los proveedores. Lo hacemos así ya que un artículo no está intrínsicamente relacionado con ninguna zona geográfica, pero sólo serán usados por los proveedores.
-
-
-
-
+La replicamos en los puntos de almacenamiento de los proveedores. Lo hacemos así ya que los artículos no están intrínsicamente relacionados con ninguna zona geográfica, pero sólo serán usados por los proveedores.
