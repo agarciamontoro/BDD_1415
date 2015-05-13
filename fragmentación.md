@@ -71,9 +71,34 @@ Entonces hacemos la asignación de tal forma que se adapte a la representación 
 
 ####Proveedor
 
+Los proveedores de la cadena están todos en Granada y en Sevilla, de manera que su área de acción es la siguiente:
 
+Proveedores en **Granada**: Suministran a Granada, Jaén, Málaga y Almería.
+Proveedores en **Sevilla**: Suministran a Sevilla, Córdoba, Cádiz y Huelva.
 
+Predicados simples:
 
+    P = { Ciudad = Granada, Ciudad = Sevilla }
+
+Para facilitarnos la tarea, notemos cada predicado.
+
+1. Pgra = Ciudad = Granada
+2. Psev = Ciudad = Sevilla
+
+Los predicados verdaderos:
+
+1. y1 =   Pgra ^ ¬Psev
+2. y2 =  ¬Pgra ^ Psev
+
+Resultan entonces 2 fragmentos:
+
+1. Proveedor1 = SL1(Proveedor)
+2. Proveedor2 = SL2(Proveedor)
+
+La asignación de los fragmentos la hacemos de tal forma que se adapte a la representación física que se proporciona:
+
+1. Granada: Proveedor1
+2. Sevilla: Proveedor2
 
 Ahora, tenemos también tablas que no usen directamente el atributo ciudad, pero indirectamente si puede que lo necesiten o lo usen.
 Para estas tablas entonces usaremos una fragmentación horizontal derivada
