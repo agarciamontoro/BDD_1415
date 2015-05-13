@@ -1,21 +1,27 @@
 #Diseño de la fragmentación y de la asignación
 ##Introducción
-La base de datos distribuida, tendrá sus datos físicos almacenados en cuatro localidades **Granada, Cádiz, Sevilla, Málaga**.
+La base de datos distribuida tendrá sus datos físicos almacenados en cuatro localidades: **Granada, Cádiz, Sevilla, Málaga**.
 
-Y cada una de estas localidades almacenará la información de los siguientes lugares:
+Cada una de estas localidades almacenará la información de los siguientes lugares:
 
 1. **Granada** = Granada y Jaén
 2. **Cádiz** = Cádiz y Huelva
 3. **Sevilla** = Sevilla y Córdoba
 4. **Málaga** = Málaga y Almería
 
-Ahora basándonos en el diagrama *Entidad Relación realizado anteriormente* y éstos datos, nos proponemos a hacer la fragmentación.
+Ahora, basándonos en el diagrama *Entidad Relación realizado anteriormente* y estos datos, hacemos la fragmentación.
 
 ##Fragmentación
 ###Tablas a fragmentar.
-Para este problema, es claro que hay que hacer una fragmentación horizontal con el atributo ciudad, ya que los datos se dividen en diferentes ciudades según la zona, y de esta manera, conseguiremos que los accesos en cada una de las zonas sean más probables locales ya que lo más normal es que la mayoría de las consultas en un hotel serán en los datos de su propia ciudad.
+La fragmentación la realizaremos en dos pasos:
 
-Cómo podemos observar las tablas que tienen los atributos de ciudad son: **Hotel y Proveedor**
+1. Fragmentaciones horizontales primarias de aquellas tablas cuyas tuplas tengan una relación directa con la localidad en la que se encuentran.
+2. Fragmentaciones horizontales, derivadas de las anteriores, de aquellas tablas que tengan una relación directa con los fragmentos. Tendremos en consideración el *grado de relación* de las tuplas con la localidad, de manera que en cada caso decidiremos entre fragmentación o replicación.
+
+####Fragmentaciones horizontales primarias
+Las dos únicas tablas cuyas tuplas tienen una relación directa -mediante un atributo de las mismas- de la localidad en la que se encuentran son **Hotel** y **Proveedor**.
+
+Es claro entonces que la fragmentación hay que realizarla en base al atributo *ciudad* de las mismas. Esta decisión tiene como principal objetivo maximizar los accesos locales: los accesos que involucren a las tablas Hotel y Proveedor se realizarán, en su mayoría, desde las ciudades cuyas tuplas se necesita consultar.
 
 ####Hotel
 
