@@ -1,3 +1,20 @@
+-- Borramos las tablas y las vistas antes para voler a crearlas todas --
+DROP TABLE fragmentoSuministro;
+DROP TABLE fragmentoTiene;
+DROP TABLE fragmentoReserva;
+DROP TABLE fragmentoArticulo;
+DROP TABLE fragmentoProveedor;
+DROP TABLE fragmentoHotel;
+DROP TABLE fragmentoEmpleado;
+DROP TABLE fragmentoCliente;
+
+DROP VIEW suministro;
+DROP VIEW tiene;
+DROP VIEW reserva;
+DROP VIEW proveedor;
+DROP VIEW hotel;
+DROP VIEW empleado;
+
 --  Tablas  --
 CREATE TABLE fragmentoCliente(
 	idCliente NUMBER,
@@ -9,7 +26,7 @@ CREATE TABLE fragmentoCliente(
 
 CREATE TABLE fragmentoEmpleado(
 	idEmpleado NUMBER,
-	idHotel NUMBER  NOT NULL REFERENCES hotel(idHotel),
+	idHotel NUMBER NOT NULL REFERENCES hotel(idHotel),
 	salario NUMBER,
 	dni CHAR(9) UNIQUE,
 	nombre VARCHAR(50),
