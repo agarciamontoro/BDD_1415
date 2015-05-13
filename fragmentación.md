@@ -74,6 +74,7 @@ Entonces hacemos la asignación de tal forma que se adapte a la representación 
 Los proveedores de la cadena están todos en Granada y en Sevilla, de manera que su área de acción es la siguiente:
 
 Proveedores en **Granada**: Suministran a Granada, Jaén, Málaga y Almería.
+
 Proveedores en **Sevilla**: Suministran a Sevilla, Córdoba, Cádiz y Huelva.
 
 Predicados simples:
