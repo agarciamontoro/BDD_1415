@@ -1,4 +1,6 @@
-Cliente(_idClient_, DNI, nombre, telefono)
+Estas son las tablas:
+
+Cliente(_idCliente_, DNI, nombre, telefono)
 
 Empleado(_idEmpleado_, salario, DNI, nombre, telefono, direccion, fechaContrato)
 
@@ -16,4 +18,11 @@ Trabaja(_idEmpleado_, idHotel)
 
 Tiene(_idProveedor, idArticulo_)
 
-Suministro(_idHotel, fecha_, idProveedor, idArticulo, cantidad, precioUnidad)
+Suministro(_idHotel, fecha, idProveedor, idArticulo_, cantidad, precioUnidad)
+
+Ahora vamos a propagar las siguientes llaves de las tablas:
+**Trabaja y Empleado**
+Empleado=EmpleadoTrabaja(_idEmpleado_, idHotel, salario, DNI, nombre, telefono, direccion, fechaContrato)
+
+**Dirige y Hotel**
+Hotel=DirigeHotel(_idHotel_, nombre, ciudad, sencillasLibres, doblesLibes, idDirector)
