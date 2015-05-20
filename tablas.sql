@@ -55,7 +55,7 @@ CREATE TABLE fragmentoTrabaja(
 CREATE TABLE fragmentoProveedor (
   	idProveedor NUMBER,
   	nombre VARCHAR2(50),
-  	ciudad VARCHAR2(50) CHECK (provincia IN ('Granada','Sevilla')),
+  	ciudad VARCHAR2(50) CHECK (ciudad IN ('Granada','Sevilla')),
   	PRIMARY KEY(idProveedor)
 );
 
@@ -69,11 +69,11 @@ CREATE TABLE fragmentoArticulo (
 CREATE TABLE fragmentoReserva(
 	idCliente NUMBER REFERENCES fragmentoCliente(idCliente),
 	fechaEntrada DATE,
-	fechaSalida DATE CHECK (fechaInicio <= fechaFin),
+	fechaSalida DATE,
 	idHotel NUMBER NOT NULL REFERENCES fragmentoHotel(idHotel),
 	precioNoche NUMBER,
 	tipoHabitacion VARCHAR(10) CHECK (tipoHabitacion IN ('Simple','Doble')),
-  PRIMARY KEY(codC,fechaEntrada,fechaSalida)
+  PRIMARY KEY(idCliente,fechaEntrada,fechaSalida)
 );
 
 CREATE TABLE fragmentoTiene (
