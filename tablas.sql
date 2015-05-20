@@ -2,15 +2,15 @@
 DROP TABLE fragmentoSuministro;
 DROP TABLE fragmentoTiene;
 DROP TABLE fragmentoReserva;
-DROP TABLE fragmentoArticulo;
+DROP TABLE articulo;
 DROP TABLE fragmentoProveedor;
 DROP TABLE fragmentoTrabaja;
 DROP TABLE fragmentoHotel;
 DROP TABLE fragmentoEmpleado;
-DROP TABLE fragmentoCliente;
+DROP TABLE cliente;
 
 --  Tablas  --
-CREATE TABLE fragmentoCliente(
+CREATE TABLE cliente(
 	idCliente NUMBER,
 	dni CHAR(9) UNIQUE,
 	nombre VARCHAR(50),
@@ -51,7 +51,7 @@ CREATE TABLE fragmentoProveedor (
   	PRIMARY KEY(idProveedor)
 );
 
-CREATE TABLE fragmentoArticulo (
+CREATE TABLE articulo (
   	idArticulo NUMBER,
   	nombre VARCHAR2(50),
   	tipo CHAR(1) CHECK (tipo IN ('A','B','C','D')), -- enumerado A,B,C,D
@@ -59,7 +59,7 @@ CREATE TABLE fragmentoArticulo (
 );
 
 CREATE TABLE fragmentoReserva(
-	idCliente NUMBER REFERENCES fragmentoCliente(idCliente),
+	idCliente NUMBER REFERENCES cliente(idCliente),
 	fechaEntrada DATE,
 	fechaSalida DATE,
 	idHotel NUMBER NOT NULL REFERENCES fragmentoHotel(idHotel),
@@ -70,7 +70,7 @@ CREATE TABLE fragmentoReserva(
 
 CREATE TABLE fragmentoTiene (
   	idProveedor NUMBER REFERENCES fragmentoProveedor(idProveedor),
-  	idArticulo NUMBER REFERENCES fragmentoArticulo(idArticulo),
+  	idArticulo NUMBER REFERENCES articulo(idArticulo),
   	PRIMARY KEY(idProveedor,idArticulo)
 );
 
