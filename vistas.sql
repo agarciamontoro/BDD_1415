@@ -57,6 +57,7 @@ CREATE VIEW trabaja AS
   UNION
   SELECT * FROM Magnos4.fragmentotrabaja;
 
+// Ejecutar solo en Magnos1, Magnos3
 CREATE VIEW articulo AS
   SELECT * FROM Magnos2.articulo;
   //SELECT * FROM Magnos4.articulo;
