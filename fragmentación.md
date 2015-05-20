@@ -106,25 +106,47 @@ La asignación de los fragmentos la hacemos de tal forma que se adapte a la repr
 Derivadas de las fragmentaciones anteriormente realizadas, a continuación se presentan las fragmentaciones de tablas que, si bien no tienen un atributo *ciudad* explícito, tienen una relación indirecta con la ciudad en la que se encuentran. Estas tablas son:
 
 * Empleado
+* Tabla
 * Reserva
 * Suministro
 * Tiene
 
 El objetivo de estas fragmentaciones horizontales derivadas es, igual que en las anteriores, maximizar los accesos locales; es lícito suponer que los accesos que involucren a estas tablas en sus consultas se realizarán en su gran mayoría desde las localidades donde se encuentren físicamente sus tuplas.
 
-#####Empleado
+#####Trabaja
 La hacemos a partir del Hotel.
 
 Resultan 8 fragmentos:
 
-1. Empleado1 = Empleado SJNCodH=CodH Hotel1
-2. Empleado2 = Empleado SJNCodH=CodH Hotel2
-3. Empleado3 = Empleado SJNCodH=CodH Hotel3
-4. Empleado4 = Empleado SJNCodH=CodH Hotel4
-5. Empleado5 = Empleado SJNCodH=CodH Hotel5
-6. Empleado6 = Empleado SJNCodH=CodH Hotel6
-7. Empleado7 = Empleado SJNCodH=CodH Hotel7
-8. Empleado8 = Empleado SJNCodH=CodH Hotel8
+1. Trabaja1 = Trabaja SJNCodH=CodH Hotel1
+2. Trabaja2 = Trabaja SJNCodH=CodH Hotel2
+3. Trabaja3 = Trabaja SJNCodH=CodH Hotel3
+4. Trabaja4 = Trabaja SJNCodH=CodH Hotel4
+5. Trabaja5 = Trabaja SJNCodH=CodH Hotel5
+6. Trabaja6 = Trabaja SJNCodH=CodH Hotel6
+7. Trabaja7 = Trabaja SJNCodH=CodH Hotel7
+8. Trabaja8 = Trabaja SJNCodH=CodH Hotel8
+
+La asignación la hacemos de la siguiente forma:
+
+1. Granada: Trabaja1, Trabaja2
+2. Cádiz: Trabaja3, Trabaja4
+3. Sevilla: Trabaja5, Trabaja6
+4. Málaga: Trabaja7, Trabaja8
+
+#####Empleado
+La hacemos a partir de la tabla Trabaja.
+
+Resultan 8 fragmentos:
+
+1. Empleado1 = Empleado SJNCodH=CodH Trabaja1
+2. Empleado2 = Empleado SJNCodH=CodH Trabaja2
+3. Empleado3 = Empleado SJNCodH=CodH Trabaja3
+4. Empleado4 = Empleado SJNCodH=CodH Trabaja4
+5. Empleado5 = Empleado SJNCodH=CodH Trabaja5
+6. Empleado6 = Empleado SJNCodH=CodH Trabaja6
+7. Empleado7 = Empleado SJNCodH=CodH Trabaja7
+8. Empleado8 = Empleado SJNCodH=CodH Trabaja8
 
 La asignación la hacemos de la siguiente forma:
 
