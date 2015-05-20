@@ -5,6 +5,7 @@ DROP VIEW proveedor;
 DROP VIEW hotel;
 DROP VIEW empleado;
 DROP VIEW trabaja;
+DROP VIEW articulo;
 
 CREATE VIEW empleado AS
   SELECT * FROM Magnos1.fragmentoEmpleado
