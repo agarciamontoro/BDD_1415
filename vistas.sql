@@ -4,6 +4,7 @@ DROP VIEW reserva;
 DROP VIEW proveedor;
 DROP VIEW hotel;
 DROP VIEW empleado;
+DROP VIEW trabaja;
 
 
 CREATE VIEW empleado AS
