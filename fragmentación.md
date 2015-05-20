@@ -178,25 +178,17 @@ La asignación la hacemos de la siguiente forma:
 
 
 #####Suministro
-Lo hacemos a partir del Hotel
+Lo hacemos a partir de Proveedor
 
 Resultan 8 fragmentos:
 
-1. Suministro1 = Suministro SJNCodH=CodH Hotel1
-2. Suministro2 = Suministro SJNCodH=CodH Hotel2
-3. Suministro3 = Suministro SJNCodH=CodH Hotel3
-4. Suministro4 = Suministro SJNCodH=CodH Hotel4
-5. Suministro5 = Suministro SJNCodH=CodH Hotel5
-6. Suministro6 = Suministro SJNCodH=CodH Hotel6
-7. Suministro7 = Suministro SJNCodH=CodH Hotel7
-8. Suministro8 = Suministro SJNCodH=CodH Hotel8
+1. Suministro1 = Suministro SJNCodH=CodH Proveedor1
+2. Suministro2 = Suministro SJNCodH=CodH Proveedor2
 
 La asignación la hacemos de la siguiente forma:
 
-1. Granada: Suministro1, Suministro2
-2. Cádiz: Suministro, Suministro4
-3. Sevilla: Suministro5, Suministro6
-4. Málaga: Suministro7, Suministro8
+1. Granada: Suministro1
+2. Sevilla: Suministro2
 
 #####Tiene
 La hacemos a partir de Proveedor.
