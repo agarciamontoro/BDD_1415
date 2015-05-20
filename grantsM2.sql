@@ -1,7 +1,9 @@
 --PERMISOS MAGNOS2--
-GRANT SELECT,UPDATE,DELETE,INSERT TO Magnos1,Magnos3,Magnos4 ON fragmentoEmpleado;
-GRANT SELECT,UPDATE,DELETE,INSERT TO Magnos1,Magnos3,Magnos4 ON fragmentoHotel;
-GRANT SELECT,UPDATE,DELETE,INSERT TO Magnos1,Magnos3,Magnos4 ON fragmentoProveedor;
-GRANT SELECT,UPDATE,DELETE,INSERT TO Magnos1,Magnos3,Magnos4 ON fragmentoReserva;
-GRANT SELECT,UPDATE,DELETE,INSERT TO Magnos1,Magnos3,Magnos4 ON fragmentoTiene;
-GRANT SELECT,UPDATE,DELETE,INSERT TO Magnos1,Magnos3,Magnos4 ON fragmentoSuministro;
+GRANT SELECT,UPDATE,DELETE,INSERT ON cliente TO Magnos1,Magnos3,Magnos4;
+GRANT SELECT,UPDATE,DELETE,INSERT ON fragmentoEmpleado TO Magnos1,Magnos3,Magnos4 ;
+GRANT SELECT,UPDATE,DELETE,INSERT ON fragmentoHotel TO Magnos1,Magnos3,Magnos4 ;
+GRANT SELECT,UPDATE,DELETE,INSERT ON fragmentoProveedor TO Magnos1,Magnos3,Magnos4 ;
+GRANT SELECT,UPDATE,DELETE,INSERT ON fragmentoReserva TO Magnos1,Magnos3,Magnos4 ;
+GRANT SELECT,UPDATE,DELETE,INSERT ON fragmentoTiene TO Magnos1,Magnos3,Magnos4 ;
+GRANT SELECT,UPDATE,DELETE,INSERT ON fragmentoSuministro TO Magnos1,Magnos3,Magnos4 ;
+GRANT SELECT,UPDATE,DELETE,INSERT ON articulo TO Magnos1,Magnos3,Magnos4 ;

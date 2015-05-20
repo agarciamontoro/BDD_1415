@@ -6,7 +6,6 @@ DROP VIEW hotel;
 DROP VIEW empleado;
 DROP VIEW trabaja;
 
-
 CREATE VIEW empleado AS
   SELECT * FROM Magnos1.fragmentoEmpleado
   UNION
