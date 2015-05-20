@@ -4,16 +4,18 @@ DROP TABLE fragmentoTiene;
 DROP TABLE fragmentoReserva;
 DROP TABLE fragmentoArticulo;
 DROP TABLE fragmentoProveedor;
+DROP TABLE fragmentoTrabaja;
 DROP TABLE fragmentoHotel;
 DROP TABLE fragmentoEmpleado;
 DROP TABLE fragmentoCliente;
-
+/*
 DROP VIEW suministro;
 DROP VIEW tiene;
 DROP VIEW reserva;
 DROP VIEW proveedor;
 DROP VIEW hotel;
 DROP VIEW empleado;
+*/
 
 --  Tablas  --
 CREATE TABLE fragmentoCliente(
@@ -26,7 +28,6 @@ CREATE TABLE fragmentoCliente(
 
 CREATE TABLE fragmentoEmpleado(
 	idEmpleado NUMBER,
-	idHotel NUMBER NOT NULL REFERENCES hotel(idHotel),
 	salario NUMBER,
 	dni CHAR(9) UNIQUE,
 	nombre VARCHAR(50),
@@ -42,8 +43,13 @@ CREATE TABLE fragmentoHotel (
   	ciudad VARCHAR2(50) CHECK (ciudad IN ('Huelva','Sevilla','Cádiz','Málaga','Córdoba','Jaen','Granada','Almería')),
   	sencillasLibres NUMBER,
   	doblesLibres NUMBER,
-  	idDirector NUMBER NOT NULL REFERENCES empleado(idEmpleado),
+  	idDirector NUMBER NOT NULL REFERENCES fragmentoEmpleado(idEmpleado),
   	PRIMARY KEY(idHotel)
+);
+
+CREATE TABLE fragmentoTrabaja(
+  idEmpleado NUMBER NOT NULL REFERENCES fragmentoEmpleado(idEmpleado),
+  idHotel NUMBER NOT NULL REFERENCES fragmentoHotel(idHotel)
 );
 
 CREATE TABLE fragmentoProveedor (
@@ -61,41 +67,41 @@ CREATE TABLE fragmentoArticulo (
 );
 
 CREATE TABLE fragmentoReserva(
-	idCliente NUMBER REFERENCES cliente(idCliente),
+	idCliente NUMBER REFERENCES fragmentoCliente(idCliente),
 	fechaEntrada DATE,
 	fechaSalida DATE CHECK (fechaInicio <= fechaFin),
-	idHotel NUMBER NOT NULL REFERENCES hotel(idHotel),
+	idHotel NUMBER NOT NULL REFERENCES fragmentoHotel(idHotel),
 	precioNoche NUMBER,
-	tipoHabitacion VARCHAR(10) CHECK (tipoHabitacion IN ('Simple','Doble'),
-	PRIMARY KEY(codC,fechaEntrada,fechaSalida)
+	tipoHabitacion VARCHAR(10) CHECK (tipoHabitacion IN ('Simple','Doble')),
+  PRIMARY KEY(codC,fechaEntrada,fechaSalida)
 );
 
 CREATE TABLE fragmentoTiene (
-  	idProveedor NUMBER REFERENCES proveedor(idProveedor),
-  	idArticulo NUMBER REFERENCES articulo(idArticulo),
+  	idProveedor NUMBER REFERENCES fragmentoProveedor(idProveedor),
+  	idArticulo NUMBER REFERENCES fragmentoArticulo(idArticulo),
   	PRIMARY KEY(idProveedor,idArticulo)
 );
 
 CREATE TABLE fragmentoSuministro (
-  	idHotel NUMBER REFERENCES hotel(idHotel),
+  	idHotel NUMBER REFERENCES fragmentoHotel(idHotel),
   	fecha DATE,
   	idProveedor NUMBER,
   	idArticulo NUMBER,
   	cantidad NUMBER,
   	precioUnidad NUMBER,
-  	PRIMARY KEY(idHotel,fecha,idProveedor,idArticulo)
-  	FOREIGN KEY(idProveedor,idArticulo) REFERENCES tiene(idProveedor,idArticulo)
+  	PRIMARY KEY(idHotel,fecha,idProveedor,idArticulo),
+  	FOREIGN KEY(idProveedor,idArticulo) REFERENCES fragmentoTiene(idProveedor,idArticulo)
 );
 
 
 --PERMISOS MAGNOS1--
-GRANT SELECT,UPDATE,DELETE,INSERT TO Magnos2,Magnos3,Magnos4 ON fragmentoEmpleado;
-GRANT SELECT,UPDATE,DELETE,INSERT TO Magnos2,Magnos3,Magnos4 ON fragmentoHotel;
-GRANT SELECT,UPDATE,DELETE,INSERT TO Magnos2,Magnos3,Magnos4 ON fragmentoProveedor;
-GRANT SELECT,UPDATE,DELETE,INSERT TO Magnos2,Magnos3,Magnos4 ON fragmentoReserva;
-GRANT SELECT,UPDATE,DELETE,INSERT TO Magnos2,Magnos3,Magnos4 ON fragmentoTiene;
-GRANT SELECT,UPDATE,DELETE,INSERT TO Magnos2,Magnos3,Magnos4 ON fragmentoSuministro;
-
+GRANT SELECT,UPDATE,DELETE,INSERT ON fragmentoEmpleado TO Magnos2,Magnos3,Magnos4;
+GRANT SELECT,UPDATE,DELETE,INSERT ON fragmentoHotel TO Magnos2,Magnos3,Magnos4;
+GRANT SELECT,UPDATE,DELETE,INSERT ON fragmentoProveedor TO Magnos2,Magnos3,Magnos4 ;
+GRANT SELECT,UPDATE,DELETE,INSERT ON fragmentoReserva TO Magnos2,Magnos3,Magnos4 ;
+GRANT SELECT,UPDATE,DELETE,INSERT ON fragmentoTiene TO Magnos2,Magnos3,Magnos4 ;
+GRANT SELECT,UPDATE,DELETE,INSERT ON fragmentoSuministro TO Magnos2,Magnos3,Magnos4 ;
+/*
 --PERMISOS MAGNOS2--
 GRANT SELECT,UPDATE,DELETE,INSERT TO Magnos1,Magnos3,Magnos4 ON fragmentoEmpleado;
 GRANT SELECT,UPDATE,DELETE,INSERT TO Magnos1,Magnos3,Magnos4 ON fragmentoHotel;
@@ -174,4 +180,4 @@ CREATE VIEW suministro AS
   UNION
   SELECT * FROM Magnos3.fragmentoSuministro
   UNION
-  SELECT * FROM Magnos4.fragmentoSuministro;
+  SELECT * FROM Magnos4.fragmentoSuministro;*/
