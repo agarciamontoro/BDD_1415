@@ -62,10 +62,10 @@ CREATE VIEW suministro AS
   SELECT * FROM Magnos4.fragmentoSuministro;
   
 CREATE VIEW trabaja AS
-  SELECT * FROM Magnos1.fragmentoTrabaja;
+  SELECT * FROM Magnos1.fragmentoTrabaja
   UNION
-  SELECT * FROM Magnos2.fragmentoTrabaja;
+  SELECT * FROM Magnos2.fragmentoTrabaja
   UNION
-  SELECT * FROM Magnos3.fragmentoTrabaja;
+  SELECT * FROM Magnos3.fragmentoTrabaja
   UNION
   SELECT * FROM Magnos4.fragmentotrabaja;
