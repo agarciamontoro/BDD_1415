@@ -25,11 +25,7 @@ CREATE VIEW hotel AS
   SELECT * FROM Magnos4.fragmentoHotel;
 
 CREATE VIEW proveedor AS
-  SELECT * FROM Magnos1.fragmentoProveedor
-  UNION
   SELECT * FROM Magnos2.fragmentoProveedor
-  UNION
-  SELECT * FROM Magnos3.fragmentoProveedor
   UNION
   SELECT * FROM Magnos4.fragmentoProveedor;
 
@@ -43,20 +39,12 @@ CREATE VIEW reserva AS
   SELECT * FROM Magnos4.fragmentoReserva;
 
 CREATE VIEW tiene AS
-  SELECT * FROM Magnos1.fragmentoTiene
-  UNION
   SELECT * FROM Magnos2.fragmentoTiene
-  UNION
-  SELECT * FROM Magnos3.fragmentoTiene
   UNION
   SELECT * FROM Magnos4.fragmentoTiene;
 
 CREATE VIEW suministro AS
-  SELECT * FROM Magnos1.fragmentoSuministro
-  UNION
   SELECT * FROM Magnos2.fragmentoSuministro
-  UNION
-  SELECT * FROM Magnos3.fragmentoSuministro
   UNION
   SELECT * FROM Magnos4.fragmentoSuministro;
   
@@ -68,3 +56,7 @@ CREATE VIEW trabaja AS
   SELECT * FROM Magnos3.fragmentoTrabaja
   UNION
   SELECT * FROM Magnos4.fragmentotrabaja;
+
+CREATE VIEW articulo AS
+  SELECT * FROM Magnos2.articulo;
+  //SELECT * FROM Magnos4.articulo;
