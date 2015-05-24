@@ -5,7 +5,6 @@ DROP VIEW proveedor;
 DROP VIEW hotel;
 DROP VIEW empleado;
 DROP VIEW trabaja;
-DROP VIEW articulo;
 
 CREATE VIEW empleado AS
   SELECT * FROM Magnos1.fragmentoEmpleado
@@ -16,11 +15,11 @@ CREATE VIEW empleado AS
   UNION
   SELECT * FROM Magnos4.fragmentoEmpleado;
 
-CREATE VIEW hotel AS 
+CREATE VIEW hotel AS
   SELECT * FROM Magnos1.fragmentoHotel
   UNION
   SELECT * FROM Magnos2.fragmentoHotel
-  UNION 
+  UNION
   SELECT * FROM Magnos3.fragmentoHotel
   UNION
   SELECT * FROM Magnos4.fragmentoHotel;
@@ -48,7 +47,7 @@ CREATE VIEW suministro AS
   SELECT * FROM Magnos2.fragmentoSuministro
   UNION
   SELECT * FROM Magnos4.fragmentoSuministro;
-  
+
 CREATE VIEW trabaja AS
   SELECT * FROM Magnos1.fragmentoTrabaja
   UNION
@@ -58,7 +57,13 @@ CREATE VIEW trabaja AS
   UNION
   SELECT * FROM Magnos4.fragmentoTrabaja;
 
--- Ejecutar solo en Magnos1, Magnos3
+-- Descomentar lo siguiente en M1-Cadiz, M3-Malaga
+/*
+
+DROP VIEW articulo;
+
 CREATE VIEW articulo AS
   SELECT * FROM Magnos2.articulo;
   --SELECT * FROM Magnos4.articulo;
+  
+*/

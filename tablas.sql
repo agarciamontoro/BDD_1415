@@ -1,9 +1,5 @@
 -- Borramos las tablas y las vistas antes para voler a crearlas todas --
-DROP TABLE fragmentoSuministro;
-DROP TABLE fragmentoTiene;
 DROP TABLE fragmentoReserva;
-DROP TABLE articulo;
-DROP TABLE fragmentoProveedor;
 DROP TABLE fragmentoTrabaja;
 DROP TABLE fragmentoHotel;
 DROP TABLE fragmentoEmpleado;
@@ -44,6 +40,24 @@ CREATE TABLE fragmentoTrabaja(
   idHotel NUMBER NOT NULL REFERENCES fragmentoHotel(idHotel)
 );
 
+CREATE TABLE fragmentoReserva(
+	idCliente NUMBER REFERENCES cliente(idCliente),
+	fechaEntrada DATE,
+	fechaSalida DATE,
+	idHotel NUMBER NOT NULL REFERENCES fragmentoHotel(idHotel),
+	precioNoche NUMBER,
+	tipoHabitacion VARCHAR(10) CHECK (tipoHabitacion IN ('Simple','Doble')),
+	PRIMARY KEY(idCliente,fechaEntrada,fechaSalida)
+);
+
+-- Descomentar lo siguiente en M2-Granada, M4-Sevilla
+/*
+
+DROP TABLE fragmentoSuministro;
+DROP TABLE fragmentoTiene;
+DROP TABLE articulo;
+DROP TABLE fragmentoProveedor;
+
 CREATE TABLE fragmentoProveedor (
   	idProveedor NUMBER,
   	nombre VARCHAR2(50),
@@ -56,16 +70,6 @@ CREATE TABLE articulo (
   	nombre VARCHAR2(50),
   	tipo CHAR(1) CHECK (tipo IN ('A','B','C','D')), -- enumerado A,B,C,D
   	PRIMARY KEY(idArticulo)
-);
-
-CREATE TABLE fragmentoReserva(
-	idCliente NUMBER REFERENCES cliente(idCliente),
-	fechaEntrada DATE,
-	fechaSalida DATE,
-	idHotel NUMBER NOT NULL REFERENCES fragmentoHotel(idHotel),
-	precioNoche NUMBER,
-	tipoHabitacion VARCHAR(10) CHECK (tipoHabitacion IN ('Simple','Doble')),
-  PRIMARY KEY(idCliente,fechaEntrada,fechaSalida)
 );
 
 CREATE TABLE fragmentoTiene (
@@ -84,3 +88,5 @@ CREATE TABLE fragmentoSuministro (
   	PRIMARY KEY(idHotel,fecha,idProveedor,idArticulo),
   	FOREIGN KEY(idProveedor,idArticulo) REFERENCES fragmentoTiene(idProveedor,idArticulo)
 );
+
+*/
