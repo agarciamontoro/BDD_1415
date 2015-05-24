@@ -38,7 +38,7 @@ La implementación de la primera de las opciones conllevaba bucles de referencia
 
 # Diseño de la fragmentación y de la asignación
 ## Introducción
-La base de datos distribuida tendrá sus datos físicos almacenados en cuatro localidades: **Granada, Cádiz, Sevilla, Málaga**.
+La base de datos distribuida tendrá sus datos físicos almacenados en cuatro localidades: **Granada, Cádiz, Sevilla y Málaga**.
 
 Cada una de estas localidades almacenará la información de los siguientes lugares:
 
@@ -56,7 +56,7 @@ La fragmentación la realizaremos en dos pasos:
 1. Fragmentaciones horizontales primarias de aquellas tablas cuyas tuplas tengan una relación directa con la localidad en la que se encuentran.
 2. Fragmentaciones horizontales, derivadas de las anteriores, de aquellas tablas que tengan una relación directa con los fragmentos. Tendremos en consideración el *grado de relación* de las tuplas con la localidad, de manera que en cada caso decidiremos entre fragmentación o replicación.
 
-####Fragmentaciones horizontales primarias
+#### Fragmentaciones horizontales primarias
 Las dos únicas tablas cuyas tuplas tienen una relación directa -mediante un atributo de las mismas- de la localidad en la que se encuentran son **Hotel** y **Proveedor**.
 
 Es claro entonces que la fragmentación hay que realizarla en base al atributo *ciudad* de las mismas. Esta decisión tiene como principal objetivo maximizar los accesos locales: los accesos que involucren a las tablas Hotel y Proveedor se realizarán, en su mayoría, desde las ciudades cuyas tuplas se necesita consultar.
@@ -89,7 +89,7 @@ Los predicados verdaderos:
 7. y7 =  ¬Pgra ^ ¬Pjae ^ ¬Pcad ^ ¬Phue ^ ¬Psev ^ ¬Pcor ^ Pmal ^ ¬Palm
 8. y8 =  ¬Pgra ^ ¬Pjae ^ ¬Pcad ^ ¬Phue ^ ¬Psev ^ ¬Pcor ^ ¬Pmal ^ Palm
 
-Entonces nos da cómo resultado 8 fragmentos:
+Entonces nos da como resultado 8 fragmentos:
 
 1. Hotel1 = SL1(Hotel)
 2. Hotel2 = SL2(Hotel)
