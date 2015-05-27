@@ -56,7 +56,7 @@ DECLARE
     numReservas NUMBER;
 BEGIN
   SELECT COUNT(*) INTO numReservas FROM reserva
-  	WHERE :NEW.codC = codC
+  	WHERE :NEW.idCliente = idCliente
   		AND((:NEW.FechaInicio >= FechaInicio AND :NEW.FechaInicio < FechaFin)
     		OR(:NEW.FechaInicio <= FechaInicio AND :NEW.FechaFin > FechaInicio)
   	);
@@ -64,6 +64,15 @@ BEGIN
   IF numReservas > 0 THEN
     RAISE_APPLICATION_ERROR(-20002,'El cliente tiene reservas simultáneas en distintos hoteles')
   END IF;
+END;
+
+-- Restricción 10 --
+CREATE OR REPLACE TRIGGER salarioEmpleadoNoPuedeDisminuir
+BEFORE UPDATE OF salario ON empleado 
+FOR EACH ROW
+	WHEN NEW.salario >= OLD.salario
+BEGIN
+	RAISE_APPLICATION_ERROR(-20003,'El salario no se puede disminuir');
 END;
 
 -- Restricción 12 --
@@ -77,7 +86,7 @@ BEGIN
 	WHERE :NEW.idArticulo = suministro.idArticulo ;
 
 	IF NEW.precioUnidad < precioMinSuminAnteriores THEN
-		RAISE_APPLICATION_ERROR(-20003,'El precio por unidad no puede ser menor respecto a otros suministros');
+		RAISE_APPLICATION_ERROR(-20004,'El precio por unidad no puede ser menor respecto a otros suministros');
 	END IF;
 END;
 
@@ -98,17 +107,8 @@ BEGIN
 		AND proveedor.ciudad = ciudadNuevoSuministro);
 
 	IF error > 0
-		RAISE_APPLICATION_ERROR(-20004,'Un artículo sólo puede ser suministrado por dos proveedores distintos');
+		RAISE_APPLICATION_ERROR(-20005,'Un artículo sólo puede ser suministrado por dos proveedores distintos');
 	END IF;
-END;
-
--- Restricción 14 --
-CREATE OR REPLACE TRIGGER salarioEmpleadoNoPuedeDisminuir
-BEFORE UPDATE OF salario ON empleado 
-FOR EACH ROW
-	WHEN NEW.salario >= OLD.salario
-BEGIN
-	RAISE_APPLICATION_ERROR(-2005,'El salario no se puede disminuir');
 END;
 
 -- Restricciones 15 y 16 --
