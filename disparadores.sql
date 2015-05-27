@@ -62,7 +62,7 @@ BEGIN
   	);
 
   IF numReservas > 0 THEN
-    RAISE_APPLICATION_ERROR(-20002,'El cliente tiene reservas simultáneas en distintos hoteles')
+    RAISE_APPLICATION_ERROR(-20003,'El cliente tiene reservas simultáneas en distintos hoteles')
   END IF;
 END;
 
@@ -72,7 +72,7 @@ BEFORE UPDATE OF salario ON empleado
 FOR EACH ROW
 	WHEN NEW.salario >= OLD.salario
 BEGIN
-	RAISE_APPLICATION_ERROR(-20003,'El salario no se puede disminuir');
+	RAISE_APPLICATION_ERROR(-20004,'El salario no se puede disminuir');
 END;
 
 -- Restricción 12 --
@@ -86,7 +86,7 @@ BEGIN
 	WHERE :NEW.idArticulo = suministro.idArticulo ;
 
 	IF NEW.precioUnidad < precioMinSuminAnteriores THEN
-		RAISE_APPLICATION_ERROR(-20004,'El precio por unidad no puede ser menor respecto a otros suministros');
+		RAISE_APPLICATION_ERROR(-20005,'El precio por unidad no puede ser menor respecto a otros suministros');
 	END IF;
 END;
 
@@ -107,7 +107,7 @@ BEGIN
 		AND proveedor.ciudad = ciudadNuevoSuministro);
 
 	IF error > 0
-		RAISE_APPLICATION_ERROR(-20005,'Un artículo sólo puede ser suministrado por dos proveedores distintos');
+		RAISE_APPLICATION_ERROR(-20006,'Un artículo sólo puede ser suministrado por dos proveedores distintos');
 	END IF;
 END;
 
@@ -129,7 +129,7 @@ BEGIN
 	 		AND hotel.ciudad IN ('Granada','Jaen','Malaga','Almería'));
 
 	 	IF error > 0 THEN
-	 		RAISE_APPLICATION_ERROR(-20006, 'Las ciudades de Granada, Jaén, Málaga y Almería no pueden tener suministros de Sevilla');
+	 		RAISE_APPLICATION_ERROR(-20007, 'Las ciudades de Granada, Jaén, Málaga y Almería no pueden tener suministros de Sevilla');
 	 	END IF;
 	END IF;
 
@@ -140,7 +140,7 @@ BEGIN
 	 		AND hotel.ciudad IN ('Cordoba','Sevilla','Cadiz','Huelva'));
 
 	 	IF error > 0 THEN
-	 		RAISE_APPLICATION_ERROR(-20007, 'Las ciudades de Córdoba, Sevilla, Cádiz o Huelva no pueden tener suministros de Granada');
+	 		RAISE_APPLICATION_ERROR(-20008, 'Las ciudades de Córdoba, Sevilla, Cádiz o Huelva no pueden tener suministros de Granada');
 	 	END IF;
 	END IF;
 END;
@@ -157,7 +157,7 @@ END;
  			AND suministro.cantidad > 0;
  	
  	IF error > 0 THEN
- 		RAISE_APPLICATION_ERROR(-20008, 'No se puede eliminar, la cantidad suministrada no es 0');
+ 		RAISE_APPLICATION_ERROR(-20009, 'No se puede eliminar, la cantidad suministrada no es 0');
  	END IF;
  END;
 
@@ -173,7 +173,7 @@ END;
  			AND suministro.cantidad > 0;
  	
  	IF error > 0 THEN
- 		RAISE_APPLICATION_ERROR(-20009, 'No se puede eliminar, la cantidad suministrada no es 0');
+ 		RAISE_APPLICATION_ERROR(-20010, 'No se puede eliminar, la cantidad suministrada no es 0');
  	END IF;
  END;
 
