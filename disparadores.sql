@@ -39,6 +39,15 @@ BEGIN
 
 END;
 
+ -- Restricción 5
+CREATE OR REPLACE TRIGGER controlFechasReservas
+BEFORE INSERT ON reserva
+FOR EACH ROW
+	WHEN :NEW.fechaEntrada >= :NEW.fechaSalida
+BEGIN
+  RAISE_APPLICATION_ERROR(-20002,'La fecha de entrada es mayor que la fecha de salida')
+END; 
+
  -- Restricción 6
 CREATE OR REPLACE TRIGGER controlReservasCliente
 BEFORE INSERT OR UPDATE ON reserva
