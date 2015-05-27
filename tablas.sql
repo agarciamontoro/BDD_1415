@@ -25,13 +25,14 @@ CREATE TABLE fragmentoEmpleado(
 	PRIMARY KEY(idEmpleado)
 );
 
+-- El UNIQUE en idDirector es para la restricción 8
 CREATE TABLE fragmentoHotel (
   	idHotel NUMBER,
   	nombre VARCHAR2(50),
   	ciudad VARCHAR2(50) CHECK (ciudad IN ('Huelva','Sevilla','Cádiz','Málaga','Córdoba','Jaen','Granada','Almería')),
   	sencillasLibres NUMBER,
   	doblesLibres NUMBER,
-  	idDirector NUMBER NOT NULL REFERENCES fragmentoEmpleado(idEmpleado),
+  	idDirector NUMBER NOT NULL REFERENCES fragmentoEmpleado(idEmpleado) UNIQUE,
   	PRIMARY KEY(idHotel)
 );
 
