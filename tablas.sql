@@ -32,21 +32,21 @@ CREATE TABLE fragmentoHotel (
   	ciudad VARCHAR2(50) CHECK (ciudad IN ('Huelva','Sevilla','Cádiz','Málaga','Córdoba','Jaen','Granada','Almería')),
   	sencillasLibres NUMBER,
   	doblesLibres NUMBER,
-  	idDirector NUMBER NOT NULL REFERENCES empleado(idEmpleado) UNIQUE,
+  	idDirector NUMBER NOT NULL REFERENCES fragmentoEmpleado(idEmpleado) UNIQUE,
   	PRIMARY KEY(idHotel)
 );
 
 CREATE TABLE fragmentoTrabaja(
-  idEmpleado NUMBER NOT NULL REFERENCES empleado(idEmpleado),
-  idHotel NUMBER NOT NULL REFERENCES hotel(idHotel)
+  idEmpleado NUMBER NOT NULL REFERENCES fragmentoEmpleado(idEmpleado),
+  idHotel NUMBER NOT NULL REFERENCES fragmentoHotel(idHotel)
   PRIMARY KEY(idEmpleado)
 );
 
 CREATE TABLE fragmentoReserva(
-	idCliente NUMBER REFERENCES cliente(idCliente),
+	idCliente NUMBER REFERENCES fragmentoCliente(idCliente),
 	fechaEntrada DATE,
 	fechaSalida DATE,
-	idHotel NUMBER NOT NULL REFERENCES hotel(idHotel),
+	idHotel NUMBER NOT NULL REFERENCES fragmentoHotel(idHotel),
 	precioNoche NUMBER,
 	tipoHabitacion VARCHAR(10) CHECK (tipoHabitacion IN ('Simple','Doble')),
 	PRIMARY KEY(idCliente,fechaEntrada,fechaSalida)
@@ -75,20 +75,20 @@ CREATE TABLE articulo (
 );
 
 CREATE TABLE fragmentoTiene (
-  	idProveedor NUMBER REFERENCES proveedor(idProveedor),
+  	idProveedor NUMBER REFERENCES fragmentoProveedor(idProveedor),
   	idArticulo NUMBER REFERENCES articulo(idArticulo),
   	PRIMARY KEY(idProveedor,idArticulo)
 );
 
 CREATE TABLE fragmentoSuministro (
-  	idHotel NUMBER REFERENCES hotel(idHotel),
+  	idHotel NUMBER REFERENCES fragmentoHotel(idHotel),
   	fecha DATE,
   	idProveedor NUMBER,
   	idArticulo NUMBER,
   	cantidad NUMBER,
   	precioUnidad NUMBER,
   	PRIMARY KEY(idHotel,fecha,idProveedor,idArticulo),
-  	FOREIGN KEY(idProveedor,idArticulo) REFERENCES tiene(idProveedor,idArticulo)
+  	FOREIGN KEY(idProveedor,idArticulo) REFERENCES fragmentoTiene(idProveedor,idArticulo)
 );
 
 */
