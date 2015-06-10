@@ -1,4 +1,4 @@
--- Restricción 4
+-- Restricción 4 (Hecho) --
 CREATE OR REPLACE TRIGGER capacidadReservas
 BEFORE INSERT OR UPDATE ON reserva
 FOR EACH ROW
@@ -7,32 +7,29 @@ DECLARE
   habDobles  NUMBER;
   reservasActuales    NUMBER;
 BEGIN
-  --¿ Tabla Mutante ?
   SELECT COUNT(*) INTO reservasActuales FROM reserva
-  WHERE tipoHabitacion = NEW.tipoHabitacion
-  	AND((:NEW.fechaEntrada >= fechaEntrada AND :NEW.fechaEntrada < fechaSalida)
-  		OR(:NEW.fechaEntrada <= fechaEntrada AND :NEW.fechaSalida > fechaEntrada)
-  );
+  WHERE hotel.idHotel = reserva.idHotel
+    AND reserva.idHotel = :NEW.idHotel
+    AND tipoHabitacion = :NEW.tipoHabitacion;
 
   IF NEW.tipoHabitacion = 'Simple' THEN
     SELECT sencillasLibres INTO habSimples FROM hotel,reserva
-    WHERE hotel.idHotel=reserva.idHotel
-    	AND reserva.idHotel=:NEW.idHotel;
+    WHERE hotel.idHotel = reserva.idHotel
+    	AND reserva.idHotel = :NEW.idHotel;
 
-    IF habSimples < reservasActualesSimples THEN
+    IF habSimples <= reservasActualesSimples THEN
       RAISE_APPLICATION_ERROR(-20001,'Las reservas superan el número de habitaciones simples')
     END IF;
 
   END IF;
 
   IF NEW.tipoHabitacion = 'Doble' THEN
-
     SELECT doblesLibres INTO habDobles FROM hotel,reserva
-    WHERE hotel.idHotel=reserva.idHotel
-    	AND reserva.idHotel=:NEW.idHotel;
+    WHERE hotel.idHotel = reserva.idHotel
+    	AND reserva.idHotel = :NEW.idHotel;
 
-    IF habDobles < reservasActualesDobles THEN
-      RAISE_APPLICATION_ERROR(-20001,'Las reservas superan el número de habitaciones dobles')
+    IF habDobles <= reservasActualesDobles THEN
+      RAISE_APPLICATION_ERROR(-21001,'Las reservas superan el número de habitaciones dobles')
     END IF;
 
   END IF;
