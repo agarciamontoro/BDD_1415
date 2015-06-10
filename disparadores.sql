@@ -5,7 +5,7 @@ FOR EACH ROW
 DECLARE
   habSimples NUMBER;
   habDobles  NUMBER;
-  reservasActuales    NUMBER;
+  reservasActuales NUMBER;
 BEGIN
   SELECT COUNT(*) INTO reservasActuales FROM reserva
   WHERE hotel.idHotel = reserva.idHotel
@@ -18,7 +18,7 @@ BEGIN
     	AND reserva.idHotel = :NEW.idHotel;
 
     IF habSimples <= reservasActualesSimples THEN
-      RAISE_APPLICATION_ERROR(-20001,'Las reservas superan el número de habitaciones simples')
+      RAISE_APPLICATION_ERROR(-20001,'Las reservas superan el número de habitaciones simples');
     END IF;
 
   END IF;
@@ -29,7 +29,7 @@ BEGIN
     	AND reserva.idHotel = :NEW.idHotel;
 
     IF habDobles <= reservasActualesDobles THEN
-      RAISE_APPLICATION_ERROR(-21001,'Las reservas superan el número de habitaciones dobles')
+      RAISE_APPLICATION_ERROR(-21001,'Las reservas superan el número de habitaciones dobles');
     END IF;
 
   END IF;
@@ -40,9 +40,9 @@ END;
 CREATE OR REPLACE TRIGGER controlFechasReservas
 BEFORE INSERT ON fragmentoReserva
 FOR EACH ROW
-	WHEN :NEW.fechaEntrada >= :NEW.fechaSalida
+	WHEN (:NEW.fechaEntrada >= :NEW.fechaSalida)
 BEGIN
-  RAISE_APPLICATION_ERROR(-20002,'La fecha de entrada es mayor que la fecha de salida')
+  RAISE_APPLICATION_ERROR(-20002,'La fecha de entrada es mayor que la fecha de salida');
 END;
 
  -- Restricción 6 (Hecho) --
@@ -59,7 +59,7 @@ BEGIN
   	);
 
   IF numReservas > 0 THEN
-    RAISE_APPLICATION_ERROR(-20003,'El cliente tiene reservas simultáneas en distintos hoteles')
+    RAISE_APPLICATION_ERROR(-20003,'El cliente tiene reservas simultáneas en distintos hoteles');
   END IF;
 END;
 
@@ -67,7 +67,7 @@ END;
 CREATE OR REPLACE TRIGGER salarioEmpleadoNoPuedeDisminuir
 BEFORE UPDATE OF salario ON empleado
 FOR EACH ROW
-	WHEN NEW.salario < OLD.salario
+	WHEN (NEW.salario < OLD.salario)
 BEGIN
 	RAISE_APPLICATION_ERROR(-20004,'El salario no se puede disminuir');
 END;
