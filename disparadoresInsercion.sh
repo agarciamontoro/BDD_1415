@@ -1,6 +1,6 @@
 #!/bin/bash
 
-TABLAS=( cliente empleado hotel trabaja reserva proveedor articulo tiene suministro)
+TABLAS=( Cliente Empleado Hotel Trabaja Reserva Proveedor Articulo Tiene Suministro)
 LLAVES=( "idCliente = :NEW.idCliente"
 		 "idEmpleado = :NEW.idCliente"
 		 "idHotel = :NEW.idHotel"
@@ -19,7 +19,7 @@ do
 	echo "" >> disparadoresInsercion.sql
 	echo "-------------------------------------------------------" >> disparadoresInsercion.sql
 	echo "" >> disparadoresInsercion.sql
-	echo "CREATE OR REPLACE TRIGGER restriccionLlaveUnica" >> disparadoresInsercion.sql
+	echo "CREATE OR REPLACE TRIGGER restriccionLlaveUnica${TABLAS[$i]}" >> disparadoresInsercion.sql
 	echo "BEFORE INSERT OR UPDATE ON ${TABLAS[$i]}" >> disparadoresInsercion.sql
 	echo "FOR EACH ROW" >> disparadoresInsercion.sql
 	echo "DECLARE" >> disparadoresInsercion.sql
@@ -28,7 +28,7 @@ do
 	echo "  SELECT COUNT(*) INTO numTuplas FROM ${TABLAS[$i]}" >> disparadoresInsercion.sql
 	echo "  WHERE ${LLAVES[$i]};" >> disparadoresInsercion.sql >> disparadoresInsercion.sql
 	echo "	IF numTuplas > 0 THEN" >> disparadoresInsercion.sql
-	echo "  	RAISE_APPLICATION_ERROR(-20001,'Restricción de llave única violada: la llave ya existe en la tabla')" >> disparadoresInsercion.sql
+	echo "  	RAISE_APPLICATION_ERROR(-1000$i,'Restricción de llave única violada: la llave ya existe en la tabla');" >> disparadoresInsercion.sql
 	echo "  END IF;" >> disparadoresInsercion.sql
 	echo "END;" >> disparadoresInsercion.sql
 done
