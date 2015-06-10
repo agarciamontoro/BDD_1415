@@ -38,7 +38,7 @@ CREATE TABLE fragmentoHotel (
 
 CREATE TABLE fragmentoTrabaja(
   idEmpleado NUMBER NOT NULL REFERENCES fragmentoEmpleado(idEmpleado),
-  idHotel NUMBER NOT NULL REFERENCES fragmentoHotel(idHotel)
+  idHotel NUMBER NOT NULL REFERENCES fragmentoHotel(idHotel),
   PRIMARY KEY(idEmpleado)
 );
 
