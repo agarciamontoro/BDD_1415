@@ -43,7 +43,7 @@ CREATE TABLE fragmentoTrabaja(
 );
 
 CREATE TABLE fragmentoReserva(
-	idCliente NUMBER REFERENCES fragmentoCliente(idCliente),
+	idCliente NUMBER REFERENCES cliente(idCliente),
 	fechaEntrada DATE,
 	fechaSalida DATE,
 	idHotel NUMBER NOT NULL REFERENCES fragmentoHotel(idHotel),
