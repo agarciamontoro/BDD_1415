@@ -58,12 +58,11 @@ CREATE VIEW trabaja AS
   SELECT * FROM Magnos4.fragmentoTrabaja;
 
 -- Descomentar lo siguiente en M1-Cadiz, M3-Malaga
-/*
 
+/*
 DROP VIEW articulo;
 
 CREATE VIEW articulo AS
   SELECT * FROM Magnos2.articulo;
   --SELECT * FROM Magnos4.articulo;
-  
 */
