@@ -48,17 +48,17 @@ BEGIN
   RAISE_APPLICATION_ERROR(-20002,'La fecha de entrada es mayor que la fecha de salida')
 END;
 
- -- Restricción 6
+ -- Restricción 6 (Hecho) --
 CREATE OR REPLACE TRIGGER controlReservasCliente
-BEFORE INSERT OR UPDATE ON reserva
+BEFORE INSERT OR UPDATE ON fragmentoReserva
 FOR EACH ROW
 DECLARE
     numReservas NUMBER;
 BEGIN
   SELECT COUNT(*) INTO numReservas FROM reserva
   	WHERE :NEW.idCliente = idCliente
-  		AND((:NEW.FechaInicio >= FechaInicio AND :NEW.FechaInicio < FechaFin)
-    		OR(:NEW.FechaInicio <= FechaInicio AND :NEW.FechaFin > FechaInicio)
+  		AND((fechaEntrada >= :NEW.fechaEntrada AND fechaEntrada < :NEW.fechaSalida)
+    		OR(fechaSalida <= :NEW.fechaSalida AND fechaSalida > :NEW.fechaEntrada)
   	);
 
   IF numReservas > 0 THEN
@@ -128,74 +128,78 @@ BEGIN
     END CASE;
 
 	IF nVecesSuministrado > 1 THEN
-		RAISE_APPLICATION_ERROR(-20006,'Un artículo sólo puede ser suministrado por dos proveedores distintos');
+		RAISE_APPLICATION_ERROR(-21006,'Un artículo sólo puede ser suministrado por dos proveedores distintos');
 	END IF;
 
     COMMIT;
 END;
 
--- Restricciones 15 y 16 --
+-- Restricciones 15 y 16 (Hecho) --
 CREATE OR REPLACE TRIGGER restriccionHotelesProveedores
-BEFORE INSERT ON suministro
+BEFORE INSERT ON fragmentoSuministro
 FOR EACH ROW
 DECLARE
-	ciudadNuevoSuministro VARCHAR(50);
-	error NUMBER;
+	ciudadProveedor fragmentoProveedor.ciudad%TYPE;
+	suministrosInvalidos NUMBER;
 BEGIN
-	SELECT provincia INTO ciudadNuevoSuministro	FROM proveedor
-	WHERE :NEW.idProveedor = proveedor.idProveedor;
+	SELECT ciudad
+    INTO ciudadProveedor
+    FROM proveedor
+	WHERE :NEW.idProveedor = idProveedor;
 
-	IF ciudadNuevoSuministro = 'Sevilla'
-		SELECT COUNT(*) INTO error FROM hotel,suministro
-	 	WHERE (:NEW.idHotel = hotel.idHotel
-	 		AND hotel.idHotel = suministro.idHotel
-	 		AND hotel.ciudad IN ('Granada','Jaen','Malaga','Almería'));
+	IF ciudadProveedor = 'Sevilla' THEN
+		SELECT COUNT(*)
+        INTO suministrosInvalidos
+        FROM suministro, magnos4.fragmentoHotel
+	 	WHERE (:NEW.idHotel = magnos4.fragmentoHotel.idHotel
+	 		AND magnos4.fragmentoHotel.idHotel = suministro.idHotel
+	 		AND magnos4.fragmentoHotel.ciudad IN ('Granada','Jaen','Malaga','Almería'));
 
-	 	IF error > 0 THEN
+	 	IF suministrosInvalidos > 0 THEN
 	 		RAISE_APPLICATION_ERROR(-20007, 'Las ciudades de Granada, Jaén, Málaga y Almería no pueden tener suministros de Sevilla');
 	 	END IF;
 	END IF;
 
-	IF ciudadNuevoSuministro = 'Granada'
-		SELECT COUNT(*) INTO error FROM hotel,suministro
-	 	WHERE (:NEW.idHotel = hotel.idHotel
-	 		AND hotel.idHotel = suministro.idHotel
-	 		AND hotel.ciudad IN ('Cordoba','Sevilla','Cadiz','Huelva'));
+	IF ciudadProveedor = 'Granada' THEN
+		SELECT COUNT(*)
+        INTO suministrosInvalidos
+        FROM suministro, magnos2.fragmentoHotel
+	 	WHERE (:NEW.idHotel = magnos2.fragmentoHotel.idHotel
+	 		AND magnos2.fragmentoHotel.idHotel = suministro.idHotel
+	 		AND magnos2.fragmentoHotel.ciudad IN ('Cordoba','Sevilla','Cadiz','Huelva'));
 
-	 	IF error > 0 THEN
+	 	IF suministrosInvalidos > 0 THEN
 	 		RAISE_APPLICATION_ERROR(-20008, 'Las ciudades de Córdoba, Sevilla, Cádiz o Huelva no pueden tener suministros de Granada');
 	 	END IF;
 	END IF;
 END;
 
- --Restricción 17 --
- CREATE OR REPLACE TRIGGER
- BEFORE DELETE ON proveedor
+ --Restricción 17 (Hecho)--
+ CREATE OR REPLACE TRIGGER borrarProveedor
+ BEFORE DELETE ON fragmentoProveedor
  FOR EACH ROW
  DECLARE
- 	error NUMBER;
+ 	suministros NUMBER;
  BEGIN
- 	SELECT COUNT(*) INTO error FROM suministro
- 		WHERE suministro.idArticulo = :OLD.idProveedor
- 			AND suministro.cantidad > 0;
+ 	SELECT COUNT(*) INTO suministros FROM fragmentoSuministro
+ 		WHERE :OLD.idProveedor = idProveedor AND cantidad > 0;
 
- 	IF error > 0 THEN
+ 	IF suministros > 0 THEN
  		RAISE_APPLICATION_ERROR(-20009, 'No se puede eliminar, la cantidad suministrada no es 0');
  	END IF;
  END;
 
- --Restricción 18 --
- CREATE OR REPLACE TRIGGER
- BEFORE DELETE ON articulo
+ --Restricción 18 (Hecho)--
+ CREATE OR REPLACE TRIGGER borrarArticulo
+ BEFORE DELETE ON fragmentoArticulo
  FOR EACH ROW
  DECLARE
- 	error NUMBER;
+    suministro NUMBER;
  BEGIN
- 	SELECT COUNT(*) INTO error FROM suministro
- 		WHERE suministro.idArticulo = :OLD.idArticulo
- 			AND suministro.cantidad > 0;
+ 	SELECT COUNT(*) INTO suministros FROM fragmentoSuministro
+ 		WHERE :OLD.idArticulo = idArticulo AND cantidad > 0;
 
- 	IF error > 0 THEN
+ 	IF suministros > 0 THEN
  		RAISE_APPLICATION_ERROR(-20010, 'No se puede eliminar, la cantidad suministrada no es 0');
  	END IF;
  END;
