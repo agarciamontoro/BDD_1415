@@ -1,4 +1,14 @@
 -- Borramos las tablas y las vistas antes para voler a crearlas todas --
+
+-- Descomentar lo siguiente en M2-Granada, M4-Sevilla
+
+/*
+DROP TABLE fragmentoSuministro;
+DROP TABLE fragmentoTiene;
+DROP TABLE articulo;
+DROP TABLE fragmentoProveedor;
+*/
+
 DROP TABLE fragmentoReserva;
 DROP TABLE fragmentoTrabaja;
 DROP TABLE fragmentoHotel;
@@ -32,7 +42,7 @@ CREATE TABLE fragmentoHotel (
   	ciudad VARCHAR2(50) CHECK (ciudad IN ('Huelva','Sevilla','Cádiz','Málaga','Córdoba','Jaen','Granada','Almería')),
   	sencillasLibres NUMBER,
   	doblesLibres NUMBER,
-  	idDirector NUMBER NOT NULL REFERENCES fragmentoEmpleado(idEmpleado) UNIQUE,
+  	idDirector NUMBER NOT NULL UNIQUE,
   	PRIMARY KEY(idHotel)
 );
 
@@ -54,12 +64,6 @@ CREATE TABLE fragmentoReserva(
 
 -- Descomentar lo siguiente en M2-Granada, M4-Sevilla
 /*
-
-DROP TABLE fragmentoSuministro;
-DROP TABLE fragmentoTiene;
-DROP TABLE articulo;
-DROP TABLE fragmentoProveedor;
-
 CREATE TABLE fragmentoProveedor (
   	idProveedor NUMBER,
   	nombre VARCHAR2(50),
@@ -90,5 +94,4 @@ CREATE TABLE fragmentoSuministro (
   	PRIMARY KEY(idHotel,fecha,idProveedor,idArticulo),
   	FOREIGN KEY(idProveedor,idArticulo) REFERENCES fragmentoTiene(idProveedor,idArticulo)
 );
-
 */
