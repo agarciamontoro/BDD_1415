@@ -1,49 +1,48 @@
 -- Restricción 4 (Hecho) --
 CREATE OR REPLACE TRIGGER capacidadReservas
-BEFORE INSERT OR UPDATE ON reserva
+BEFORE INSERT OR UPDATE ON fragmentoReserva
 FOR EACH ROW
 DECLARE
   habSimples NUMBER;
   habDobles  NUMBER;
   reservasActuales NUMBER;
 BEGIN
-  SELECT COUNT(*) INTO reservasActuales FROM reserva
-  WHERE hotel.idHotel = reserva.idHotel
-    AND reserva.idHotel = :NEW.idHotel
-    AND tipoHabitacion = :NEW.tipoHabitacion;
+  SELECT COUNT(*) INTO reservasActuales FROM reserva, hotel
+  WHERE reserva.idHotel = :NEW.idHotel
+    AND reserva.tipoHabitacion = :NEW.tipoHabitacion;
 
-  IF NEW.tipoHabitacion = 'Simple' THEN
-    SELECT sencillasLibres INTO habSimples FROM hotel,reserva
-    WHERE hotel.idHotel = reserva.idHotel
-    	AND reserva.idHotel = :NEW.idHotel;
+  IF :NEW.tipoHabitacion = 'Simple' THEN
+    SELECT sencillasLibres INTO habSimples FROM hotel
+    WHERE hotel.idHotel = :NEW.idHotel;
 
-    IF habSimples <= reservasActualesSimples THEN
+    IF habSimples <= reservasActuales THEN
       RAISE_APPLICATION_ERROR(-20001,'Las reservas superan el número de habitaciones simples');
     END IF;
 
   END IF;
 
-  IF NEW.tipoHabitacion = 'Doble' THEN
-    SELECT doblesLibres INTO habDobles FROM hotel,reserva
-    WHERE hotel.idHotel = reserva.idHotel
-    	AND reserva.idHotel = :NEW.idHotel;
+  IF :NEW.tipoHabitacion = 'Doble' THEN
+    SELECT doblesLibres INTO habDobles FROM hotel
+    WHERE hotel.idHotel = :NEW.idHotel;
 
-    IF habDobles <= reservasActualesDobles THEN
+    IF habDobles <= reservasActuales THEN
       RAISE_APPLICATION_ERROR(-21001,'Las reservas superan el número de habitaciones dobles');
     END IF;
 
   END IF;
 
 END;
+/
 
  -- Restricción 5 (Hecho) --
 CREATE OR REPLACE TRIGGER controlFechasReservas
 BEFORE INSERT ON fragmentoReserva
 FOR EACH ROW
-	WHEN (:NEW.fechaEntrada >= :NEW.fechaSalida)
+	WHEN (NEW.fechaEntrada >= NEW.fechaSalida)
 BEGIN
   RAISE_APPLICATION_ERROR(-20002,'La fecha de entrada es mayor que la fecha de salida');
 END;
+/
 
  -- Restricción 6 (Hecho) --
 CREATE OR REPLACE TRIGGER controlReservasCliente
@@ -62,19 +61,21 @@ BEGIN
     RAISE_APPLICATION_ERROR(-20003,'El cliente tiene reservas simultáneas en distintos hoteles');
   END IF;
 END;
+/
 
--- Restricción 10 (Hecho)--
+-- Restricción 10 (Hecho) No rula todavia--
 CREATE OR REPLACE TRIGGER salarioEmpleadoNoPuedeDisminuir
-BEFORE UPDATE OF salario ON empleado
-FOR EACH ROW
-	WHEN (NEW.salario < OLD.salario)
+BEFORE UPDATE OF salario ON fragmentoEmpleado
+FOR EACH ROW WHEN (:NEW.salario < :OLD.salario)
 BEGIN
 	RAISE_APPLICATION_ERROR(-20004,'El salario no se puede disminuir');
 END;
+/
 
+/*
 -- Restricción 12 (Hecho)--
 CREATE OR REPLACE TRIGGER precioSuministroNoMenor
-BEFORE INSERT ON suministro
+BEFORE INSERT ON fragmentoSuministro
 FOR EACH ROW
 DECLARE
     PRAGMA AUTONOMOUS_TRANSACTION;
@@ -91,6 +92,7 @@ BEGIN
 
     COMMIT;
 END;
+/
 
 -- Restricción 13 (Hecho)--
 CREATE OR REPLACE TRIGGER suministroArticuloMaxDosProvincias
@@ -130,6 +132,7 @@ BEGIN
 
     COMMIT;
 END;
+/
 
 -- Restricciones 15 y 16 (Hecho) --
 CREATE OR REPLACE TRIGGER restriccionHotelesProveedores
@@ -170,6 +173,7 @@ BEGIN
 	 	END IF;
 	END IF;
 END;
+/
 
  --Restricción 17 (Hecho)--
  CREATE OR REPLACE TRIGGER borrarProveedor
@@ -200,3 +204,5 @@ END;
  		RAISE_APPLICATION_ERROR(-20010, 'No se puede eliminar, la cantidad suministrada no es 0');
  	END IF;
  END;
+/
+*/
