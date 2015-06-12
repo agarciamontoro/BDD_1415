@@ -97,4 +97,25 @@ BEGIN
     END IF;
 END;
 
--- 13. Dar de alta o actualizar una reserva
+-- 13. Dar de baja un suministro. ¿Falta idProveedor?
+CREATE OR REPLACE PROCEDURE bajaSuministros (
+    arg_idHotel     suministro.idHotel%TYPE,
+    arg_idArticulo  suministro.idArticulo%TYPE,
+    arg_fecha       suministro.fecha%TYPE = null ) AS
+BEGIN
+    -- Si no hay fecha, eliminamos todas las que tengan los otros dos parámetros
+    IF arg_fecha IS NULL THEN
+        DELETE FROM Suministro
+        WHERE   idHotel = arg_idHotel
+                AND
+                idArticulo = arg_idArticulo;
+    -- Si hay fecha, eliminamos esa en concreto
+    ELSE
+        DELETE FROM Suministro
+        WHERE   idHotel = arg_idHotel
+                AND
+                idArticulo = arg_idArticulo
+                AND
+                fecha = arg_fecha;
+    END IF;
+END;
