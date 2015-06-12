@@ -200,7 +200,7 @@ END;
  	SELECT COUNT(*) INTO suministros FROM fragmentoSuministro
  		WHERE :OLD.idArticulo = idArticulo AND cantidad > 0;
 
- 	IF suministros > 0 THEN
+ eve	IF suministros > 0 THEN
  		RAISE_APPLICATION_ERROR(-20010, 'No se puede eliminar, la cantidad suministrada no es 0');
  	END IF;
  END;
