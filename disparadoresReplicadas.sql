@@ -7,7 +7,7 @@ BEGIN
     idCliente,
     DNI,
     nombre,
-    telefono 
+    telefono
   )
   VALUES
   (
@@ -55,7 +55,7 @@ AFTER INSERT ON articulo
 FOR EACH ROW
 BEGIN
 
-  INSERT INTO magnos1.articulo
+  INSERT INTO magnos4.articulo
   (
     idArticulo,
     nombre,
@@ -63,8 +63,8 @@ BEGIN
   )
   VALUES
   (
-    :NEW.idArticulo
-    :NEW.nombre
+    :NEW.idArticulo,
+    :NEW.nombre,
     :NEW.tipo
   );
 
