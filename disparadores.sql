@@ -63,30 +63,30 @@ BEGIN
 END;
 /
 
--- Restricción 10 (Hecho) No rula todavia--
-CREATE OR REPLACE TRIGGER salarioEmpleadoNoPuedeDisminuir
+-- Restricción 10 (Hecho) No rula todavia --
+CREATE OR REPLACE TRIGGER salarioEmpleadoNoDisminuye
 BEFORE UPDATE OF salario ON fragmentoEmpleado
-FOR EACH ROW WHEN (:NEW.salario < :OLD.salario)
+FOR EACH ROW WHEN (NEW.salario < OLD.salario)
 BEGIN
 	RAISE_APPLICATION_ERROR(-20004,'El salario no se puede disminuir');
 END;
 /
 
-/*
+/* Sólo ejectar en magnos2 y magnos4 */
 -- Restricción 12 (Hecho)--
 CREATE OR REPLACE TRIGGER precioSuministroNoMenor
 BEFORE INSERT ON fragmentoSuministro
 FOR EACH ROW
 DECLARE
-    PRAGMA AUTONOMOUS_TRANSACTION;
+  PRAGMA AUTONOMOUS_TRANSACTION;
 	precioMinSumAnteriores fragmentoSuministro.precioUnidad%TYPE;
 BEGIN
-	SELECT MIN(precioPorUnidad)
+	SELECT MIN(precioUnidad)
     INTO precioMinSumAnteriores
     FROM suministro
 	WHERE :NEW.idArticulo = suministro.idArticulo ;
 
-	IF NEW.precioUnidad < precioMinSumAnteriores THEN
+	IF :NEW.precioUnidad < precioMinSumAnteriores THEN
 		RAISE_APPLICATION_ERROR(-20005,'El precio por unidad no puede ser menor respecto a otros suministros');
 	END IF;
 
@@ -95,13 +95,13 @@ END;
 /
 
 -- Restricción 13 (Hecho)--
-CREATE OR REPLACE TRIGGER suministroArticuloMaxDosProvincias
+CREATE OR REPLACE TRIGGER suminArticuloMaxDosProv
 BEFORE INSERT ON fragmentoSuministro
 FOR EACH ROW
 DECLARE
     PRAGMA AUTONOMOUS_TRANSACTION;
     ciudadProveedor fragmentoProveedor.ciudad%TYPE;
-	nVecesSuministrado NUMBER;
+    nVecesSuministrado NUMBER;
 BEGIN
 	SELECT ciudad
     INTO ciudadProveedor
@@ -121,7 +121,7 @@ BEGIN
             FROM suminstro, magnos4.fragmentoProveedor
             WHERE (suministro.idProveedor = magnos4.fragmentoProveedor.idProveedor
                 AND suministro.idArticulo = :new.idArticulo
-                AND magnos2.fragmentoProveedor.ciudad = ciudadProveedor );
+                AND magnos4.fragmentoProveedor.ciudad = ciudadProveedor );
 
         ELSE RAISE_APPLICATION_ERROR(-20006, 'Ciudad del proveedor errónea');
     END CASE;
@@ -130,10 +130,11 @@ BEGIN
 		RAISE_APPLICATION_ERROR(-21006,'Un artículo sólo puede ser suministrado por dos proveedores distintos');
 	END IF;
 
-    COMMIT;
+  COMMIT;
 END;
 /
 
+/*
 -- Restricciones 15 y 16 (Hecho) --
 CREATE OR REPLACE TRIGGER restriccionHotelesProveedores
 BEFORE INSERT ON fragmentoSuministro
@@ -200,7 +201,7 @@ END;
  	SELECT COUNT(*) INTO suministros FROM fragmentoSuministro
  		WHERE :OLD.idArticulo = idArticulo AND cantidad > 0;
 
- 	IF suministros > 0 THEN
+ eve	IF suministros > 0 THEN
  		RAISE_APPLICATION_ERROR(-20010, 'No se puede eliminar, la cantidad suministrada no es 0');
  	END IF;
  END;
