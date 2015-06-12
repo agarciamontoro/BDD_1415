@@ -1,7 +1,7 @@
 
 -------------------------------------------------------
 
-CREATE OR REPLACE TRIGGER restriccionLlaveUnicaCliente
+CREATE OR REPLACE TRIGGER llaveUnicaCliente
 BEFORE INSERT OR UPDATE ON Cliente
 FOR EACH ROW
 DECLARE
@@ -13,26 +13,28 @@ BEGIN
   	RAISE_APPLICATION_ERROR(-10000,'Restricción de llave única violada: la llave ya existe en la tabla');
   END IF;
 END;
+/
 
 -------------------------------------------------------
 
-CREATE OR REPLACE TRIGGER restriccionLlaveUnicaEmpleado
-BEFORE INSERT OR UPDATE ON Empleado
+CREATE OR REPLACE TRIGGER llaveUnicaEmpleado
+BEFORE INSERT OR UPDATE ON fragmentoEmpleado
 FOR EACH ROW
 DECLARE
   numTuplas NUMBER;
 BEGIN
   SELECT COUNT(*) INTO numTuplas FROM Empleado
-  WHERE idEmpleado = :NEW.idCliente;
+  WHERE idEmpleado = :NEW.idEmpleado;
 	IF numTuplas > 0 THEN
   	RAISE_APPLICATION_ERROR(-10001,'Restricción de llave única violada: la llave ya existe en la tabla');
   END IF;
 END;
+/
 
 -------------------------------------------------------
 
-CREATE OR REPLACE TRIGGER restriccionLlaveUnicaHotel
-BEFORE INSERT OR UPDATE ON Hotel
+CREATE OR REPLACE TRIGGER llaveUnicaHotel
+BEFORE INSERT OR UPDATE ON fragmentoHotel
 FOR EACH ROW
 DECLARE
   numTuplas NUMBER;
@@ -43,11 +45,12 @@ BEGIN
   	RAISE_APPLICATION_ERROR(-10002,'Restricción de llave única violada: la llave ya existe en la tabla');
   END IF;
 END;
+/
 
 -------------------------------------------------------
 
-CREATE OR REPLACE TRIGGER restriccionLlaveUnicaTrabaja
-BEFORE INSERT OR UPDATE ON Trabaja
+CREATE OR REPLACE TRIGGER llaveUnicaTrabaja
+BEFORE INSERT OR UPDATE ON fragmentoTrabaja
 FOR EACH ROW
 DECLARE
   numTuplas NUMBER;
@@ -58,11 +61,12 @@ BEGIN
   	RAISE_APPLICATION_ERROR(-10003,'Restricción de llave única violada: la llave ya existe en la tabla');
   END IF;
 END;
+/
 
 -------------------------------------------------------
 
-CREATE OR REPLACE TRIGGER restriccionLlaveUnicaReserva
-BEFORE INSERT OR UPDATE ON Reserva
+CREATE OR REPLACE TRIGGER llaveUnicaReserva
+BEFORE INSERT OR UPDATE ON fragmentoReserva
 FOR EACH ROW
 DECLARE
   numTuplas NUMBER;
@@ -73,11 +77,13 @@ BEGIN
   	RAISE_APPLICATION_ERROR(-10004,'Restricción de llave única violada: la llave ya existe en la tabla');
   END IF;
 END;
+/
+/* Solo para magnos2 - Granada y magnos4 - Sevilla
 
 -------------------------------------------------------
 
-CREATE OR REPLACE TRIGGER restriccionLlaveUnicaProveedor
-BEFORE INSERT OR UPDATE ON Proveedor
+CREATE OR REPLACE TRIGGER llaveUnicaProveedor
+BEFORE INSERT OR UPDATE ON fragmentoProveedor
 FOR EACH ROW
 DECLARE
   numTuplas NUMBER;
@@ -88,10 +94,11 @@ BEGIN
   	RAISE_APPLICATION_ERROR(-10005,'Restricción de llave única violada: la llave ya existe en la tabla');
   END IF;
 END;
+/
 
 -------------------------------------------------------
 
-CREATE OR REPLACE TRIGGER restriccionLlaveUnicaArticulo
+CREATE OR REPLACE TRIGGER llaveUnicaArticulo
 BEFORE INSERT OR UPDATE ON Articulo
 FOR EACH ROW
 DECLARE
@@ -103,11 +110,12 @@ BEGIN
   	RAISE_APPLICATION_ERROR(-10006,'Restricción de llave única violada: la llave ya existe en la tabla');
   END IF;
 END;
+/
 
 -------------------------------------------------------
 
-CREATE OR REPLACE TRIGGER restriccionLlaveUnicaTiene
-BEFORE INSERT OR UPDATE ON Tiene
+CREATE OR REPLACE TRIGGER llaveUnicaTiene
+BEFORE INSERT OR UPDATE ON fragmentoTiene
 FOR EACH ROW
 DECLARE
   numTuplas NUMBER;
@@ -118,11 +126,12 @@ BEGIN
   	RAISE_APPLICATION_ERROR(-10007,'Restricción de llave única violada: la llave ya existe en la tabla');
   END IF;
 END;
+/
 
 -------------------------------------------------------
 
-CREATE OR REPLACE TRIGGER restriccionLlaveUnicaSuministro
-BEFORE INSERT OR UPDATE ON Suministro
+CREATE OR REPLACE TRIGGER llaveUnicaSuministro
+BEFORE INSERT OR UPDATE ON fragmentoSuministro
 FOR EACH ROW
 DECLARE
   numTuplas NUMBER;
@@ -133,3 +142,5 @@ BEGIN
   	RAISE_APPLICATION_ERROR(-10008,'Restricción de llave única violada: la llave ya existe en la tabla');
   END IF;
 END;
+/
+*/
