@@ -82,10 +82,10 @@ CREATE OR REPLACE PROCEDURE altaEmpleado(
     arg_idEmpleado    fragmentoEmpleado.idEmpleado%TYPE,
     arg_dni fragmentoEmpleado.dni%TYPE,
     arg_nombre  fragmentoEmpleado.nombre%TYPE,
-    arg_dire    fragmentoEmpleado.direccion%TYPE,
-    arg_tel fragmentoEmpleado.telefono%TYPE,
+    arg_direccion    fragmentoEmpleado.direccion%TYPE,
+    arg_telefono fragmentoEmpleado.telefono%TYPE,
     arg_fechaContrato fragmentoEmpleado.fechaContrato%TYPE,
-    arg_sala    fragmentoEmpleado.salario%TYPE,
+    arg_salario    fragmentoEmpleado.salario%TYPE,
     arg_idHotel    fragmentoEmpleado.idHotel%TYPE) AS
 
     ciudadHotel fragmentoHotel.ciudad%TYPE;
@@ -97,22 +97,22 @@ BEGIN
 
     IF ( ciudadHotel = 'Cádiz' OR ciudadHotel = 'Huelva' ) THEN
         INSERT INTO magnos1.fragmentoEmpleado(idEmpleado,dni,nombre,telefono,direccion,fechaContrato,salario)
-        VALUES (arg_idEmpleado,arg_dni,arg_nombre,arg_tel,arg_dire,arg_fechaContrato,arg_sala,arg_idHotel);
+        VALUES (arg_idEmpleado,arg_dni,arg_nombre,arg_telefono,arg_direccion,arg_fechaContrato,arg_salario);
         INSERT INTO magnos1.fragmentoTrabaja(idEmpleado, idHotel)
         VALUES (arg_idEmpleado, arg_idHotel);
     ELSIF ( ciudadHotel = 'Granada' OR ciudadHotel = 'Jaén' ) THEN
         INSERT INTO magnos2.fragmentoEmpleado(idEmpleado,dni,nombre,telefono,direccion,fechaContrato,salario)
-        VALUES (arg_idEmpleado,arg_dni,arg_nombre,arg_tel,arg_dire,arg_fechaContrato,arg_sala,arg_idHotel);
+        VALUES (arg_idEmpleado,arg_dni,arg_nombre,arg_telefono,arg_direccion,arg_fechaContrato,arg_salario);
         INSERT INTO magnos2.fragmentoTrabaja(idEmpleado, idHotel)
         VALUES (arg_idEmpleado, arg_idHotel);
     ELSIF ( ciudadHotel = 'Málaga' OR ciudadHotel = 'Almería' ) THEN
         INSERT INTO magnos3.fragmentoEmpleado(idEmpleado,dni,nombre,telefono,direccion,fechaContrato,salario)
-        VALUES (arg_idEmpleado,arg_dni,arg_nombre,arg_tel,arg_dire,arg_fechaContrato,arg_sala,arg_idHotel);
+        VALUES (arg_idEmpleado,arg_dni,arg_nombre,arg_telefono,arg_direccion,arg_fechaContrato,arg_salario);
         INSERT INTO magnos3.fragmentoTrabaja(idEmpleado, idHotel)
         VALUES (arg_idEmpleado, arg_idHotel);
     ELSIF ( ciudadHotel = 'Sevilla' OR ciudadHotel = 'Córdoba' ) THEN
         INSERT INTO magnos4.fragmentoEmpleado(idEmpleado,dni,nombre,telefono,direccion,fechaContrato,salario)
-        VALUES (arg_idEmpleado,arg_dni,arg_nombre,arg_tel,arg_dire,arg_fechaContrato,arg_sala,arg_idHotel);
+        VALUES (arg_idEmpleado,arg_dni,arg_nombre,arg_telefono,arg_direccion,arg_fechaContrato,arg_salario);
         INSERT INTO magnos4.fragmentoTrabaja(idEmpleado, idHotel)
         VALUES (arg_idEmpleado, arg_idHotel);
     ELSE
@@ -131,46 +131,52 @@ END;
 -- 3. Modificar el salario de un empleado. --
 CREATE OR REPLACE PROCEDURE modificarSalario (
     arg_idEmpleado fragmentoEmpleado.idEmpleado%TYPE,
-    arg_salario fragmentoEmpleado.salario%TYPE) AS
+    arg_salariorio fragmentoEmpleado.salario%TYPE) AS
 BEGIN
     UPDATE empleado
-    SET salario = arg_salario
+    SET salario = arg_salariorio
     WHERE idEmpleado = arg_idEmpleado;
 END;
 
 -- 4. Trasladar de hotel a un empleado. --
+/* Los atributos en los que no se especifica lo que se hace con ellos, hemos decidido copiarlos al nuevo destino */
 CREATE OR REPLACE PROCEDURE trasladarEmpleado (
     arg_idEmpleado fragmentoEmpleado.id_Empleado%TYPE,
     arg_idHotel fragmentoTrabaja.id_Hotel%TYPE,
-    arg_direccion fragmentoEmpleado.direccion%TYPE = null,
-    arg_telefono fragmentoEmpleado.telefono%TYPE = null) AS
+    arg_direccionccion fragmentoEmpleado.direccion%TYPE = null,
+    arg_telefonoefono fragmentoEmpleado.telefono%TYPE = null) AS
 BEGIN
     SELECT ciudad
     INTO ciudadHotel
     FROM hotel
     WHERE idHotel = arg_idHotel;
 
+    SELECT dni, nombre, fechaContrato, salario
+    INTO dniEmpleado, nombreEmpleado, fechaContratoEmpleado, salarioEmpleadoNoDisminuye
+    FROM empleado
+    WHERE idEmpleado = arg_idEmpleado;
+
     DELETE FROM trabaja WHERE idEmpleado = arg_idEmpleado;
     DELETE FROM empleado WHERE IDEmpleado = arg_idEmpleado;
 
     IF ( ciudadHotel = 'Cádiz' OR ciudadHotel = 'Huelva' ) THEN
         INSERT INTO magnos1.fragmentoEmpleado(idEmpleado,dni,nombre,telefono,direccion,fechaContrato,salario)
-        VALUES (arg_idEmpleado,arg_dni,arg_nombre,arg_tel,arg_dire,arg_fechaContrato,arg_sala,arg_idHotel);
+        VALUES (arg_idEmpleado,dniEmpleado,nombreEmpleado,arg_telefono,arg_direccion,fechaContratoEmpleado,salarioEmpleado);
         INSERT INTO magnos1.fragmentoTrabaja(idEmpleado, idHotel)
         VALUES (arg_idEmpleado, arg_idHotel);
     ELSIF ( ciudadHotel = 'Granada' OR ciudadHotel = 'Jaén' ) THEN
         INSERT INTO magnos2.fragmentoEmpleado(idEmpleado,dni,nombre,telefono,direccion,fechaContrato,salario)
-        VALUES (arg_idEmpleado,arg_dni,arg_nombre,arg_tel,arg_dire,arg_fechaContrato,arg_sala,arg_idHotel);
+        VALUES (arg_idEmpleado,dniEmpleado,nombreEmpleado,arg_telefono,arg_direccion,fechaContratoEmpleado,salarioEmpleado);
         INSERT INTO magnos2.fragmentoTrabaja(idEmpleado, idHotel)
         VALUES (arg_idEmpleado, arg_idHotel);
     ELSIF ( ciudadHotel = 'Málaga' OR ciudadHotel = 'Almería' ) THEN
         INSERT INTO magnos3.fragmentoEmpleado(idEmpleado,dni,nombre,telefono,direccion,fechaContrato,salario)
-        VALUES (arg_idEmpleado,arg_dni,arg_nombre,arg_tel,arg_dire,arg_fechaContrato,arg_sala,arg_idHotel);
+        VALUES (arg_idEmpleado,dniEmpleado,nombreEmpleado,arg_telefono,arg_direccion,fechaContratoEmpleado,salarioEmpleado);
         INSERT INTO magnos3.fragmentoTrabaja(idEmpleado, idHotel)
         VALUES (arg_idEmpleado, arg_idHotel);
     ELSIF ( ciudadHotel = 'Sevilla' OR ciudadHotel = 'Córdoba' ) THEN
         INSERT INTO magnos4.fragmentoEmpleado(idEmpleado,dni,nombre,telefono,direccion,fechaContrato,salario)
-        VALUES (arg_idEmpleado,arg_dni,arg_nombre,arg_tel,arg_dire,arg_fechaContrato,arg_sala,arg_idHotel);
+        VALUES (arg_idEmpleado,dniEmpleado,nombreEmpleado,arg_telefono,arg_direccion,fechaContratoEmpleado,salarioEmpleado);
         INSERT INTO magnos4.fragmentoTrabaja(idEmpleado, idHotel)
         VALUES (arg_idEmpleado, arg_idHotel);
     ELSE
@@ -209,17 +215,17 @@ CREATE OR REPLACE PROCEDURE nuevoCliente (
     arg_idCliente    fragmentoCliente.idCliente%TYPE,
     arg_DNI     fragmentoCliente.DNI%TYPE,
     arg_nombre  fragmentoCliente.nombre%TYPE,
-    arg_telefono    fragmentoCliente.telefono%TYPE ) AS
+    arg_telefonoefono    fragmentoCliente.telefono%TYPE ) AS
 
     clientes NUMBER;
 BEGIN
     SELECT COUNT(*) INTO clientes FROM fragmentoCliente WHERE idCliente=arg_idCliente OR DNI=arg_DNI;
 
     IF clientes = 0 THEN
-        INSERT INTO magnos1.fragmentoCliente VALUES (arg_idCliente,arg_DNI,arg_nombre,arg_telefono);
-        INSERT INTO magnos2.fragmentoCliente VALUES (arg_idCliente,arg_DNI,arg_nombre,arg_telefono);
-        INSERT INTO magnos3.fragmentoCliente VALUES (arg_idCliente,arg_DNI,arg_nombre,arg_telefono);
-        INSERT INTO magnos4.fragmentoCliente VALUES (arg_idCliente,arg_DNI,arg_nombre,arg_telefono);
+        INSERT INTO magnos1.fragmentoCliente VALUES (arg_idCliente,arg_DNI,arg_nombre,arg_telefonoefono);
+        INSERT INTO magnos2.fragmentoCliente VALUES (arg_idCliente,arg_DNI,arg_nombre,arg_telefonoefono);
+        INSERT INTO magnos3.fragmentoCliente VALUES (arg_idCliente,arg_DNI,arg_nombre,arg_telefonoefono);
+        INSERT INTO magnos4.fragmentoCliente VALUES (arg_idCliente,arg_DNI,arg_nombre,arg_telefonoefono);
     ELSE
         RAISE_APPLICATION_ERROR(-24030,'Este cliente ya existe');
     END IF;
