@@ -32,7 +32,7 @@ BEGIN
 END;
 
 -- 8. Dar de alta o actualizar una reserva
-CREATE OR REPLACE PROCEDURE cambiarDirector (
+CREATE OR REPLACE PROCEDURE actualizarReserva (
     arg_idCliente       cliente.idCliente%TYPE,
     arg_idHotel         hotel.idHotel%TYPE 
     arg_tipoHab         reserva.tipoHabitacion%TYPE 
@@ -96,3 +96,5 @@ BEGIN
         END CASE;
     END IF;
 END;
+
+-- 13. Dar de alta o actualizar una reserva
