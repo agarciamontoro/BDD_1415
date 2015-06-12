@@ -94,6 +94,7 @@ BEGIN
 END;
 /
 
+/* Se arreglará más adelante
 -- Restricción 13 (Hecho)--
 CREATE OR REPLACE TRIGGER suminArticuloMaxDosProv
 BEFORE INSERT ON fragmentoSuministro
@@ -134,7 +135,8 @@ BEGIN
 END;
 /
 
-/*
+*/
+
 -- Restricciones 15 y 16 (Hecho) --
 CREATE OR REPLACE TRIGGER restriccionHotelesProveedores
 BEFORE INSERT ON fragmentoSuministro
@@ -190,20 +192,21 @@ END;
  		RAISE_APPLICATION_ERROR(-20009, 'No se puede eliminar, la cantidad suministrada no es 0');
  	END IF;
  END;
+ /
 
  --Restricción 18 (Hecho)--
  CREATE OR REPLACE TRIGGER borrarArticulo
- BEFORE DELETE ON fragmentoArticulo
+ BEFORE DELETE ON articulo
  FOR EACH ROW
  DECLARE
-    suministro NUMBER;
+    suministros NUMBER;
  BEGIN
  	SELECT COUNT(*) INTO suministros FROM fragmentoSuministro
  		WHERE :OLD.idArticulo = idArticulo AND cantidad > 0;
 
- eve	IF suministros > 0 THEN
+  IF suministros > 0 THEN
  		RAISE_APPLICATION_ERROR(-20010, 'No se puede eliminar, la cantidad suministrada no es 0');
  	END IF;
  END;
 /
-*/
+
