@@ -9,35 +9,35 @@ CREATE OR REPLACE PROCEDURE altaEmpleado(
     arg_salario    fragmentoEmpleado.salario%TYPE,
     arg_idHotel    fragmentoEmpleado.idHotel%TYPE) AS
 
-    ciudadHotel fragmentoHotel.ciudad%TYPE;
+    provinciaHotel fragmentoHotel.provincia%TYPE;
 BEGIN
-    SELECT ciudad
-    INTO ciudadHotel
+    SELECT provincia
+    INTO provinciaHotel
     FROM fragmentoHotel
     WHERE idHotel=arg_idHotel;
 
-    IF ( ciudadHotel = 'Cádiz' OR ciudadHotel = 'Huelva' ) THEN
+    IF ( provinciaHotel = 'Cádiz' OR provinciaHotel = 'Huelva' ) THEN
         INSERT INTO magnos1.fragmentoEmpleado(idEmpleado,dni,nombre,telefono,direccion,fechaContrato,salario)
         VALUES (arg_idEmpleado,arg_dni,arg_nombre,arg_telefono,arg_direccion,arg_fechaContrato,arg_salario);
         INSERT INTO magnos1.fragmentoTrabaja(idEmpleado, idHotel)
         VALUES (arg_idEmpleado, arg_idHotel);
-    ELSIF ( ciudadHotel = 'Granada' OR ciudadHotel = 'Jaén' ) THEN
+    ELSIF ( provinciaHotel = 'Granada' OR provinciaHotel = 'Jaén' ) THEN
         INSERT INTO magnos2.fragmentoEmpleado(idEmpleado,dni,nombre,telefono,direccion,fechaContrato,salario)
         VALUES (arg_idEmpleado,arg_dni,arg_nombre,arg_telefono,arg_direccion,arg_fechaContrato,arg_salario);
         INSERT INTO magnos2.fragmentoTrabaja(idEmpleado, idHotel)
         VALUES (arg_idEmpleado, arg_idHotel);
-    ELSIF ( ciudadHotel = 'Málaga' OR ciudadHotel = 'Almería' ) THEN
+    ELSIF ( provinciaHotel = 'Málaga' OR provinciaHotel = 'Almería' ) THEN
         INSERT INTO magnos3.fragmentoEmpleado(idEmpleado,dni,nombre,telefono,direccion,fechaContrato,salario)
         VALUES (arg_idEmpleado,arg_dni,arg_nombre,arg_telefono,arg_direccion,arg_fechaContrato,arg_salario);
         INSERT INTO magnos3.fragmentoTrabaja(idEmpleado, idHotel)
         VALUES (arg_idEmpleado, arg_idHotel);
-    ELSIF ( ciudadHotel = 'Sevilla' OR ciudadHotel = 'Córdoba' ) THEN
+    ELSIF ( provinciaHotel = 'Sevilla' OR provinciaHotel = 'Córdoba' ) THEN
         INSERT INTO magnos4.fragmentoEmpleado(idEmpleado,dni,nombre,telefono,direccion,fechaContrato,salario)
         VALUES (arg_idEmpleado,arg_dni,arg_nombre,arg_telefono,arg_direccion,arg_fechaContrato,arg_salario);
         INSERT INTO magnos4.fragmentoTrabaja(idEmpleado, idHotel)
         VALUES (arg_idEmpleado, arg_idHotel);
     ELSE
-        RAISE_APPLICATION_ERROR(-24001, 'ciudad de Hotel errónea');
+        RAISE_APPLICATION_ERROR(-24001, 'Provincia de Hotel errónea');
     END IF;
 END;
 /
@@ -68,10 +68,10 @@ CREATE OR REPLACE PROCEDURE trasladarEmpleado (
     arg_idEmpleado fragmentoEmpleado.id_Empleado%TYPE,
     arg_idHotel fragmentoTrabaja.id_Hotel%TYPE,
     arg_direccionccion fragmentoEmpleado.direccion%TYPE = null,
-    arg_telefonoefono fragmentoEmpleado.telefono%TYPE = null) AS
+    arg_telefono fragmentoEmpleado.telefono%TYPE = null) AS
 BEGIN
-    SELECT ciudad
-    INTO ciudadHotel
+    SELECT provincia
+    INTO provinciaHotel
     FROM hotel
     WHERE idHotel = arg_idHotel;
 
@@ -83,28 +83,28 @@ BEGIN
     DELETE FROM trabaja WHERE idEmpleado = arg_idEmpleado;
     DELETE FROM empleado WHERE IDEmpleado = arg_idEmpleado;
 
-    IF ( ciudadHotel = 'Cádiz' OR ciudadHotel = 'Huelva' ) THEN
+    IF ( provinciaHotel = 'Cádiz' OR provinciaHotel = 'Huelva' ) THEN
         INSERT INTO magnos1.fragmentoEmpleado(idEmpleado,dni,nombre,telefono,direccion,fechaContrato,salario)
         VALUES (arg_idEmpleado,dniEmpleado,nombreEmpleado,arg_telefono,arg_direccion,fechaContratoEmpleado,salarioEmpleado);
         INSERT INTO magnos1.fragmentoTrabaja(idEmpleado, idHotel)
         VALUES (arg_idEmpleado, arg_idHotel);
-    ELSIF ( ciudadHotel = 'Granada' OR ciudadHotel = 'Jaén' ) THEN
+    ELSIF ( provinciaHotel = 'Granada' OR provinciaHotel = 'Jaén' ) THEN
         INSERT INTO magnos2.fragmentoEmpleado(idEmpleado,dni,nombre,telefono,direccion,fechaContrato,salario)
         VALUES (arg_idEmpleado,dniEmpleado,nombreEmpleado,arg_telefono,arg_direccion,fechaContratoEmpleado,salarioEmpleado);
         INSERT INTO magnos2.fragmentoTrabaja(idEmpleado, idHotel)
         VALUES (arg_idEmpleado, arg_idHotel);
-    ELSIF ( ciudadHotel = 'Málaga' OR ciudadHotel = 'Almería' ) THEN
+    ELSIF ( provinciaHotel = 'Málaga' OR provinciaHotel = 'Almería' ) THEN
         INSERT INTO magnos3.fragmentoEmpleado(idEmpleado,dni,nombre,telefono,direccion,fechaContrato,salario)
         VALUES (arg_idEmpleado,dniEmpleado,nombreEmpleado,arg_telefono,arg_direccion,fechaContratoEmpleado,salarioEmpleado);
         INSERT INTO magnos3.fragmentoTrabaja(idEmpleado, idHotel)
         VALUES (arg_idEmpleado, arg_idHotel);
-    ELSIF ( ciudadHotel = 'Sevilla' OR ciudadHotel = 'Córdoba' ) THEN
+    ELSIF ( provinciaHotel = 'Sevilla' OR provinciaHotel = 'Córdoba' ) THEN
         INSERT INTO magnos4.fragmentoEmpleado(idEmpleado,dni,nombre,telefono,direccion,fechaContrato,salario)
         VALUES (arg_idEmpleado,dniEmpleado,nombreEmpleado,arg_telefono,arg_direccion,fechaContratoEmpleado,salarioEmpleado);
         INSERT INTO magnos4.fragmentoTrabaja(idEmpleado, idHotel)
         VALUES (arg_idEmpleado, arg_idHotel);
     ELSE
-        RAISE_APPLICATION_ERROR(-24001, 'ciudad de Hotel errónea');
+        RAISE_APPLICATION_ERROR(-24001, 'Provincia de Hotel errónea');
     END IF;
 END;
 /
@@ -214,7 +214,7 @@ BEGIN
             fechaSalida = arg_fechaSalida;
 
     -- Si hay una reserva con los datos suministrados, basta actualizarla
-    -- en la vista. Si no, se inserta según la ciudad correspondiente a idHotel.
+    -- en la vista. Si no, se inserta según la provincia correspondiente a idHotel.
     IF numReservas > 0 THEN
         UPDATE  Reserva
         SET     idCliente = arg_idCliente,
@@ -229,11 +229,11 @@ BEGIN
                 AND
                 fechaSalida = arg_fechaSalida;
     ELSE
-        SELECT ciudad INTO ciudadHotel
+        SELECT provincia INTO provinciaHotel
         FROM Hotel
         WHERE idHotel = arg_idHotel;
 
-        CASE ciudadHotel
+        CASE provinciaHotel
             WHEN 'Cádiz' OR 'Huelva' THEN
                 INSERT INTO magnos1.fragmentoReserva
                 (idCliente, idHotel, tipoHab, precio, fechaEntrada, fechaSalida, idCliente)
