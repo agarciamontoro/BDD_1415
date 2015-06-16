@@ -142,34 +142,34 @@ CREATE OR REPLACE TRIGGER restriccionHotelesProveedores
 BEFORE INSERT ON fragmentoSuministro
 FOR EACH ROW
 DECLARE
-	ciudadProveedor fragmentoProveedor.ciudad%TYPE;
+	provinciaProveedor fragmentoProveedor.provincia%TYPE;
 	suministrosInvalidos NUMBER;
 BEGIN
-	SELECT ciudad
-    INTO ciudadProveedor
+	SELECT provincia
+    INTO provinciaProveedor
     FROM proveedor
 	WHERE :NEW.idProveedor = idProveedor;
 
-	IF ciudadProveedor = 'Sevilla' THEN
+	IF provinciaProveedor = 'Sevilla' THEN
 		SELECT COUNT(*)
         INTO suministrosInvalidos
         FROM suministro, magnos4.fragmentoHotel
 	 	WHERE (:NEW.idHotel = magnos4.fragmentoHotel.idHotel
 	 		AND magnos4.fragmentoHotel.idHotel = suministro.idHotel
-	 		AND magnos4.fragmentoHotel.ciudad IN ('Granada','Jaen','Malaga','Almería'));
+	 		AND magnos4.fragmentoHotel.provincia IN ('Granada','Jaen','Malaga','Almería'));
 
 	 	IF suministrosInvalidos > 0 THEN
 	 		RAISE_APPLICATION_ERROR(-20007, 'Las ciudades de Granada, Jaén, Málaga y Almería no pueden tener suministros de Sevilla');
 	 	END IF;
 	END IF;
 
-	IF ciudadProveedor = 'Granada' THEN
+	IF provinciaProveedor = 'Granada' THEN
 		SELECT COUNT(*)
         INTO suministrosInvalidos
         FROM suministro, magnos2.fragmentoHotel
 	 	WHERE (:NEW.idHotel = magnos2.fragmentoHotel.idHotel
 	 		AND magnos2.fragmentoHotel.idHotel = suministro.idHotel
-	 		AND magnos2.fragmentoHotel.ciudad IN ('Cordoba','Sevilla','Cadiz','Huelva'));
+	 		AND magnos2.fragmentoHotel.provincia IN ('Cordoba','Sevilla','Cadiz','Huelva'));
 
 	 	IF suministrosInvalidos > 0 THEN
 	 		RAISE_APPLICATION_ERROR(-20008, 'Las ciudades de Córdoba, Sevilla, Cádiz o Huelva no pueden tener suministros de Granada');
