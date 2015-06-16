@@ -22,7 +22,7 @@ BEGIN
     WHERE hotel.idHotel = :NEW.idHotel;
 
     IF habSimples <= reservasActuales THEN
-      RAISE_APPLICATION_ERROR(-21001,'Las reservas superan el número de habitaciones simples');
+      RAISE_APPLICATION_ERROR(-20101,'Las reservas superan el número de habitaciones simples');
     END IF;
 
   END IF;
@@ -32,7 +32,7 @@ BEGIN
     WHERE hotel.idHotel = :NEW.idHotel;
 
     IF habDobles <= reservasActuales THEN
-      RAISE_APPLICATION_ERROR(-21101,'Las reservas superan el número de habitaciones dobles');
+      RAISE_APPLICATION_ERROR(-20102,'Las reservas superan el número de habitaciones dobles');
     END IF;
 
   END IF;
@@ -152,7 +152,7 @@ BEGIN
     END CASE;
 
 	IF nVecesSuministrado > 0 THEN
-		RAISE_APPLICATION_ERROR(-21006,'Un artículo sólo puede ser suministrado por dos proveedores distintos');
+		RAISE_APPLICATION_ERROR(-20106,'Un artículo sólo puede ser suministrado por dos proveedores distintos');
 	END IF;
 
   COMMIT;
