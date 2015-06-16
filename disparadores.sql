@@ -1,10 +1,10 @@
 -- Restricción 4 --
-/* Antes de hacer una nueva reserva contamos el número de reservas que tenemos del tipo de
-** habitacion que queremos insertar. A continuación vemos cuantas habitaciones tiene el
-** hotel del tipo que se quiere añadir una reserva, y en el caso en el que el número de
-** habitaciones de ese tipo sea menor o igual que el número de reservas que se tiene
-** actualmente, lanzamos error, en caso contrario, dejamos que se haga la inserción
-*/
+-- Antes de hacer una nueva reserva contamos el número de reservas que tenemos del tipo de
+-- habitacion que queremos insertar. A continuación vemos cuantas habitaciones tiene el
+-- hotel del tipo que se quiere añadir una reserva, y en el caso en el que el número de
+-- habitaciones de ese tipo sea menor o igual que el número de reservas que se tiene
+-- actualmente, lanzamos error, en caso contrario, dejamos que se haga la inserción
+
 CREATE OR REPLACE TRIGGER capacidadReservas
 BEFORE INSERT OR UPDATE ON fragmentoReserva
 FOR EACH ROW
@@ -42,9 +42,9 @@ END;
 
 
  -- Restricción 5 --
-/* Antes de hacer una nueva reserva, se comprueba que la fecha de entrada sea menor que la de
-** salida, en caso contrario se rechaza la inserción.
-*/
+-- Antes de hacer una nueva reserva, se comprueba que la fecha de entrada sea menor que la de
+-- salida, en caso contrario se rechaza la inserción.
+
 CREATE OR REPLACE TRIGGER controlFechasReservas
 BEFORE INSERT ON fragmentoReserva
 FOR EACH ROW
@@ -55,8 +55,8 @@ END;
 /
 
  -- Restricción 6 --
-/* Antes de una nueva reserva, comprobamos que las fechas no se cruzen.
-*/
+-- Antes de una nueva reserva, comprobamos que las fechas no se cruzen.
+
 CREATE OR REPLACE TRIGGER controlReservasCliente
 BEFORE INSERT OR UPDATE ON fragmentoReserva
 FOR EACH ROW
@@ -76,9 +76,9 @@ END;
 /
 
 -- Restricción 10 --
-/* Antes de actualizar la información de un empleado, se comprueba que el nuevo salario
-** no sea menor que el antiguo.
-*/
+-- Antes de actualizar la información de un empleado, se comprueba que el nuevo salario
+-- no sea menor que el antiguo.
+
 CREATE OR REPLACE TRIGGER salarioEmpleadoNoDisminuye
 BEFORE UPDATE OF salario ON fragmentoEmpleado
 FOR EACH ROW WHEN (NEW.salario < OLD.salario)
@@ -87,13 +87,14 @@ BEGIN
 END;
 /
 
-/* Sólo ejectar en magnos2 y magnos4 */
+-- Sólo ejectar en magnos2 y magnos4
+/*
 
 -- Restricción 12 --
-/* Antes de hacer un nuevo suministro, vemos el precioUnidad minimo en los suministros
-** del artículo del que se desea hacer un nuevo suministro. En el caso en el que el nuevo
-** precio sea menor que ese mínimo, rechazamos la inserción.
-*/
+-- Antes de hacer un nuevo suministro, vemos el precioUnidad minimo en los suministros
+-- del artículo del que se desea hacer un nuevo suministro. En el caso en el que el nuevo
+-- precio sea menor que ese mínimo, rechazamos la inserción.
+
 CREATE OR REPLACE TRIGGER precioSuministroNoMenor
 BEFORE INSERT ON fragmentoSuministro
 FOR EACH ROW
@@ -115,10 +116,10 @@ END;
 /
 
 -- Restricción 13 --
-/* Antes de hacer un nuevo suministro, vemos de que provincia es el proveedor, a continuación
-** contamos el número de veces que se ha suministrado ese artículo por los distintos proveedores
-** que trabajan con esas provincias. En caso de ser más de 2 no permitimos el nuevo suministro.
-*/
+-- Antes de hacer un nuevo suministro, vemos de que provincia es el proveedor, a continuación
+-- contamos el número de veces que se ha suministrado ese artículo por los distintos proveedores
+-- que trabajan con esas provincias. En caso de ser más de 2 no permitimos el nuevo suministro.
+
 CREATE OR REPLACE TRIGGER suminArticuloMaxDosProv
 BEFORE INSERT ON fragmentoSuministro
 FOR EACH ROW
@@ -159,11 +160,11 @@ END;
 /
 
 -- Restricciones 15 y 16  --
-/* Antes de hacer un nuevo suministro, vemos la provincia del proveedor que quiere
-** hacer un nuevo suministro, a contunuación antendiendo a la provincia del proveeedor,
-** comprobamos si el nuevo suministro se quiere hacer a una de las provincias de las que
-** el proveedor no puede suministrar.
-*/
+-- Antes de hacer un nuevo suministro, vemos la provincia del proveedor que quiere
+-- hacer un nuevo suministro, a contunuación antendiendo a la provincia del proveeedor,
+-- comprobamos si el nuevo suministro se quiere hacer a una de las provincias de las que
+-- el proveedor no puede suministrar.
+
 CREATE OR REPLACE TRIGGER restriccionHotelesProveedores
 BEFORE INSERT ON fragmentoSuministro
 FOR EACH ROW
@@ -204,10 +205,10 @@ BEGIN
 END;
 /
 
- --Restricción 17 --
- /* Antes de borrar un proveedor contamos el número de suministros que ha hecho el proveedor
- ** con cantidad mayor que cero, en caso de haber alguno, no se puede eliminar ese proveedor.
- */
+--Restricción 17 --
+-- Antes de borrar un proveedor contamos el número de suministros que ha hecho el proveedor
+-- con cantidad mayor que cero, en caso de haber alguno, no se puede eliminar ese proveedor.
+
  CREATE OR REPLACE TRIGGER borrarProveedor
  BEFORE DELETE ON fragmentoProveedor
  FOR EACH ROW
@@ -224,9 +225,9 @@ END;
  /
 
  --Restricción 18 --
- /* Antes de borrar un artículo se cuenta si existe un suministro con cantidad mayor que cero,
- ** en caso de haber alguno, no se puede eliminar ese artículo.
- */
+ -- Antes de borrar un artículo se cuenta si existe un suministro con cantidad mayor que cero,
+ -- en caso de haber alguno, no se puede eliminar ese artículo.
+ 
  CREATE OR REPLACE TRIGGER borrarArticulo
  BEFORE DELETE ON articulo
  FOR EACH ROW
@@ -241,3 +242,4 @@ END;
  	END IF;
  END;
 /
+*/
