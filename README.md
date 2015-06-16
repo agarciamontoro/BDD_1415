@@ -19,7 +19,7 @@ No se necesitaba el potencial que da una entidad en este caso, así que para sim
 
 **Agregación**
 
-En vez de haber hecho uso de una agregación para relacionar el **Proveedor**, **Artículo** y **Suministro**, se podría haber optado por una relación *ternaria*. Pero las relaciones ternarias, pueden llegar a ser difíciles de entender. Además se llegó a la conclusión de que la agregación optimizaba el problema planteado.
+En vez de haber hecho uso de una agregación para relacionar el **Proveedor**, **Artículo** y **Suministro**, se podría haber optado por una *relación ternaria*. Pero pueden llegar a ser difíciles de entender. Además se llegó a la conclusión de que la agregación optimizaba mejor el problema planteado.
 ### Paso a tablas
 Las tablas resultantes del diagrama anterior son las siguientes:
 
@@ -274,16 +274,29 @@ La replicamos en los puntos de almacenamiento de los proveedores. Se hace así y
 
 #### Alternativas o Justificación
 **Hotel**
+
 Se decidió fragmentarlo en cuatro nodos atendiendo a la provincia para mejorar las operaciones locales.
+
 **Dirige, Empleado, Reserva**
+
 Se decidió usar fragmentación horizontal derivdad por **Hotel**, porque se ajustaba mejor al problema.
+
 **Proveedor**
+
 Se decidió fragmentarlo en los dos nodos que toma provincia para mejorar las operaciones locales.
+
 **Tiene**
+
 Se decidió usar fragmentación horizontal derivada por **Proveedor**, porque se ajustaba mejor al problema.
+
 **Cliente**
+
 Como fragmentamos **Reserva**, se planteó fragmentar **Cliente** también.Pero un cliente podía reservar en cualquier sitio, por lo que la replicación en toda la base de datos se ajustaba mejor al problema.
+
 **Articulo**
+
 Como fragmentamos **Tiene**, se planteó fragmentar **Artículo** también. Pero un artículo podía tener varios proveedores de distintas provincias. Así que decidimos replicarlo en dónde estában los proveedores.
+
 **Suministra**
+
 Se decidió fragmentarla en las localidades de **Proveedor**, ya que es más coherente y en la mayoría de los casos optimizaría mejor las consultas. Se pensó también en fragmentarla en las localidades de **Hotel** pero nos pareció que optimizaría menos.
