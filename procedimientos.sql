@@ -37,7 +37,7 @@ BEGIN
         INSERT INTO magnos4.fragmentoTrabaja(idEmpleado, idHotel)
         VALUES (arg_idEmpleado, arg_idHotel);
     ELSE
-        RAISE_APPLICATION_ERROR(-24001, 'Provincia de Hotel errónea');
+        RAISE_APPLICATION_ERROR(-20401, 'Provincia de Hotel errónea');
     END IF;
 END;
 /
@@ -69,7 +69,7 @@ CREATE OR REPLACE PROCEDURE trasladarEmpleado (
     arg_idHotel fragmentoTrabaja.idHotel%TYPE,
     arg_direccion fragmentoEmpleado.direccion%TYPE DEFAULT NULL,
     arg_telefono fragmentoEmpleado.telefono%TYPE DEFAULT NULL)AS
-    
+
     dniEmpleado fragmentoEmpleado.dni%TYPE;
     nombreEmpleado  fragmentoEmpleado.nombre%TYPE;
     fechaContratoEmpleado   fragmentoEmpleado.fechaContrato%TYPE;
@@ -87,7 +87,7 @@ BEGIN
                  dniEmpleado,
                  nombreEmpleado,
                  arg_direccion,
-                 arg_telefono, 
+                 arg_telefono,
                  fechaContratoEmpleado,
                  salarioEmpleado,
                  arg_idHotel
@@ -118,7 +118,7 @@ BEGIN
         INSERT INTO magnos4.fragmentoHotel(idHotel,nombre,provincia,ciudad,sencillasLibres,doblesLibres)
         VALUES (arg_idHotel,arg_nombre,arg_provincia,arg_ciudad,arg_sencillasLibres,arg_doblesLibres);
     ELSE
-        RAISE_APPLICATION_ERROR(-24010, 'Provincia erronea');
+        RAISE_APPLICATION_ERROR(-20402, 'Provincia erronea');
     END IF;
 END;
 /
@@ -137,7 +137,7 @@ BEGIN
     WHERE idDirector = arg_idDirector;
 
     IF numDirectores > 0 THEN
-        RAISE_APPLICATION_ERROR(-5000, 'Este empleado ya dirige un hotel');
+        RAISE_APPLICATION_ERROR(-20403, 'Este empleado ya dirige un hotel');
     END IF;
 
     -- Si el hotel no existe, error. Si existe, modificamos la tupla
@@ -147,8 +147,8 @@ BEGIN
     WHERE idHotel = arg_idHotel;
 
     IF numHoteles = 0 THEN
-        RAISE_APPLICATION_ERROR(-5001, 'Este hotel no existe en la base de datos');
-    ELSE    
+        RAISE_APPLICATION_ERROR(-20404, 'Este hotel no existe en la base de datos');
+    ELSE
         UPDATE Hotel
         SET idDirector = arg_idDirector
         WHERE idHotel = arg_idHotel;
@@ -173,7 +173,7 @@ BEGIN
         INSERT INTO magnos3.cliente VALUES (arg_idCliente,arg_DNI,arg_nombre,arg_telefono);
         INSERT INTO magnos4.cliente VALUES (arg_idCliente,arg_DNI,arg_nombre,arg_telefono);
     ELSE
-        RAISE_APPLICATION_ERROR(-24030,'Este cliente ya existe');
+        RAISE_APPLICATION_ERROR(-20405,'Este cliente ya existe');
     END IF;
 END;
 /
@@ -240,7 +240,7 @@ BEGIN
             VALUES
             (arg_idCliente, arg_idHotel, arg_tipoHab, arg_precio, arg_fechaEntrada, arg_fechaSalida);
         END IF;
-        
+
     END IF;
 END;
 /
@@ -269,7 +269,7 @@ BEGIN
         DELETE FROM magnos4.fragmentoReserva
         WHERE idCliente=arg_idCliente AND idHotel=arg_idHotel AND fechaEntrada=arg_fechaEntrada AND fechaSalida=arg_fechaSalida;
     ELSE
-        RAISE_APPLICATION_ERROR(-24001, 'Provincia de Hotel errónea');
+        RAISE_APPLICATION_ERROR(-20406, 'Provincia de Hotel errónea');
     END IF;
 END;
 /
@@ -288,7 +288,7 @@ BEGIN
             INSERT INTO magnos4.fragmentoProveedor(idProveedor,nombre,provincia)
             VALUES (arg_idProveedor,arg_nombre,arg_provincia) ;
         ELSE
-            RAISE_APPLICATION_ERROR(-24010, 'Provincia errónea');
+            RAISE_APPLICATION_ERROR(-20407, 'Provincia errónea');
     END CASE;
 END;
 /
@@ -315,9 +315,9 @@ CREATE OR REPLACE PROCEDURE altaActualizaSuministro(
     provinciaProveedor  magnos2.fragmentoProveedor.provincia%TYPE;
 BEGIN
     -- lo borramos si esta
-    DELETE FROM magnos2.fragmentoSuministro WHERE idHotel = arg_idHotel AND idProveedor = arg_idProveedor 
+    DELETE FROM magnos2.fragmentoSuministro WHERE idHotel = arg_idHotel AND idProveedor = arg_idProveedor
         AND idArticulo = arg_idArticulo AND fecha = arg_fecha;
-    DELETE FROM magnos4.fragmentoSuministro WHERE idHotel = arg_idHotel AND idProveedor = arg_idProveedor 
+    DELETE FROM magnos4.fragmentoSuministro WHERE idHotel = arg_idHotel AND idProveedor = arg_idProveedor
         AND idArticulo = arg_idArticulo AND fecha = arg_fecha;
 
     SELECT provincia
@@ -333,7 +333,7 @@ BEGIN
             INSERT INTO magnos4.fragmentoSuministro(idArticulo,idProveedor,idHotel,fecha,cantidad,precioUnidad)
             VALUES (arg_idArticulo,arg_idProveedor,arg_idHotel,arg_fecha,arg_cantidad,arg_precioUnidad);
         ELSE
-            RAISE_APPLICATION_ERROR(-20000, 'Provincia errónea');
+            RAISE_APPLICATION_ERROR(-20408, 'Provincia errónea');
     END CASE;
 END;
 /
@@ -393,7 +393,7 @@ BEGIN
             INSERT INTO magnos4.fragmentoTiene(idProveedor,idArticulo)
             VALUES (arg_idProveedor,arg_idArticulo) ;
         ELSE
-            RAISE_APPLICATION_ERROR(-24010, 'Provincia errónea');
+            RAISE_APPLICATION_ERROR(-20409, 'Provincia errónea');
     END CASE;
 END;
 /
