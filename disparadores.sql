@@ -9,29 +9,33 @@ CREATE OR REPLACE TRIGGER capacidadReservas
 BEFORE INSERT OR UPDATE ON fragmentoReserva
 FOR EACH ROW
 DECLARE
-  habSimples NUMBER;
-  habDobles  NUMBER;
+  capacidad NUMBER;
   reservasActuales NUMBER;
 BEGIN
-  SELECT COUNT(*) INTO reservasActuales FROM reserva, hotel
+  SELECT COUNT(*) INTO reservasActuales FROM reserva
   WHERE reserva.idHotel = :NEW.idHotel
-    AND reserva.tipoHabitacion = :NEW.tipoHabitacion;
+    AND reserva.tipoHabitacion = :NEW.tipoHabitacion
+    AND (
+        (reserva.fechaEntrada BETWEEN :NEW.fechaEntrada AND :NEW.fechaSalida)
+        OR
+        (reserva.fechaSalida BETWEEN :NEW.fechaSalida AND :NEW.fechaEntrada)
+    );
 
-  IF :NEW.tipoHabitacion = 'Simple' THEN
-    SELECT sencillasLibres INTO habSimples FROM hotel
+  IF :NEW.tipoHabitacion = 'Sencilla' THEN
+    SELECT sencillasLibres INTO capacidad FROM hotel
     WHERE hotel.idHotel = :NEW.idHotel;
 
-    IF habSimples <= reservasActuales THEN
-      RAISE_APPLICATION_ERROR(-20101,'Las reservas superan el número de habitaciones simples');
+    IF capacidad <= reservasActuales THEN
+      RAISE_APPLICATION_ERROR(-20101,'Las reservas superan el número de habitaciones sencillas');
     END IF;
 
   END IF;
 
   IF :NEW.tipoHabitacion = 'Doble' THEN
-    SELECT doblesLibres INTO habDobles FROM hotel
+    SELECT doblesLibres INTO capacidad FROM hotel
     WHERE hotel.idHotel = :NEW.idHotel;
 
-    IF habDobles <= reservasActuales THEN
+    IF capacidad <= reservasActuales THEN
       RAISE_APPLICATION_ERROR(-20102,'Las reservas superan el número de habitaciones dobles');
     END IF;
 
@@ -40,7 +44,7 @@ BEGIN
 END;
 /
 
-
+/*
  -- Restricción 5 --
 -- Antes de hacer una nueva reserva, se comprueba que la fecha de entrada sea menor que la de
 -- salida, en caso contrario se rechaza la inserción.
@@ -89,7 +93,7 @@ END;
 
 -- Sólo ejectar en magnos2 y magnos4
 
-/*
+
 -- Restricción 12 --
 -- Antes de hacer un nuevo suministro, vemos el precioUnidad minimo en los suministros
 -- del artículo del que se desea hacer un nuevo suministro. En el caso en el que el nuevo
@@ -239,4 +243,6 @@ END;
  	END IF;
  END;
 /
+
 */
+COMMIT;

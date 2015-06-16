@@ -59,11 +59,13 @@ CREATE VIEW trabaja AS
 
 -- Descomentar lo siguiente en M1-Cadiz, M3-Malaga
 
-/*
+
 DROP VIEW articulo;
 
 CREATE VIEW articulo AS
-  SELECT * FROM Magnos2.articulo;
-  --SELECT * FROM Magnos4.articulo;
+  --SELECT * FROM Magnos2.articulo;
+  SELECT * FROM Magnos4.articulo;
 
-*/
+
+
+COMMIT;

@@ -16,6 +16,8 @@ BEGIN
 END;
 /
 
+-- Solo para magnos2 - Granada y magnos4 - Sevilla
+/*
 -- Integridad referencial de idHotel en Suministro con respecto Hotel --
 CREATE OR REPLACE TRIGGER referenciaHotel
 BEFORE INSERT OR UPDATE ON fragmentoSuministro
@@ -33,3 +35,5 @@ BEGIN
    END IF;
 END;
 /
+*/
+COMMIT;

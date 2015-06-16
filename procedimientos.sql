@@ -450,3 +450,5 @@ BEGIN
   DELETE FROM magnos4.articulo WHERE idArticulo=arg_idArticulo;
 END;
 /
+
+COMMIT;

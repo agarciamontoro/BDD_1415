@@ -153,7 +153,7 @@ execute altaActualizaSuministro(10,4,9,TO_DATE('13-05-2014','DD-MM-YYYY'),200,20
 execute altaActualizaSuministro(11,4,10,TO_DATE('27-05-2014','DD-MM-YYYY'),200,15);
 execute altaActualizaSuministro(8,4,8,TO_DATE('23-05-2014','DD-MM-YYYY'),150,2);
 COMMIT;
-/*
+
 -- Clientes
 execute nuevoCliente(1,'12345678','Jose',123456);
 execute nuevoCliente(2,'89012345','Francisco',890123);
@@ -187,4 +187,3 @@ execute actualizarReserva(9,1,'Sencilla',80,TO_DATE('13-09-2014','DD-MM-YYYY'),T
 execute actualizarReserva(10,7,'Doble',75,TO_DATE('1-09-2014','DD-MM-YYYY'),TO_DATE('12-09-2014','DD-MM-YYYY'));
 
 COMMIT;
-*/
