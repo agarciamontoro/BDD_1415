@@ -9,8 +9,8 @@ Las tablas resultantes del diagrama anterior son las siguientes:
 
 * Cliente(_idCliente_, DNI, nombre, telefono)
 * Empleado(_idEmpleado_, salario, DNI, nombre, telefono, direccion, fechaContrato)
-* Hotel(_idHotel_, nombre, ciudad, sencillasLibres, doblesLibes)
-* Proveedor(_idProveedor_, nombre, ciudad)
+* Hotel(_idHotel_, nombre, provincia, ciudad, sencillasLibres, doblesLibres)
+* Proveedor(_idProveedor_, nombre, provincia)
 * Articulo(_idArticulo_, nombre, tipo)
 * Reserva(_idCliente, fechaEntrada, fechaSalida_, idHotel, precioNoche, tipoHabitacion, )
 * Dirige(_idEmpleado_, idHotel)
@@ -27,8 +27,8 @@ La implementación de la primera de las opciones conllevaba bucles de referencia
 
 * Cliente(_idCliente_, DNI, nombre, telefono)
 * Empleado(_idEmpleado_, salario, DNI, nombre, telefono, direccion, fechaContrato)
-* **Hotel(_idHotel_, nombre, ciudad, sencillasLibres, doblesLibes, idDirector)**
-* Proveedor(_idProveedor_, nombre, ciudad)
+* **Hotel(_idHotel_, nombre, provincia, sencillasLibres, doblesLibes, idDirector)**
+* Proveedor(_idProveedor_, nombre, provincia)
 * Articulo(_idArticulo_, nombre, tipo)
 * Reserva(_idCliente, fechaEntrada, fechaSalida_, idHotel, precioNoche, tipoHabitacion, )
 * Trabaja(_idEmpleado_, idHotel)
@@ -59,24 +59,24 @@ La fragmentación la realizaremos en dos pasos:
 #### Fragmentaciones horizontales primarias
 Las dos únicas tablas cuyas tuplas tienen una relación directa -mediante un atributo de las mismas- de la localidad en la que se encuentran son **Hotel** y **Proveedor**.
 
-Es claro entonces que la fragmentación hay que realizarla en base al atributo *ciudad* de las mismas. Esta decisión tiene como principal objetivo maximizar los accesos locales: los accesos que involucren a las tablas Hotel y Proveedor se realizarán, en su mayoría, desde las ciudades cuyas tuplas se necesita consultar.
+Es claro entonces que la fragmentación hay que realizarla en base al atributo *provincia* de las mismas. Esta decisión tiene como principal objetivo maximizar los accesos locales: los accesos que involucren a las tablas Hotel y Proveedor se realizarán, en su mayoría, desde las ciudades cuyas tuplas se necesita consultar.
 
 #### Hotel
 
 Predicados simples:
 
-    P = { Ciudad = Granada, Ciudad = Jaén, Ciudad = Cádiz, Ciudad = Huelva, Ciudad = Sevilla, Ciudad = Córdoba, Ciudad = Málaga, Ciudad = Almería } }
+    P = { Provincia = Granada, Provincia = Jaén, Provincia = Cádiz, Provincia = Huelva, Provincia = Sevilla, Provincia = Córdoba, Provincia = Málaga, Provincia = Almería } }
 
 Para facilitarnos la tarea, notemos cada predicado.
 
-1. Pgra = Ciudad = Granada
-2. Pjae = Ciudad = Jaén
-3. Pcad = Ciudad = Cádiz
-4. Phue = Ciudad = Huelva
-5. Psev = Ciudad = Sevilla
-6. Pcor = Ciudad = Córdoba
-7. Pmal = Ciudad = Málaga
-8. Palm = Ciudad = Añmería
+1. Pgra = Provincia = Granada
+2. Pjae = Provincia = Jaén
+3. Pcad = Provincia = Cádiz
+4. Phue = Provincia = Huelva
+5. Psev = Provincia = Sevilla
+6. Pcor = Provincia = Córdoba
+7. Pmal = Provincia = Málaga
+8. Palm = Provincia = Añmería
 
 Los predicados verdaderos:
 
@@ -117,12 +117,12 @@ Proveedores en **Sevilla**: Suministran a Sevilla, Córdoba, Cádiz y Huelva.
 
 Predicados simples:
 
-    P = { Ciudad = Granada, Ciudad = Sevilla }
+    P = { Provincia = Granada, Provincia = Sevilla }
 
 Para facilitarnos la tarea, notemos cada predicado.
 
-1. Pgra = Ciudad = Granada
-2. Psev = Ciudad = Sevilla
+1. Pgra = Provincia = Granada
+2. Psev = Provincia = Sevilla
 
 Los predicados verdaderos:
 
@@ -141,7 +141,7 @@ La asignación de los fragmentos la hacemos de tal forma que se adapte a la repr
 
 #### Fragmentaciones horizontales derivadas
 
-Derivadas de las fragmentaciones anteriormente realizadas, a continuación se presentan las fragmentaciones de tablas que, si bien no tienen un atributo *ciudad* explícito, tienen una relación indirecta con la ciudad en la que se encuentran. Estas tablas son:
+Derivadas de las fragmentaciones anteriormente realizadas, a continuación se presentan las fragmentaciones de tablas que, si bien no tienen un atributo *provincia* explícito, tienen una relación indirecta con la provincia en la que se encuentran. Estas tablas son:
 
 * Empleado
 * Tabla
@@ -243,7 +243,7 @@ La asignación la hacemos de la siguiente forma:
 
 #### Replicaciones
 
-Las dos tablas restantes, **Cliente** y **Artículo**, no tienen una relación directa ni indirecta con la ciudad. Podríamos entonces optar por la asignación de todas las tuplas a una sola localidad o por la réplica de los datos en todas ellas.
+Las dos tablas restantes, **Cliente** y **Artículo**, no tienen una relación directa ni indirecta con la provincia. Podríamos entonces optar por la asignación de todas las tuplas a una sola localidad o por la réplica de los datos en todas ellas.
 
 Podemos suponer que la cantidad de actualizaciones de estas dos tablas no es crítica, de manera que es mejor optimizar los accesos locales que las actualizaciones remotas. Por tanto, la réplica es la opción óptima.
 
