@@ -150,7 +150,7 @@ BEGIN
         ELSE RAISE_APPLICATION_ERROR(-20006, 'Provincia del proveedor errónea');
     END CASE;
 
-	IF nVecesSuministrado > 1 THEN
+	IF nVecesSuministrado > 0 THEN
 		RAISE_APPLICATION_ERROR(-21006,'Un artículo sólo puede ser suministrado por dos proveedores distintos');
 	END IF;
 
