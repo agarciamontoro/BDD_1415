@@ -8,10 +8,12 @@ DECLARE
 PRAGMA AUTONOMOUS_TRANSACTION;
   numTuplas NUMBER;
 BEGIN
-  SELECT COUNT(*) INTO numTuplas FROM Empleado
-  WHERE idEmpleado = :NEW.idEmpleado;
-	IF numTuplas > 0 THEN
-  	RAISE_APPLICATION_ERROR(-20200,'Restricción de llave única violada: la llave ya existe en la tabla');
+  IF (INSERTING OR UPDATING('idEmpleado')) THEN
+     SELECT COUNT(*) INTO numTuplas FROM Empleado
+     WHERE idEmpleado = :NEW.idEmpleado;
+   	IF numTuplas > 0 THEN
+     	RAISE_APPLICATION_ERROR(-20200,'Restricción de llave única violada: la llave ya existe en la tabla');
+     END IF;
   END IF;
   COMMIT;
 END;
@@ -46,10 +48,12 @@ DECLARE
 PRAGMA AUTONOMOUS_TRANSACTION;
   numTuplas NUMBER;
 BEGIN
-  SELECT COUNT(*) INTO numTuplas FROM Trabaja
-  WHERE idEmpleado = :NEW.idEmpleado;
-	IF numTuplas > 0 THEN
-  	RAISE_APPLICATION_ERROR(-20202,'Restricción de llave única violada: la llave ya existe en la tabla');
+  IF (INSERTING OR UPDATING('idHotel') OR UPDATING('idEmpleado')) THEN
+     SELECT COUNT(*) INTO numTuplas FROM Trabaja
+     WHERE idEmpleado = :NEW.idEmpleado;
+   	IF numTuplas > 0 THEN
+     	RAISE_APPLICATION_ERROR(-20202,'Restricción de llave única violada: la llave ya existe en la tabla');
+     END IF;
   END IF;
   COMMIT;
 END;
@@ -64,10 +68,12 @@ DECLARE
 PRAGMA AUTONOMOUS_TRANSACTION;
   numTuplas NUMBER;
 BEGIN
-  SELECT COUNT(*) INTO numTuplas FROM Reserva
-  WHERE idCliente = :NEW.idCliente AND fechaEntrada = :NEW.fechaEntrada AND fechaSalida = :NEW.fechaSalida;
-	IF numTuplas > 0 THEN
-  	RAISE_APPLICATION_ERROR(-20203,'Restricción de llave única violada: la llave ya existe en la tabla');
+  IF (INSERTING OR UPDATING('idCliente') OR UPDATING('fechaEntrada') OR UPDATING ('fechaSalida')) THEN
+     SELECT COUNT(*) INTO numTuplas FROM Reserva
+     WHERE idCliente = :NEW.idCliente AND fechaEntrada = :NEW.fechaEntrada AND fechaSalida = :NEW.fechaSalida;
+   	IF numTuplas > 0 THEN
+     	RAISE_APPLICATION_ERROR(-20203,'Restricción de llave única violada: la llave ya existe en la tabla');
+     END IF;
   END IF;
   COMMIT;
 END;
@@ -83,10 +89,12 @@ DECLARE
 PRAGMA AUTONOMOUS_TRANSACTION;
   numTuplas NUMBER;
 BEGIN
-  SELECT COUNT(*) INTO numTuplas FROM Proveedor
-  WHERE idProveedor = :NEW.idProveedor;
-	IF numTuplas > 0 THEN
-  	RAISE_APPLICATION_ERROR(-20204,'Restricción de llave única violada: la llave ya existe en la tabla');
+  IF (INSERTING OR UPDATING('idProveedor')) THEN
+     SELECT COUNT(*) INTO numTuplas FROM Proveedor
+     WHERE idProveedor = :NEW.idProveedor;
+   	IF numTuplas > 0 THEN
+     	RAISE_APPLICATION_ERROR(-20204,'Restricción de llave única violada: la llave ya existe en la tabla');
+     END IF;
   END IF;
   COMMIT;
 END;
@@ -101,10 +109,12 @@ DECLARE
 PRAGMA AUTONOMOUS_TRANSACTION;
   numTuplas NUMBER;
 BEGIN
-  SELECT COUNT(*) INTO numTuplas FROM Tiene
-  WHERE idProveedor = :NEW.idProveedor AND idArticulo = :NEW.idArticulo;
-	IF numTuplas > 0 THEN
-  	RAISE_APPLICATION_ERROR(-20205,'Restricción de llave única violada: la llave ya existe en la tabla');
+  IF (INSERTING OR UPDATING('idArticulo') OR UPDATING('idProveedor')) THEN
+     SELECT COUNT(*) INTO numTuplas FROM Tiene
+     WHERE idProveedor = :NEW.idProveedor AND idArticulo = :NEW.idArticulo;
+   	IF numTuplas > 0 THEN
+     	RAISE_APPLICATION_ERROR(-20205,'Restricción de llave única violada: la llave ya existe en la tabla');
+     END IF;
   END IF;
   COMMIT;
 END;
@@ -119,10 +129,12 @@ DECLARE
 PRAGMA AUTONOMOUS_TRANSACTION;
   numTuplas NUMBER;
 BEGIN
-  SELECT COUNT(*) INTO numTuplas FROM Suministro
-  WHERE idHotel = :NEW.idHotel AND fecha = :NEW.fecha AND idProveedor = :NEW.idProveedor AND idArticulo = :NEW.idArticulo;
-	IF numTuplas > 0 THEN
-  	RAISE_APPLICATION_ERROR(-20206,'Restricción de llave única violada: la llave ya existe en la tabla');
+  IF (INSERTING OR UPDATING('idHotel') OR UPDATING('fecha') OR UPDATING('idProveedor') OR UPDATING('idArticulo')) THEN
+     SELECT COUNT(*) INTO numTuplas FROM Suministro
+     WHERE idHotel = :NEW.idHotel AND fecha = :NEW.fecha AND idProveedor = :NEW.idProveedor AND idArticulo = :NEW.idArticulo;
+   	IF numTuplas > 0 THEN
+     	RAISE_APPLICATION_ERROR(-20206,'Restricción de llave única violada: la llave ya existe en la tabla');
+     END IF;
   END IF;
   COMMIT;
 END;
