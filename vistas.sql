@@ -63,7 +63,7 @@ CREATE VIEW trabaja AS
 DROP VIEW articulo;
 
 CREATE VIEW articulo AS
-  --SELECT * FROM Magnos2.articulo;
-  SELECT * FROM Magnos4.articulo;
+  SELECT * FROM Magnos2.articulo;
+  --SELECT * FROM Magnos4.articulo;
 
 */

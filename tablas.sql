@@ -1,7 +1,7 @@
 -- Borramos las tablas y las vistas antes para voler a crearlas todas --
 
 -- Descomentar lo siguiente en M2-Granada, M4-Sevilla
-/*
+
 DROP VIEW suministro;
 DROP TABLE fragmentoSuministro;
 
@@ -13,7 +13,7 @@ DROP TABLE articulo;
 
 DROP VIEW proveedor;
 DROP TABLE fragmentoProveedor;
-*/
+
 
 DROP VIEW reserva;
 DROP TABLE fragmentoReserva;
@@ -79,7 +79,7 @@ CREATE TABLE fragmentoReserva(
 );
 
 -- Descomentar lo siguiente en M2-Granada, M4-Sevilla
-/*
+
 CREATE TABLE fragmentoProveedor (
   	idProveedor NUMBER,
   	nombre VARCHAR2(50),
@@ -101,7 +101,7 @@ CREATE TABLE fragmentoTiene (
 );
 
 CREATE TABLE fragmentoSuministro (
-  	idHotel,
+  	idHotel NUMBER,
   	fecha DATE,
   	idProveedor NUMBER,
   	idArticulo NUMBER,
@@ -110,4 +110,3 @@ CREATE TABLE fragmentoSuministro (
   	PRIMARY KEY(idHotel,fecha,idProveedor,idArticulo),
   	FOREIGN KEY(idProveedor,idArticulo) REFERENCES fragmentoTiene(idProveedor,idArticulo)
 );
-*/

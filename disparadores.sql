@@ -89,7 +89,7 @@ END;
 
 -- Sólo ejectar en magnos2 y magnos4
 
-
+/*
 -- Restricción 12 --
 -- Antes de hacer un nuevo suministro, vemos el precioUnidad minimo en los suministros
 -- del artículo del que se desea hacer un nuevo suministro. En el caso en el que el nuevo
@@ -156,7 +156,6 @@ BEGIN
   COMMIT;
 END;
 /
-
 -- Restricciones 15 y 16  --
 -- Antes de hacer un nuevo suministro, vemos la provincia del proveedor que quiere
 -- hacer un nuevo suministro, a contunuación antendiendo a la provincia del proveeedor,
@@ -181,7 +180,7 @@ BEGIN
         FROM suministro, hotel
 	 	WHERE (:NEW.idHotel = hotel.idHotel
 	 		AND hotel.idHotel = suministro.idHotel
-	 		AND hotel.provincia IN ('Granada','Jaen','Malaga','Almería'));
+	 		AND hotel.provincia IN ('Granada','Jaen','Malaga','Almeria'));
 
 	 	IF suministrosInvalidos > 0 THEN
 	 		RAISE_APPLICATION_ERROR(-20007, 'Las ciudades de Granada, Jaén, Málaga y Almería no pueden tener suministros de Sevilla');
@@ -194,7 +193,7 @@ BEGIN
         FROM suministro, hotel
 	 	WHERE (:NEW.idHotel = hotel.idHotel
 	 		AND hotel.idHotel = suministro.idHotel
-	 		AND hotel.fragmentoHotel.provincia IN ('Cordoba','Sevilla','Cadiz','Huelva'));
+	 		AND hotel.provincia IN ('Cordoba','Sevilla','Cadiz','Huelva'));
 
 	 	IF suministrosInvalidos > 0 THEN
 	 		RAISE_APPLICATION_ERROR(-20008, 'Las ciudades de Córdoba, Sevilla, Cádiz o Huelva no pueden tener suministros de Granada');
@@ -240,3 +239,4 @@ END;
  	END IF;
  END;
 /
+*/
