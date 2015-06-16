@@ -120,19 +120,19 @@ CREATE OR REPLACE PROCEDURE altaHotel (
 BEGIN
 	DBMS_OUTPUT.PUT_LINE('Alta hotel en: ' || arg_provincia || ' marchando');
     IF ( arg_provincia = 'Cádiz' OR arg_provincia = 'Huelva' ) THEN
-        INSERT INTO magnos1.fragmentoHotel(idHotel,nombre,provincia,ciudad,ciudad,sencillasLibres,sencillasDobles)
+        INSERT INTO magnos1.fragmentoHotel(idHotel,nombre,provincia,ciudad,sencillasLibres,sencillasDobles)
         VALUES (arg_idHotel,arg_nombre,arg_provincia,arg_ciudad,arg_sencillasLibres,arg_sencillasDobles);
     ELSIF ( arg_provincia = 'Granada' OR arg_provincia = 'Jaén' ) THEN
-        INSERT INTO magnos2.fragmentoHotel(idHotel,nombre,provincia,ciudad,ciudad,sencillasLibres,sencillasDobles)
+        INSERT INTO magnos2.fragmentoHotel(idHotel,nombre,provincia,ciudad,sencillasLibres,sencillasDobles)
         VALUES (arg_idHotel,arg_nombre,arg_provincia,arg_ciudad,arg_sencillasLibres,arg_sencillasDobles);
     ELSIF ( arg_provincia = 'Málaga' OR arg_provincia = 'Almería' ) THEN
-        INSERT INTO magnos3.fragmentoHotel(idHotel,nombre,provincia,ciudad,ciudad,sencillasLibres,sencillasDobles)
+        INSERT INTO magnos3.fragmentoHotel(idHotel,nombre,provincia,ciudad,sencillasLibres,sencillasDobles)
         VALUES (arg_idHotel,arg_nombre,arg_provincia,arg_ciudad,arg_sencillasLibres,arg_sencillasDobles);
     ELSIF ( arg_provincia = 'Sevilla' OR arg_provincia = 'Córdoba' ) THEN
-        INSERT INTO magnos4.fragmentoHotel(idHotel,nombre,provincia,ciudad,ciudad,sencillasLibres,sencillasDobles)
+        INSERT INTO magnos4.fragmentoHotel(idHotel,nombre,provincia,ciudad,sencillasLibres,sencillasDobles)
         VALUES (arg_idHotel,arg_nombre,arg_provincia,arg_ciudad,arg_sencillasLibres,arg_sencillasDobles);
     ELSE
-        RAISE_APPLICATION_ERROR(-24010, 'Ciudad errónea');
+        RAISE_APPLICATION_ERROR(-24010, 'Provincia errónea');
     END IF;
 END;
 /
@@ -202,7 +202,7 @@ CREATE OR REPLACE PROCEDURE actualizarReserva (
     arg_fechaSalida     reserva.fechaSalida%TYPE ) AS
 
     numReservas NUMBER;
-    ciudadHotel hotel.ciudad%TYPE;
+    provinciaHotel hotel.provincia%TYPE;
 BEGIN
     -- Si el director ya dirige un hotel, error.
     SELECT COUNT(*) INTO numReservas
@@ -268,7 +268,7 @@ CREATE OR REPLACE anularReserva (
 
     provinciaHotel fragmentoHotel.provincia%TYPE;
 BEGIN
-    SELECT ciudad INTO ciudadHotel FROM fragmentoHotel WHERE idHotel=arg_idHotel;
+    SELECT provincia INTO provinciaHotel FROM fragmentoHotel WHERE idHotel=arg_idHotel;
 
     IF ( provinciaHotel = 'Cádiz' OR provinciaHotel = 'Huelva' ) THEN
         DELETE FROM magnos1.fragmentoReserva
@@ -294,7 +294,7 @@ CREATE OF REPLACE PROCEDURE altaProveedor(
     arg_nombre  fragmentoProveedor.nombre%TYPE,
     arg_provincia fragmentoProveedor.provincia%TYPE) AS
 BEGIN
-    CASE arg_ciudad
+    CASE arg_provincia
         WHEN 'Granada'THEN
             INSERT INTO magnos2.fragmentoProveedor(idProveedor,nombre,provincia)
             VALUES (arg_idProveedor,arg_nombre,arg_provincia) ;
