@@ -180,10 +180,10 @@ BEGIN
 	IF provinciaProveedor = 'Sevilla' THEN
 		SELECT COUNT(*)
         INTO suministrosInvalidos
-        FROM suministro, magnos4.fragmentoHotel
-	 	WHERE (:NEW.idHotel = magnos4.fragmentoHotel.idHotel
-	 		AND magnos4.fragmentoHotel.idHotel = suministro.idHotel
-	 		AND magnos4.fragmentoHotel.provincia IN ('Granada','Jaen','Malaga','Almería'));
+        FROM suministro, hotel
+	 	WHERE (:NEW.idHotel = hotel.idHotel
+	 		AND hotel.idHotel = suministro.idHotel
+	 		AND hotel.provincia IN ('Granada','Jaen','Malaga','Almería'));
 
 	 	IF suministrosInvalidos > 0 THEN
 	 		RAISE_APPLICATION_ERROR(-20007, 'Las ciudades de Granada, Jaén, Málaga y Almería no pueden tener suministros de Sevilla');
@@ -193,10 +193,10 @@ BEGIN
 	IF provinciaProveedor = 'Granada' THEN
 		SELECT COUNT(*)
         INTO suministrosInvalidos
-        FROM suministro, magnos2.fragmentoHotel
-	 	WHERE (:NEW.idHotel = magnos2.fragmentoHotel.idHotel
-	 		AND magnos2.fragmentoHotel.idHotel = suministro.idHotel
-	 		AND magnos2.fragmentoHotel.provincia IN ('Cordoba','Sevilla','Cadiz','Huelva'));
+        FROM suministro, hotel
+	 	WHERE (:NEW.idHotel = hotel.idHotel
+	 		AND hotel.idHotel = suministro.idHotel
+	 		AND hotel.fragmentoHotel.provincia IN ('Cordoba','Sevilla','Cadiz','Huelva'));
 
 	 	IF suministrosInvalidos > 0 THEN
 	 		RAISE_APPLICATION_ERROR(-20008, 'Las ciudades de Córdoba, Sevilla, Cádiz o Huelva no pueden tener suministros de Granada');
@@ -227,7 +227,7 @@ END;
  --Restricción 18 --
  -- Antes de borrar un artículo se cuenta si existe un suministro con cantidad mayor que cero,
  -- en caso de haber alguno, no se puede eliminar ese artículo.
- 
+
  CREATE OR REPLACE TRIGGER borrarArticulo
  BEFORE DELETE ON articulo
  FOR EACH ROW
