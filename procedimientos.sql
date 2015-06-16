@@ -199,48 +199,37 @@ BEGIN
             AND
             fechaSalida = arg_fechaSalida;
 
-    -- Si hay una reserva con los datos suministrados, basta actualizarla
-    -- en la vista. Si no, se inserta según la provincia correspondiente a idHotel.
+
+    SELECT provincia INTO provinciaHotel
+    FROM Hotel
+    WHERE idHotel = arg_idHotel;
+
+    -- Si hay una reserva con los datos suministrados, la eliminamos.
+    -- En cualquier caso, despues no existe y se inserta como si fuera nueva.
     IF numReservas > 0 THEN
-        UPDATE  Reserva
-        SET     idCliente = arg_idCliente,
-                idHotel = arg_idHotel,
-                tipoHabitacion   = arg_tipoHab,
-                precioNoche = arg_precio,
-                fechaEntrada = arg_fechaEntrada,
-                fechaSalida = arg_fechaSalida
-        WHERE   idCliente = arg_idCliente
-                AND
-                fechaEntrada = arg_fechaEntrada
-                AND
-                fechaSalida = arg_fechaSalida;
-    ELSE
-        SELECT provincia INTO provinciaHotel
-        FROM Hotel
-        WHERE idHotel = arg_idHotel;
+        anularReserva(arg_idCliente, arg_idHotel, arg_fechaEntrada, arg_fechaSalida);
+    END IF;
 
-        IF (provinciaHotel = 'Cadiz' OR provinciaHotel = 'Huelva') THEN
-            INSERT INTO magnos1.fragmentoReserva
-            (idCliente, idHotel, tipoHabitacion, precioNoche, fechaEntrada, fechaSalida)
-            VALUES
-            (arg_idCliente, arg_idHotel, arg_tipoHab, arg_precio, arg_fechaEntrada, arg_fechaSalida);
-        ELSIF (provinciaHotel = 'Granada' OR provinciaHotel = 'Jaen') THEN
-            INSERT INTO magnos2.fragmentoReserva
-            (idCliente, idHotel, tipoHabitacion, precioNoche, fechaEntrada, fechaSalida)
-            VALUES
-            (arg_idCliente, arg_idHotel, arg_tipoHab, arg_precio, arg_fechaEntrada, arg_fechaSalida);
-        ELSIF (provinciaHotel = 'Malaga' OR provinciaHotel = 'Almeria') THEN
-            INSERT INTO magnos3.fragmentoReserva
-            (idCliente, idHotel, tipoHabitacion, precioNoche, fechaEntrada, fechaSalida)
-            VALUES
-            (arg_idCliente, arg_idHotel, arg_tipoHab, arg_precio, arg_fechaEntrada, arg_fechaSalida);
-        ELSIF (provinciaHotel = 'Sevilla' OR provinciaHotel = 'Cordoba') THEN
-            INSERT INTO magnos4.fragmentoReserva
-            (idCliente, idHotel, tipoHabitacion, precioNoche, fechaEntrada, fechaSalida)
-            VALUES
-            (arg_idCliente, arg_idHotel, arg_tipoHab, arg_precio, arg_fechaEntrada, arg_fechaSalida);
-        END IF;
-
+    IF (provinciaHotel = 'Cadiz' OR provinciaHotel = 'Huelva') THEN
+        INSERT INTO magnos1.fragmentoReserva
+        (idCliente, idHotel, tipoHabitacion, precioNoche, fechaEntrada, fechaSalida)
+        VALUES
+        (arg_idCliente, arg_idHotel, arg_tipoHab, arg_precio, arg_fechaEntrada, arg_fechaSalida);
+    ELSIF (provinciaHotel = 'Granada' OR provinciaHotel = 'Jaen') THEN
+        INSERT INTO magnos2.fragmentoReserva
+        (idCliente, idHotel, tipoHabitacion, precioNoche, fechaEntrada, fechaSalida)
+        VALUES
+        (arg_idCliente, arg_idHotel, arg_tipoHab, arg_precio, arg_fechaEntrada, arg_fechaSalida);
+    ELSIF (provinciaHotel = 'Malaga' OR provinciaHotel = 'Almeria') THEN
+        INSERT INTO magnos3.fragmentoReserva
+        (idCliente, idHotel, tipoHabitacion, precioNoche, fechaEntrada, fechaSalida)
+        VALUES
+        (arg_idCliente, arg_idHotel, arg_tipoHab, arg_precio, arg_fechaEntrada, arg_fechaSalida);
+    ELSIF (provinciaHotel = 'Sevilla' OR provinciaHotel = 'Cordoba') THEN
+        INSERT INTO magnos4.fragmentoReserva
+        (idCliente, idHotel, tipoHabitacion, precioNoche, fechaEntrada, fechaSalida)
+        VALUES
+        (arg_idCliente, arg_idHotel, arg_tipoHab, arg_precio, arg_fechaEntrada, arg_fechaSalida);
     END IF;
 END;
 /
