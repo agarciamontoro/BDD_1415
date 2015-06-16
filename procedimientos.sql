@@ -348,9 +348,10 @@ BEGIN
     END CASE;
 END;
 
--- 13. Dar de baja un suministro. ¿Falta idProveedor?
+-- 13. Dar de baja un suministro.
 CREATE OR REPLACE PROCEDURE bajaSuministros (
     arg_idHotel     suministro.idHotel%TYPE,
+    arg_idProveedor suministro.idProveedor%TYPE,
     arg_idArticulo  suministro.idArticulo%TYPE,
     arg_fecha       suministro.fecha%TYPE = null ) AS
 BEGIN
@@ -359,13 +360,17 @@ BEGIN
         DELETE FROM Suministro
         WHERE   idHotel = arg_idHotel
                 AND
-                idArticulo = arg_idArticulo;
+                idArticulo = arg_idArticulo
+                AND
+                idProveedor = arg_idProveedor;
     -- Si hay fecha, eliminamos esa en concreto
     ELSE
         DELETE FROM Suministro
         WHERE   idHotel = arg_idHotel
                 AND
                 idArticulo = arg_idArticulo
+                AND
+                idProveedor = arg_idProveedor;
                 AND
                 fecha = arg_fecha;
     END IF;
