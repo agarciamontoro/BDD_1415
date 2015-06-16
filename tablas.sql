@@ -1,8 +1,8 @@
 -- Borramos las tablas y las vistas antes para voler a crearlas todas --
 
 -- Descomentar lo siguiente en M2-Granada, M4-Sevilla
-
 /*
+
 DROP TABLE fragmentoSuministro;
 DROP TABLE fragmentoTiene;
 DROP TABLE articulo;

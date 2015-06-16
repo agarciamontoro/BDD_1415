@@ -1,4 +1,5 @@
 -- Restricción 4 (Hecho) --
+
 CREATE OR REPLACE TRIGGER capacidadReservas
 BEFORE INSERT OR UPDATE ON fragmentoReserva
 FOR EACH ROW
@@ -16,7 +17,7 @@ BEGIN
     WHERE hotel.idHotel = :NEW.idHotel;
 
     IF habSimples <= reservasActuales THEN
-      RAISE_APPLICATION_ERROR(-20001,'Las reservas superan el número de habitaciones simples');
+      RAISE_APPLICATION_ERROR(-29001,'Las reservas superan el número de habitaciones simples');
     END IF;
 
   END IF;
@@ -33,6 +34,7 @@ BEGIN
 
 END;
 /
+
 
  -- Restricción 5 (Hecho) --
 CREATE OR REPLACE TRIGGER controlFechasReservas
@@ -73,6 +75,7 @@ END;
 /
 
 /* Sólo ejectar en magnos2 y magnos4 */
+/*
 -- Restricción 12 (Hecho)--
 CREATE OR REPLACE TRIGGER precioSuministroNoMenor
 BEFORE INSERT ON fragmentoSuministro
@@ -94,37 +97,36 @@ BEGIN
 END;
 /
 
-/* Se arreglará más adelante
 -- Restricción 13 (Hecho)--
 CREATE OR REPLACE TRIGGER suminArticuloMaxDosProv
 BEFORE INSERT ON fragmentoSuministro
 FOR EACH ROW
 DECLARE
     PRAGMA AUTONOMOUS_TRANSACTION;
-    ciudadProveedor fragmentoProveedor.ciudad%TYPE;
+    provinciaProveedor fragmentoProveedor.provincia%TYPE;
     nVecesSuministrado NUMBER;
 BEGIN
-	SELECT ciudad
-    INTO ciudadProveedor
+	SELECT provincia
+    INTO provinciaProveedor
     FROM proveedor
 	WHERE :NEW.idProveedor = proveedor.idProveedor;
 
-	CASE ciudadProveedor
+	CASE provinciaProveedor
         WHEN 'Granada' THEN
             SELECT COUNT(*) INTO nVecesSuministrado
             FROM suministro, magnos2.fragmentoProveedor
             WHERE (suministro.idProveedor = magnos2.fragmentoProveedor.idProveedor
                 AND suministro.idArticulo = :NEW.idArticulo
-                AND magnos2.fragmentoProveedor.ciudad = ciudadProveedor );
+                AND magnos2.fragmentoProveedor.provincia = provinciaProveedor );
 
         WHEN 'Sevilla' THEN
             SELECT COUNT(*) INTO nVecesSuministrado
-            FROM suminstro, magnos4.fragmentoProveedor
+            FROM suministro, magnos4.fragmentoProveedor
             WHERE (suministro.idProveedor = magnos4.fragmentoProveedor.idProveedor
                 AND suministro.idArticulo = :new.idArticulo
-                AND magnos4.fragmentoProveedor.ciudad = ciudadProveedor );
+                AND magnos4.fragmentoProveedor.provincia = provinciaProveedor );
 
-        ELSE RAISE_APPLICATION_ERROR(-20006, 'Ciudad del proveedor errónea');
+        ELSE RAISE_APPLICATION_ERROR(-20006, 'Provincia del proveedor errónea');
     END CASE;
 
 	IF nVecesSuministrado > 1 THEN
@@ -135,7 +137,6 @@ BEGIN
 END;
 /
 
-*/
 
 -- Restricciones 15 y 16 (Hecho) --
 CREATE OR REPLACE TRIGGER restriccionHotelesProveedores
@@ -209,4 +210,4 @@ END;
  	END IF;
  END;
 /
-
+*/
