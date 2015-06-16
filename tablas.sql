@@ -39,11 +39,11 @@ CREATE TABLE fragmentoEmpleado(
 CREATE TABLE fragmentoHotel (
   	idHotel NUMBER,
   	nombre VARCHAR2(50),
-  	provincia VARCHAR2(50) CHECK (provincia IN ('Huelva','Sevilla','Cádiz','Málaga','Córdoba','Jaen','Granada','Almería')),
+  	provincia VARCHAR2(50) CHECK (provincia IN ('Huelva','Sevilla','Cadiz','Malaga','Córdoba','Jaen','Granada','Almeria')),
     ciudad VARCHAR2(50),
   	sencillasLibres NUMBER,
   	doblesLibres NUMBER,
-  	idDirector NUMBER NOT NULL UNIQUE,
+  	idDirector NUMBER UNIQUE,
   	PRIMARY KEY(idHotel)
 );
 
