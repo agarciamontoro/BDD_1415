@@ -7,7 +7,7 @@ CREATE OR REPLACE PROCEDURE altaEmpleado(
     arg_telefono fragmentoEmpleado.telefono%TYPE,
     arg_fechaContrato fragmentoEmpleado.fechaContrato%TYPE,
     arg_salario    fragmentoEmpleado.salario%TYPE,
-    arg_idHotel    fragmentoEmpleado.idHotel%TYPE) AS
+    arg_idHotel    fragmentoHotel.idHotel%TYPE) AS
 
     provinciaHotel fragmentoHotel.provincia%TYPE;
 BEGIN
@@ -63,49 +63,35 @@ END;
 /
 
 -- 4. Trasladar de hotel a un empleado. --
-/* Los atributos en los que no se especifica lo que se hace con ellos, hemos decidido copiarlos al nuevo destino */
+-- Los atributos en los que no se especifica lo que se hace con ellos, hemos decidido copiarlos al nuevo destino
 CREATE OR REPLACE PROCEDURE trasladarEmpleado (
-    arg_idEmpleado fragmentoEmpleado.id_Empleado%TYPE,
-    arg_idHotel fragmentoTrabaja.id_Hotel%TYPE,
-    arg_direccionccion fragmentoEmpleado.direccion%TYPE = null,
-    arg_telefono fragmentoEmpleado.telefono%TYPE = null) AS
+    arg_idEmpleado fragmentoEmpleado.idEmpleado%TYPE,
+    arg_idHotel fragmentoTrabaja.idHotel%TYPE,
+    arg_direccion fragmentoEmpleado.direccion%TYPE DEFAULT NULL,
+    arg_telefono fragmentoEmpleado.telefono%TYPE DEFAULT NULL)AS
+    
+    dniEmpleado fragmentoEmpleado.dni%TYPE;
+    nombreEmpleado  fragmentoEmpleado.nombre%TYPE;
+    fechaContratoEmpleado   fragmentoEmpleado.fechaContrato%TYPE;
+    salarioEmpleado  fragmentoEmpleado.salario%TYPE;
+
 BEGIN
-    SELECT provincia
-    INTO provinciaHotel
-    FROM hotel
-    WHERE idHotel = arg_idHotel;
 
     SELECT dni, nombre, fechaContrato, salario
-    INTO dniEmpleado, nombreEmpleado, fechaContratoEmpleado, salarioEmpleadoNoDisminuye
+    INTO dniEmpleado, nombreEmpleado, fechaContratoEmpleado, salarioEmpleado
     FROM empleado
     WHERE idEmpleado = arg_idEmpleado;
 
-    DELETE FROM trabaja WHERE idEmpleado = arg_idEmpleado;
-    DELETE FROM empleado WHERE IDEmpleado = arg_idEmpleado;
-
-    IF ( provinciaHotel = 'Cádiz' OR provinciaHotel = 'Huelva' ) THEN
-        INSERT INTO magnos1.fragmentoEmpleado(idEmpleado,dni,nombre,telefono,direccion,fechaContrato,salario)
-        VALUES (arg_idEmpleado,dniEmpleado,nombreEmpleado,arg_telefono,arg_direccion,fechaContratoEmpleado,salarioEmpleado);
-        INSERT INTO magnos1.fragmentoTrabaja(idEmpleado, idHotel)
-        VALUES (arg_idEmpleado, arg_idHotel);
-    ELSIF ( provinciaHotel = 'Granada' OR provinciaHotel = 'Jaén' ) THEN
-        INSERT INTO magnos2.fragmentoEmpleado(idEmpleado,dni,nombre,telefono,direccion,fechaContrato,salario)
-        VALUES (arg_idEmpleado,dniEmpleado,nombreEmpleado,arg_telefono,arg_direccion,fechaContratoEmpleado,salarioEmpleado);
-        INSERT INTO magnos2.fragmentoTrabaja(idEmpleado, idHotel)
-        VALUES (arg_idEmpleado, arg_idHotel);
-    ELSIF ( provinciaHotel = 'Málaga' OR provinciaHotel = 'Almería' ) THEN
-        INSERT INTO magnos3.fragmentoEmpleado(idEmpleado,dni,nombre,telefono,direccion,fechaContrato,salario)
-        VALUES (arg_idEmpleado,dniEmpleado,nombreEmpleado,arg_telefono,arg_direccion,fechaContratoEmpleado,salarioEmpleado);
-        INSERT INTO magnos3.fragmentoTrabaja(idEmpleado, idHotel)
-        VALUES (arg_idEmpleado, arg_idHotel);
-    ELSIF ( provinciaHotel = 'Sevilla' OR provinciaHotel = 'Córdoba' ) THEN
-        INSERT INTO magnos4.fragmentoEmpleado(idEmpleado,dni,nombre,telefono,direccion,fechaContrato,salario)
-        VALUES (arg_idEmpleado,dniEmpleado,nombreEmpleado,arg_telefono,arg_direccion,fechaContratoEmpleado,salarioEmpleado);
-        INSERT INTO magnos4.fragmentoTrabaja(idEmpleado, idHotel)
-        VALUES (arg_idEmpleado, arg_idHotel);
-    ELSE
-        RAISE_APPLICATION_ERROR(-24001, 'Provincia de Hotel errónea');
-    END IF;
+    bajaEmpleado(arg_idEmpleado);
+    altaEmpleado(arg_idEmpleado,
+                 dniEmpleado,
+                 nombreEmpleado,
+                 arg_direccion,
+                 arg_telefono, 
+                 fechaContratoEmpleado,
+                 salarioEmpleado,
+                 arg_idHotel
+                 );
 END;
 /
 
@@ -119,20 +105,20 @@ CREATE OR REPLACE PROCEDURE altaHotel (
     arg_doblesLibres  fragmentoHotel.doblesLibres%TYPE ) AS
 BEGIN
 	DBMS_OUTPUT.PUT_LINE('Alta hotel en: ' || arg_provincia || ' marchando');
-    IF ( arg_provincia = 'Cádiz' OR arg_provincia = 'Huelva' ) THEN
-        INSERT INTO magnos1.fragmentoHotel(idHotel,nombre,provincia,ciudad,sencillasLibres,sencillasDobles)
-        VALUES (arg_idHotel,arg_nombre,arg_provincia,arg_ciudad,arg_sencillasLibres,arg_sencillasDobles);
-    ELSIF ( arg_provincia = 'Granada' OR arg_provincia = 'Jaén' ) THEN
-        INSERT INTO magnos2.fragmentoHotel(idHotel,nombre,provincia,ciudad,sencillasLibres,sencillasDobles)
-        VALUES (arg_idHotel,arg_nombre,arg_provincia,arg_ciudad,arg_sencillasLibres,arg_sencillasDobles);
-    ELSIF ( arg_provincia = 'Málaga' OR arg_provincia = 'Almería' ) THEN
-        INSERT INTO magnos3.fragmentoHotel(idHotel,nombre,provincia,ciudad,sencillasLibres,sencillasDobles)
-        VALUES (arg_idHotel,arg_nombre,arg_provincia,arg_ciudad,arg_sencillasLibres,arg_sencillasDobles);
-    ELSIF ( arg_provincia = 'Sevilla' OR arg_provincia = 'Córdoba' ) THEN
-        INSERT INTO magnos4.fragmentoHotel(idHotel,nombre,provincia,ciudad,sencillasLibres,sencillasDobles)
-        VALUES (arg_idHotel,arg_nombre,arg_provincia,arg_ciudad,arg_sencillasLibres,arg_sencillasDobles);
+    IF ( arg_provincia = 'Cadiz' OR arg_provincia = 'Huelva' ) THEN
+        INSERT INTO magnos1.fragmentoHotel(idHotel,nombre,provincia,ciudad,sencillasLibres,doblesLibres)
+        VALUES (arg_idHotel,arg_nombre,arg_provincia,arg_ciudad,arg_sencillasLibres,arg_doblesLibres);
+    ELSIF ( arg_provincia = 'Granada' OR arg_provincia = 'Jaen' ) THEN
+        INSERT INTO magnos2.fragmentoHotel(idHotel,nombre,provincia,ciudad,sencillasLibres,doblesLibres)
+        VALUES (arg_idHotel,arg_nombre,arg_provincia,arg_ciudad,arg_sencillasLibres,arg_doblesLibres);
+    ELSIF ( arg_provincia = 'Malaga' OR arg_provincia = 'Almeria' ) THEN
+        INSERT INTO magnos3.fragmentoHotel(idHotel,nombre,provincia,ciudad,sencillasLibres,doblesLibres)
+        VALUES (arg_idHotel,arg_nombre,arg_provincia,arg_ciudad,arg_sencillasLibres,arg_doblesLibres);
+    ELSIF ( arg_provincia = 'Sevilla' OR arg_provincia = 'Cordoba' ) THEN
+        INSERT INTO magnos4.fragmentoHotel(idHotel,nombre,provincia,ciudad,sencillasLibres,doblesLibres)
+        VALUES (arg_idHotel,arg_nombre,arg_provincia,arg_ciudad,arg_sencillasLibres,arg_doblesLibres);
     ELSE
-        RAISE_APPLICATION_ERROR(-24010, 'Provincia errónea');
+        RAISE_APPLICATION_ERROR(-24010, 'Provincia erronea');
     END IF;
 END;
 /
@@ -172,20 +158,20 @@ END;
 
 -- 7. Dar de alta a un nuevo cliente --
 CREATE OR REPLACE PROCEDURE nuevoCliente (
-    arg_idCliente    fragmentoCliente.idCliente%TYPE,
-    arg_DNI     fragmentoCliente.DNI%TYPE,
-    arg_nombre  fragmentoCliente.nombre%TYPE,
-    arg_telefonoefono    fragmentoCliente.telefono%TYPE ) AS
+    arg_idCliente    cliente.idCliente%TYPE,
+    arg_DNI     cliente.DNI%TYPE,
+    arg_nombre  cliente.nombre%TYPE,
+    arg_telefono    cliente.telefono%TYPE ) AS
 
     clientes NUMBER;
 BEGIN
-    SELECT COUNT(*) INTO clientes FROM fragmentoCliente WHERE idCliente=arg_idCliente OR DNI=arg_DNI;
+    SELECT COUNT(*) INTO clientes FROM cliente WHERE idCliente=arg_idCliente OR DNI=arg_DNI;
 
     IF clientes = 0 THEN
-        INSERT INTO magnos1.fragmentoCliente VALUES (arg_idCliente,arg_DNI,arg_nombre,arg_telefonoefono);
-        INSERT INTO magnos2.fragmentoCliente VALUES (arg_idCliente,arg_DNI,arg_nombre,arg_telefonoefono);
-        INSERT INTO magnos3.fragmentoCliente VALUES (arg_idCliente,arg_DNI,arg_nombre,arg_telefonoefono);
-        INSERT INTO magnos4.fragmentoCliente VALUES (arg_idCliente,arg_DNI,arg_nombre,arg_telefonoefono);
+        INSERT INTO magnos1.cliente VALUES (arg_idCliente,arg_DNI,arg_nombre,arg_telefono);
+        INSERT INTO magnos2.cliente VALUES (arg_idCliente,arg_DNI,arg_nombre,arg_telefono);
+        INSERT INTO magnos3.cliente VALUES (arg_idCliente,arg_DNI,arg_nombre,arg_telefono);
+        INSERT INTO magnos4.cliente VALUES (arg_idCliente,arg_DNI,arg_nombre,arg_telefono);
     ELSE
         RAISE_APPLICATION_ERROR(-24030,'Este cliente ya existe');
     END IF;
@@ -195,16 +181,16 @@ END;
 -- 8. Dar de alta o actualizar una reserva
 CREATE OR REPLACE PROCEDURE actualizarReserva (
     arg_idCliente       cliente.idCliente%TYPE,
-    arg_idHotel         hotel.idHotel%TYPE 
-    arg_tipoHab         reserva.tipoHabitacion%TYPE 
-    arg_precio          reserva.precioNoche%TYPE 
-    arg_fechaEntrada    reserva.fechaEntrada%TYPE 
+    arg_idHotel         hotel.idHotel%TYPE,
+    arg_tipoHab         reserva.tipoHabitacion%TYPE,
+    arg_precio          reserva.precioNoche%TYPE,
+    arg_fechaEntrada    reserva.fechaEntrada%TYPE,
     arg_fechaSalida     reserva.fechaSalida%TYPE ) AS
 
     numReservas NUMBER;
     provinciaHotel hotel.provincia%TYPE;
 BEGIN
-    -- Si el director ya dirige un hotel, error.
+
     SELECT COUNT(*) INTO numReservas
     FROM Reserva
     WHERE   idCliente = arg_idCliente
@@ -219,8 +205,8 @@ BEGIN
         UPDATE  Reserva
         SET     idCliente = arg_idCliente,
                 idHotel = arg_idHotel,
-                tipoHab = arg_tipoHab,
-                precio = arg_precio,
+                tipoHabitacion   = arg_tipoHab,
+                precioNoche = arg_precio,
                 fechaEntrada = arg_fechaEntrada,
                 fechaSalida = arg_fechaSalida
         WHERE   idCliente = arg_idCliente
@@ -233,38 +219,38 @@ BEGIN
         FROM Hotel
         WHERE idHotel = arg_idHotel;
 
-        CASE provinciaHotel
-            WHEN 'Cádiz' OR 'Huelva' THEN
-                INSERT INTO magnos1.fragmentoReserva
-                (idCliente, idHotel, tipoHab, precio, fechaEntrada, fechaSalida, idCliente)
-                VALUES
-                (arg_idCliente, arg_idHotel, arg_tipoHab, arg_precio, arg_fechaEntrada, arg_fechaSalida, arg_idCliente);
-            WHEN 'Granada' OR 'Jaén' THEN
-                INSERT INTO magnos2.fragmentoReserva
-                (idCliente, idHotel, tipoHab, precio, fechaEntrada, fechaSalida, idCliente)
-                VALUES
-                (arg_idCliente, arg_idHotel, arg_tipoHab, arg_precio, arg_fechaEntrada, arg_fechaSalida, arg_idCliente);
-            WHEN 'Málaga' OR 'Almería' THEN
-                INSERT INTO magnos3.fragmentoReserva
-                (idCliente, idHotel, tipoHab, precio, fechaEntrada, fechaSalida, idCliente)
-                VALUES
-                (arg_idCliente, arg_idHotel, arg_tipoHab, arg_precio, arg_fechaEntrada, arg_fechaSalida, arg_idCliente);
-            WHEN 'Sevilla' OR 'Córdoba' THEN
-                INSERT INTO magnos4.fragmentoReserva
-                (idCliente, idHotel, tipoHab, precio, fechaEntrada, fechaSalida, idCliente)
-                VALUES
-                (arg_idCliente, arg_idHotel, arg_tipoHab, arg_precio, arg_fechaEntrada, arg_fechaSalida, arg_idCliente);
-        END CASE;
+        IF (provinciaHotel = 'Cádiz' OR provinciaHotel = 'Huelva') THEN
+            INSERT INTO magnos1.fragmentoReserva
+            (idCliente, idHotel, tipoHabitacion, precioNoche, fechaEntrada, fechaSalida)
+            VALUES
+            (arg_idCliente, arg_idHotel, arg_tipoHab, arg_precio, arg_fechaEntrada, arg_fechaSalida);
+        ELSIF (provinciaHotel = 'Granada' OR provinciaHotel = 'Jaén') THEN
+            INSERT INTO magnos2.fragmentoReserva
+            (idCliente, idHotel, tipoHabitacion, precioNoche, fechaEntrada, fechaSalida)
+            VALUES
+            (arg_idCliente, arg_idHotel, arg_tipoHab, arg_precio, arg_fechaEntrada, arg_fechaSalida);
+        ELSIF (provinciaHotel = 'Málaga' OR provinciaHotel = 'Almería') THEN
+            INSERT INTO magnos3.fragmentoReserva
+            (idCliente, idHotel, tipoHabitacion, precioNoche, fechaEntrada, fechaSalida)
+            VALUES
+            (arg_idCliente, arg_idHotel, arg_tipoHab, arg_precio, arg_fechaEntrada, arg_fechaSalida);
+        ELSIF (provinciaHotel = 'Sevilla' OR provinciaHotel = 'Córdoba') THEN
+            INSERT INTO magnos4.fragmentoReserva
+            (idCliente, idHotel, tipoHabitacion, precioNoche, fechaEntrada, fechaSalida)
+            VALUES
+            (arg_idCliente, arg_idHotel, arg_tipoHab, arg_precio, arg_fechaEntrada, arg_fechaSalida);
+        END IF;
+        
     END IF;
 END;
 /
 
 -- 9. Anular reserva (creo que está bien, revisar porfa) --
-CREATE OR REPLACE anularReserva (
+CREATE OR REPLACE PROCEDURE anularReserva (
     arg_idCliente fragmentoReserva.idCliente%TYPE,
     arg_idHotel fragmentoReserva.idHotel%TYPE,
-    arg_fechaInicio fragmentoReserva.fechaInicio%TYPE,
-    arg_fechaFin    fragmentoReserva.fechaFin%TYPE ) AS
+    arg_fechaEntrada fragmentoReserva.fechaEntrada%TYPE,
+    arg_fechaSalida    fragmentoReserva.fechaSalida%TYPE ) AS
 
     provinciaHotel fragmentoHotel.provincia%TYPE;
 BEGIN
@@ -272,16 +258,16 @@ BEGIN
 
     IF ( provinciaHotel = 'Cádiz' OR provinciaHotel = 'Huelva' ) THEN
         DELETE FROM magnos1.fragmentoReserva
-        WHERE idCliente=arg_idCliente AND idHotel=arg_idHotel AND fechaInicio=arg_fechaInicio AND fechaFin=arg_fechaFin;
+        WHERE idCliente=arg_idCliente AND idHotel=arg_idHotel AND fechaEntrada=arg_fechaEntrada AND fechaSalida=arg_fechaSalida;
     ELSIF ( provinciaHotel = 'Granada' OR provinciaHotel = 'Jaén' ) THEN
         DELETE FROM magnos2.fragmentoReserva
-        WHERE idCliente=arg_idCliente AND idHotel=arg_idHotel AND fechaInicio=arg_fechaInicio AND fechaFin=arg_fechaFin;
+        WHERE idCliente=arg_idCliente AND idHotel=arg_idHotel AND fechaEntrada=arg_fechaEntrada AND fechaSalida=arg_fechaSalida;
     ELSIF ( provinciaHotel = 'Málaga' OR provinciaHotel = 'Almería' ) THEN
         DELETE FROM magnos3.fragmentoReserva
-        WHERE idCliente=arg_idCliente AND idHotel=arg_idHotel AND fechaInicio=arg_fechaInicio AND fechaFin=arg_fechaFin;
+        WHERE idCliente=arg_idCliente AND idHotel=arg_idHotel AND fechaEntrada=arg_fechaEntrada AND fechaSalida=arg_fechaSalida;
     ELSIF ( provinciaHotel = 'Sevilla' OR provinciaHotel = 'Córdoba' ) THEN
         DELETE FROM magnos4.fragmentoReserva
-        WHERE idCliente=arg_idCliente AND idHotel=arg_idHotel AND fechaInicio=arg_fechaInicio AND fechaFin=arg_fechaFin;
+        WHERE idCliente=arg_idCliente AND idHotel=arg_idHotel AND fechaEntrada=arg_fechaEntrada AND fechaSalida=arg_fechaSalida;
     ELSE
         RAISE_APPLICATION_ERROR(-24001, 'Provincia de Hotel errónea');
     END IF;
@@ -289,10 +275,10 @@ END;
 /
 
 -- 10. Dar de alta a un nuevo proveedor. --
-CREATE OF REPLACE PROCEDURE altaProveedor(
-    arg_idProveedor    fragmentoProveedor.idProveedor%TYPE,
-    arg_nombre  fragmentoProveedor.nombre%TYPE,
-    arg_provincia fragmentoProveedor.provincia%TYPE) AS
+CREATE OR REPLACE PROCEDURE altaProveedor(
+    arg_idProveedor    magnos2.fragmentoProveedor.idProveedor%TYPE,
+    arg_nombre  magnos2.fragmentoProveedor.nombre%TYPE,
+    arg_provincia magnos2.fragmentoProveedor.provincia%TYPE) AS
 BEGIN
     CASE arg_provincia
         WHEN 'Granada'THEN
@@ -303,12 +289,13 @@ BEGIN
             VALUES (arg_idProveedor,arg_nombre,arg_provincia) ;
         ELSE
             RAISE_APPLICATION_ERROR(-24010, 'Provincia errónea');
-    END;
+    END CASE;
 END;
+/
 
 -- 11. Dar de baja a un proveedor. --
-CREATE OF REPLACE PROCEDURE bajaProveedor(
-    arg_idProveedor    fragmentoProveedor.idProveedor%TYPE) AS
+CREATE OR REPLACE PROCEDURE bajaProveedor(
+    arg_idProveedor    magnos2.fragmentoProveedor.idProveedor%TYPE) AS
 BEGIN
     DELETE FROM magnos2.fragmentoProveedor WHERE idProveedor = arg_idProveedor;
     DELETE FROM magnos4.fragmentoProveedor WHERE idProveedor = arg_idProveedor;
@@ -317,10 +304,10 @@ END;
 
 -- 12. Dar de alta o actualizar un suministro --
 CREATE OR REPLACE PROCEDURE altaActualizaSuministro(
-    arg_idArticulo          magnos2.fragmentoSuministro.codA%TYPE,
-    arg_idProveedor         magnos2.fragmentoSuministro.codP%TYPE,
-    arg_idHotel            	magnos2.fragmentoSuministro.codH%TYPE,
-    arg_fechaSuministro 	magnos2.fragmentoSuministro.fechaSuministro%TYPE,
+    arg_idArticulo          magnos2.fragmentoSuministro.idArticulo%TYPE,
+    arg_idProveedor         magnos2.fragmentoSuministro.idProveedor%TYPE,
+    arg_idHotel            	magnos2.fragmentoSuministro.idHotel%TYPE,
+    arg_fecha               magnos2.fragmentoSuministro.fecha%TYPE,
     arg_cantidad        	magnos2.fragmentoSuministro.cantidad%TYPE,
     arg_precioUnidad 		magnos2.fragmentoSuministro.precioUnidad%TYPE) AS
 
@@ -328,10 +315,10 @@ CREATE OR REPLACE PROCEDURE altaActualizaSuministro(
     provinciaProveedor  magnos2.fragmentoProveedor.provincia%TYPE;
 BEGIN
     -- lo borramos si esta
-    DELETE FROM magnos2.suministro_fr WHERE idHotel = arg_idHotel AND idProveedor = arg_idProveedor 
-        AND idArticulo = arg_idArticulo AND fechaSuministro = arg_fechaSuministro;
-    DELETE FROM magnos4.suministro_fr WHERE idHotel = arg_idHotel AND idProveedor = arg_idProveedor 
-        AND idArticulo = arg_idArticulo AND fechaSuministro = arg_fechaSuministro;
+    DELETE FROM magnos2.fragmentoSuministro WHERE idHotel = arg_idHotel AND idProveedor = arg_idProveedor 
+        AND idArticulo = arg_idArticulo AND fecha = arg_fecha;
+    DELETE FROM magnos4.fragmentoSuministro WHERE idHotel = arg_idHotel AND idProveedor = arg_idProveedor 
+        AND idArticulo = arg_idArticulo AND fecha = arg_fecha;
 
     SELECT provincia
     INTO provinciaProveedor
@@ -340,11 +327,11 @@ BEGIN
 
     CASE provinciaProveedor
         WHEN 'Granada'THEN
-            INSERT INTO magnos2.suministro_fr(idArticulo,idProveedor,idHotel,fechaSuministro,cantidad,precioUnidad)
-            VALUES (arg_idArticulo,arg_idProveedor,arg_idHotel,arg_fechaSuministro,arg_cantidad,arg_precioUnidad);
+            INSERT INTO magnos2.fragmentoSuministro(idArticulo,idProveedor,idHotel,fecha,cantidad,precioUnidad)
+            VALUES (arg_idArticulo,arg_idProveedor,arg_idHotel,arg_fecha,arg_cantidad,arg_precioUnidad);
         WHEN 'Sevilla' THEN
-            INSERT INTO magnos4.suministro_fr(idArticulo,idProveedor,idHotel,fechaSuministro,cantidad,precioUnidad)
-            VALUES (arg_idArticulo,arg_idProveedor,arg_idHotel,arg_fechaSuministro,arg_cantidad,arg_precioUnidad);
+            INSERT INTO magnos4.fragmentoSuministro(idArticulo,idProveedor,idHotel,fecha,cantidad,precioUnidad)
+            VALUES (arg_idArticulo,arg_idProveedor,arg_idHotel,arg_fecha,arg_cantidad,arg_precioUnidad);
         ELSE
             RAISE_APPLICATION_ERROR(-20000, 'Provincia errónea');
     END CASE;
@@ -356,7 +343,7 @@ CREATE OR REPLACE PROCEDURE bajaSuministros (
     arg_idHotel     suministro.idHotel%TYPE,
     arg_idProveedor suministro.idProveedor%TYPE,
     arg_idArticulo  suministro.idArticulo%TYPE,
-    arg_fecha       suministro.fecha%TYPE = null ) AS
+    arg_fecha       suministro.fecha%TYPE DEFAULT NULL ) AS
 BEGIN
     -- Si no hay fecha, eliminamos todas las que tengan los otros dos parámetros
     IF arg_fecha IS NULL THEN
@@ -373,7 +360,7 @@ BEGIN
                 AND
                 idArticulo = arg_idArticulo
                 AND
-                idProveedor = arg_idProveedor;
+                idProveedor = arg_idProveedor
                 AND
                 fecha = arg_fecha;
     END IF;
@@ -381,17 +368,16 @@ END;
 /
 
 -- 14. Dar de alta un nuevo artículo. --
-CREATE OF REPLACE PROCEDURE altaArticulo(
-    arg_idArticulo    articulo.idArticulo%TYPE,
-    arg_nombre  articulo.nombre%TYPE,
-    arg_tipo    articulo.tipo%TYPE
-    arg_idProveedor    fragmentoProveedor.idProveedor%TYPE) AS
+CREATE OR REPLACE PROCEDURE altaArticulo(
+    arg_idArticulo    magnos2.articulo.idArticulo%TYPE,
+    arg_nombre  magnos2.articulo.nombre%TYPE,
+    arg_tipo    magnos2.articulo.tipo%TYPE,
+    arg_idProveedor    magnos2.fragmentoProveedor.idProveedor%TYPE) AS
 
-    provinciaProveedor fragmentoProveedor.provincia%TYPE;
+    provinciaProveedor magnos2.fragmentoProveedor.provincia%TYPE;
 BEGIN
+    -- El disparador de replicacion se ocupa de insertar articulo en magnos4
     INSERT INTO magnos2.articulo(idArticulo,nombre,tipo)
-        VALUES (arg_idArticulo,arg_nombre,arg_tipo);
-    INSERT INTO magnos4.articulo(idArticulo,nombre,tipo)
         VALUES (arg_idArticulo,arg_nombre,arg_tipo);
 
     SELECT provincia
@@ -400,20 +386,20 @@ BEGIN
     WHERE idProveedor = arg_idProveedor;
 
     CASE provinciaProveedor
-        WHEN 'Granada'THEN
-            INSERT INTO magnos2.gestiona_fr(idProveedor,idArticulo)
+        WHEN 'Granada' THEN
+            INSERT INTO magnos2.fragmentoTiene(idProveedor,idArticulo)
             VALUES (arg_idProveedor,arg_idArticulo) ;
         WHEN 'Sevilla' THEN
-            INSERT INTO magnos4.fragmentoProveedor(idProveedor,idArticulo)
+            INSERT INTO magnos4.fragmentoTiene(idProveedor,idArticulo)
             VALUES (arg_idProveedor,arg_idArticulo) ;
         ELSE
             RAISE_APPLICATION_ERROR(-24010, 'Provincia errónea');
-    END;
+    END CASE;
 END;
 /
 
 -- 15. Dar de baja un artículo. --
-CREATE OR REPLACE bajaArticulo (
+CREATE OR REPLACE PROCEDURE bajaArticulo (
     arg_idArticulo  articulo.idArticulo%TYPE ) AS
 BEGIN
   DELETE FROM magnos2.fragmentoSuministro WHERE idArticulo=arg_idArticulo;

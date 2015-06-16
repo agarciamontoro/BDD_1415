@@ -78,7 +78,7 @@ BEGIN
   END IF;
 END;
 /
-/* Solo para magnos2 - Granada y magnos4 - Sevilla
+/* Solo para magnos2 - Granada y magnos4 - Sevilla */
 
 -------------------------------------------------------
 
@@ -143,4 +143,4 @@ BEGIN
   END IF;
 END;
 /
-*/
+

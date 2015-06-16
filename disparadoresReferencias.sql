@@ -1,6 +1,4 @@
 -- Integridad referencial de idDirector en Hotel con respecto a Empleado --
--- ¿Hay que mirar en qué fragmento se encuentra el idDirector? ¿Hay que insertarlo
--- como magnosX.fragmentoEmpledao.idDirector?
 CREATE OR REPLACE TRIGGER referenciaDirector
 BEFORE INSERT OR UPDATE ON fragmentoHotel
 FOR EACH ROW

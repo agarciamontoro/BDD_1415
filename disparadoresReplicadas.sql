@@ -17,7 +17,7 @@ BEGIN
     :NEW.telefono 
   );
   
-  INSERT INTO magnos3.cliente
+  INSERT INTO magnos2.cliente
   (
     idCliente,
     DNI,
@@ -49,13 +49,13 @@ BEGIN
   
 END;
 /
-
+/* Descomentar para Magnos2 - Granada, Magnos4 - Sevilla 
 CREATE OR REPLACE TRIGGER replicacionArticulo
 AFTER INSERT ON articulo
 FOR EACH ROW
 BEGIN
 
-  INSERT INTO magnos4.articulo
+  INSERT INTO magnos2.articulo
   (
     idArticulo,
     nombre,
@@ -70,3 +70,4 @@ BEGIN
 
 END;
 /
+*/
