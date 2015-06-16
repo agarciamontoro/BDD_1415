@@ -2,18 +2,33 @@
 
 -- Descomentar lo siguiente en M2-Granada, M4-Sevilla
 /*
-
+DROP VIEW suministro;
 DROP TABLE fragmentoSuministro;
+
+DROP VIEW tiene;
 DROP TABLE fragmentoTiene;
+
+DROP VIEW articulo;
 DROP TABLE articulo;
+
+DROP VIEW proveedor;
 DROP TABLE fragmentoProveedor;
 */
 
+DROP VIEW reserva;
 DROP TABLE fragmentoReserva;
+
+DROP VIEW trabaja;
 DROP TABLE fragmentoTrabaja;
+
+DROP VIEW hotel;
 DROP TABLE fragmentoHotel;
+
+DROP VIEW empleado;
 DROP TABLE fragmentoEmpleado;
+
 DROP TABLE cliente;
+
 
 --  Tablas  --
 CREATE TABLE cliente(
