@@ -50,7 +50,7 @@ execute altaHotel(8,'Alcazaba','Malaga','Malaga',5,25);
 execute altaHotel(9,'Santa Paula','Granada','Granada',10,30);
 execute altaHotel(10,'Almerimar','Almeria','El Ejido',5,20);
 
-/*
+
 
 
 -- Empleados
@@ -91,7 +91,7 @@ execute cambiarDirector(9,9);
 execute cambiarDirector(10,10);
 
 
-
+/*
 
 -- Proveedores
 execute altaProveedor(1,'Gravilla','Sevilla');

@@ -88,7 +88,7 @@ END;
 /
 
 -- Sólo ejectar en magnos2 y magnos4
-/*
+
 
 -- Restricción 12 --
 -- Antes de hacer un nuevo suministro, vemos el precioUnidad minimo en los suministros
@@ -242,4 +242,3 @@ END;
  	END IF;
  END;
 /
-*/
