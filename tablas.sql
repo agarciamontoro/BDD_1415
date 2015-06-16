@@ -101,7 +101,7 @@ CREATE TABLE fragmentoTiene (
 );
 
 CREATE TABLE fragmentoSuministro (
-  	idHotel NUMBER REFERENCES fragmentoHotel(idHotel),
+  	idHotel,
   	fecha DATE,
   	idProveedor NUMBER,
   	idArticulo NUMBER,

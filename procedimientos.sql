@@ -62,7 +62,7 @@ BEGIN
    INTO provinciaEmpleado
    FROM trabaja, hotel
    WHERE trabaja.idEmpleado = arg_idEmpleado
-      AND trabaja.idHotel = id_Hotel;
+      AND trabaja.idHotel = hotel.idHotel;
 
    IF ( provinciaEmpleado = 'Cadiz' OR provinciaEmpleado = 'Huelva' ) THEN
       UPDATE magnos1.fragmentoEmpleado
@@ -195,6 +195,7 @@ BEGIN
          SET idDirector = arg_idDirector
          WHERE idHotel = arg_idHotel;
       END IF;
+    END IF;
 END;
 /
 
@@ -311,6 +312,7 @@ CREATE OR REPLACE PROCEDURE altaProveedor(
     arg_nombre  magnos2.fragmentoProveedor.nombre%TYPE,
     arg_provincia magnos2.fragmentoProveedor.provincia%TYPE) AS
 BEGIN
+    DBMS_OUTPUT.PUT_LINE('Metiendo proveedor');
     CASE arg_provincia
         WHEN 'Granada'THEN
             INSERT INTO magnos2.fragmentoProveedor(idProveedor,nombre,provincia)
@@ -321,6 +323,7 @@ BEGIN
         ELSE
             RAISE_APPLICATION_ERROR(-20407, 'Provincia erronea');
     END CASE;
+    DBMS_OUTPUT.PUT_LINE('Proveedor metido');
 END;
 /
 
@@ -406,10 +409,17 @@ CREATE OR REPLACE PROCEDURE altaArticulo(
     arg_idProveedor    magnos2.fragmentoProveedor.idProveedor%TYPE) AS
 
     provinciaProveedor magnos2.fragmentoProveedor.provincia%TYPE;
+    numArticulos NUMBER;
 BEGIN
-    -- El disparador de replicacion se ocupa de insertar articulo en magnos4
-    INSERT INTO magnos2.articulo(idArticulo,nombre,tipo)
-        VALUES (arg_idArticulo,arg_nombre,arg_tipo);
+    SELECT COUNT(*) INTO numArticulos FROM magnos2.articulo
+    WHERE idArticulo = arg_idArticulo;
+
+    IF numArticulos = 0 THEN
+        INSERT INTO magnos2.articulo(idArticulo,nombre,tipo)
+            VALUES (arg_idArticulo,arg_nombre,arg_tipo);
+        INSERT INTO magnos4.articulo(idArticulo,nombre,tipo)
+            VALUES (arg_idArticulo,arg_nombre,arg_tipo);
+    END IF;
 
     SELECT provincia
     INTO provinciaProveedor

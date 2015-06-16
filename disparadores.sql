@@ -138,15 +138,13 @@ BEGIN
             SELECT COUNT(*) INTO nVecesSuministrado
             FROM suministro, magnos2.fragmentoProveedor
             WHERE (suministro.idProveedor = magnos2.fragmentoProveedor.idProveedor
-                AND suministro.idArticulo = :NEW.idArticulo
-                AND magnos2.fragmentoProveedor.provincia = provinciaProveedor );
+                AND suministro.idArticulo = :NEW.idArticulo );
 
         WHEN 'Sevilla' THEN
             SELECT COUNT(*) INTO nVecesSuministrado
             FROM suministro, magnos4.fragmentoProveedor
             WHERE (suministro.idProveedor = magnos4.fragmentoProveedor.idProveedor
-                AND suministro.idArticulo = :new.idArticulo
-                AND magnos4.fragmentoProveedor.provincia = provinciaProveedor );
+                AND suministro.idArticulo = :new.idArticulo );
 
         ELSE RAISE_APPLICATION_ERROR(-20006, 'Provincia del proveedor errónea');
     END CASE;

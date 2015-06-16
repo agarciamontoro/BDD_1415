@@ -35,8 +35,7 @@ DELETE FROM magnos4.fragmentoEmpleado;
 DELETE FROM magnos4.fragmentoHotel;
 DELETE FROM magnos4.fragmentoProveedor;
 
-
-
+COMMIT;
 
 -- Hotel
 execute altaHotel(1,'Colon','Huelva','Huelva',5,15);
@@ -50,7 +49,7 @@ execute altaHotel(8,'Alcazaba','Malaga','Malaga',5,25);
 execute altaHotel(9,'Santa Paula','Granada','Granada',10,30);
 execute altaHotel(10,'Almerimar','Almeria','El Ejido',5,20);
 
-
+COMMIT;
 
 
 -- Empleados
@@ -75,7 +74,7 @@ execute altaEmpleado(18,'18181818','Concepcion','Canasteros 8, Cadiz',181818,TO_
 execute altaEmpleado(19,'19191919','Gabriel','Colon 11, Granada',191919,TO_DATE('19-09-2000','DD-MM-YYYY'),1.500,9);
 execute altaEmpleado(20,'20202020','Octavio','Las Peñas 18, Almeria',202020,TO_DATE('20-10-2002','DD-MM-YYYY'),1.500,10);
 
-
+COMMIT;
 
 
 -- Directores
@@ -90,17 +89,15 @@ execute cambiarDirector(8,8);
 execute cambiarDirector(9,9);
 execute cambiarDirector(10,10);
 
+COMMIT;
 
-/*
 
 -- Proveedores
 execute altaProveedor(1,'Gravilla','Sevilla');
 execute altaProveedor(2,'VictorLucas','Sevilla');
 execute altaProveedor(3,'Pescaveja','Granada');
 execute altaProveedor(4,'Molinez','Granada');
-
-
-
+COMMIT;
 
 -- Articulos y gestiona
 execute altaArticulo(1,'Pollo','A',2);
@@ -134,7 +131,7 @@ execute altaArticulo(14,'Pescadilla','D',3);
 execute altaArticulo(15,'Calamar','D',2);
 execute altaArticulo(15,'Calamar','D',3);
 
-
+COMMIT;
 
 
 -- Suministros
@@ -155,39 +152,39 @@ execute altaActualizaSuministro(9,4,8,TO_DATE('15-05-2014','DD-MM-YYYY'),600,1);
 execute altaActualizaSuministro(10,4,9,TO_DATE('13-05-2014','DD-MM-YYYY'),200,20);
 execute altaActualizaSuministro(11,4,10,TO_DATE('27-05-2014','DD-MM-YYYY'),200,15);
 execute altaActualizaSuministro(8,4,8,TO_DATE('23-05-2014','DD-MM-YYYY'),150,2);
-
-
-
-
+COMMIT;
+/*
 -- Clientes
-execute altaCliente(1,'12345678','Jose',123456);
-execute altaCliente(2,'89012345','Francisco',890123);
-execute altaCliente(3,'56789012','Maria',567890);
-execute altaCliente(4,'34567890','Cristina',345678);
-execute altaCliente(5,'01234567','Carmen',012345);
-execute altaCliente(6,'78901234','Juan',789012);
-execute altaCliente(7,'45678901','Miguel',456789);
-execute altaCliente(8,'23456789','Virtudes',234567);
-execute altaCliente(9,'22334455','Ignacio',223344);
-execute altaCliente(10,'66778899','Ismael',667788);
+execute nuevoCliente(1,'12345678','Jose',123456);
+execute nuevoCliente(2,'89012345','Francisco',890123);
+execute nuevoCliente(3,'56789012','Maria',567890);
+execute nuevoCliente(4,'34567890','Cristina',345678);
+execute nuevoCliente(5,'01234567','Carmen',012345);
+execute nuevoCliente(6,'78901234','Juan',789012);
+execute nuevoCliente(7,'45678901','Miguel',456789);
+execute nuevoCliente(8,'23456789','Virtudes',234567);
+execute nuevoCliente(9,'22334455','Ignacio',223344);
+execute nuevoCliente(10,'66778899','Ismael',667788);
 
 
-
+COMMIT;
 
 -- Reservas
-execute altaActualizaReserva(1,6,'Doble',110,TO_DATE('20-07-2014','DD-MM-YYYY'),TO_DATE('31-07-2014','DD-MM-YYYY'));
-execute altaActualizaReserva(1,4,'Sencilla',90,TO_DATE('1-10-2014','DD-MM-YYYY'),TO_DATE('6-10-2014','DD-MM-YYYY'));
-execute altaActualizaReserva(1,6,'Doble',100,TO_DATE('5-11-2014','DD-MM-YYYY'),TO_DATE('12-11-2014','DD-MM-YYYY'));
-execute altaActualizaReserva(2,6,'Doble',110,TO_DATE('20-07-2014','DD-MM-YYYY'),TO_DATE('31-07-2014','DD-MM-YYYY'));
-execute altaActualizaReserva(3,6,'Doble',110,TO_DATE('20-07-2014','DD-MM-YYYY'),TO_DATE('31-07-2014','DD-MM-YYYY'));
-execute altaActualizaReserva(3,9,'Sencilla',150,TO_DATE('1-06-2014','DD-MM-YYYY'),TO_DATE('9-06-2014','DD-MM-YYYY'));
-execute altaActualizaReserva(4,6,'Doble',110,TO_DATE('20-07-2014','DD-MM-YYYY'),TO_DATE('31-07-2014','DD-MM-YYYY'));
-execute altaActualizaReserva(4,6,'Doble',90,TO_DATE('30-11-2014','DD-MM-YYYY'),TO_DATE('5-12-2014','DD-MM-YYYY'));
-execute altaActualizaReserva(5,6,'Doble',110,TO_DATE('20-07-2014','DD-MM-YYYY'),TO_DATE('31-07-2014','DD-MM-YYYY'));
-execute altaActualizaReserva(6,6,'Doble',110,TO_DATE('20-07-2014','DD-MM-YYYY'),TO_DATE('31-07-2014','DD-MM-YYYY'));
-execute altaActualizaReserva(7,10,'Doble',95,TO_DATE('20-06-2014','DD-MM-YYYY'),TO_DATE('1-07-2014','DD-MM-YYYY'));
-execute altaActualizaReserva(8,2,'Doble',85,TO_DATE('1-06-2014','DD-MM-YYYY'),TO_DATE('15-06-2014','DD-MM-YYYY'));
-execute altaActualizaReserva(9,8,'Doble',120,TO_DATE('1-08-2014','DD-MM-YYYY'),TO_DATE('16-08-2014','DD-MM-YYYY'));
-execute altaActualizaReserva(9,1,'Sencilla',80,TO_DATE('13-09-2014','DD-MM-YYYY'),TO_DATE('25-09-2014','DD-MM-YYYY'));
-execute altaActualizaReserva(10,7,'Doble',75,TO_DATE('1-09-2014','DD-MM-YYYY'),TO_DATE('12-09-2014','DD-MM-YYYY'));
+execute actualizarReserva(1,6,'Doble',110,TO_DATE('20-07-2014','DD-MM-YYYY'),TO_DATE('31-07-2014','DD-MM-YYYY'));
+execute actualizarReserva(1,4,'Sencilla',90,TO_DATE('1-10-2014','DD-MM-YYYY'),TO_DATE('6-10-2014','DD-MM-YYYY'));
+execute actualizarReserva(1,6,'Doble',100,TO_DATE('5-11-2014','DD-MM-YYYY'),TO_DATE('12-11-2014','DD-MM-YYYY'));
+execute actualizarReserva(2,6,'Doble',110,TO_DATE('20-07-2014','DD-MM-YYYY'),TO_DATE('31-07-2014','DD-MM-YYYY'));
+execute actualizarReserva(3,6,'Doble',110,TO_DATE('20-07-2014','DD-MM-YYYY'),TO_DATE('31-07-2014','DD-MM-YYYY'));
+execute actualizarReserva(3,9,'Sencilla',150,TO_DATE('1-06-2014','DD-MM-YYYY'),TO_DATE('9-06-2014','DD-MM-YYYY'));
+execute actualizarReserva(4,6,'Doble',110,TO_DATE('20-07-2014','DD-MM-YYYY'),TO_DATE('31-07-2014','DD-MM-YYYY'));
+execute actualizarReserva(4,6,'Doble',90,TO_DATE('30-11-2014','DD-MM-YYYY'),TO_DATE('5-12-2014','DD-MM-YYYY'));
+execute actualizarReserva(5,6,'Doble',110,TO_DATE('20-07-2014','DD-MM-YYYY'),TO_DATE('31-07-2014','DD-MM-YYYY'));
+execute actualizarReserva(6,6,'Doble',110,TO_DATE('20-07-2014','DD-MM-YYYY'),TO_DATE('31-07-2014','DD-MM-YYYY'));
+execute actualizarReserva(7,10,'Doble',95,TO_DATE('20-06-2014','DD-MM-YYYY'),TO_DATE('1-07-2014','DD-MM-YYYY'));
+execute actualizarReserva(8,2,'Doble',85,TO_DATE('1-06-2014','DD-MM-YYYY'),TO_DATE('15-06-2014','DD-MM-YYYY'));
+execute actualizarReserva(9,8,'Doble',120,TO_DATE('1-08-2014','DD-MM-YYYY'),TO_DATE('16-08-2014','DD-MM-YYYY'));
+execute actualizarReserva(9,1,'Sencilla',80,TO_DATE('13-09-2014','DD-MM-YYYY'),TO_DATE('25-09-2014','DD-MM-YYYY'));
+execute actualizarReserva(10,7,'Doble',75,TO_DATE('1-09-2014','DD-MM-YYYY'),TO_DATE('12-09-2014','DD-MM-YYYY'));
+
+COMMIT;
 */
