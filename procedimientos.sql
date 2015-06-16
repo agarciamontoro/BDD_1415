@@ -1,36 +1,3 @@
-/*
--- Baja empleado (errores)
-CREATE OR REPLACE PROCEDURE bajaEmpleado (
-    arg_idEmpleado fragmentoEmpleado.idEmpleado%TYPE) AS
-    ciudadHotel fragmentoHotel.ciudad%TYPE;
-  BEGIN
-
-
-  SELECT  H.ciudad
-    INTO ciudadHotel
-    FROM fragmentoHotel H
-    WHERE H.idHotel=arg_idHotel;
-
-    IF ( ciudadHotel = 'Cádiz' OR ciudadHotel = 'Huelva' ) THEN
-            DELETE FROM magnos1.fragmentoEmpleado E WHERE E.idEmpleado=arg_idEmpleado;
-        ELSIF ( ciudadHotel = 'Granada' OR ciudadHotel = 'Jaén' ) THEN
-            DELETE FROM magnos1.fragmentoEmpleado E WHERE E.idEmpleado=arg_idEmpleado;
-
-        ELSIF ( ciudadHotel = 'Málaga' OR ciudadHotel = 'Almería' ) THEN
-
-            DELETE FROM magnos1.fragmentoEmpleado E WHERE E.idEmpleado=arg_idEmpleado;
-
-        ELSIF ( ciudadHotel = 'Sevilla' OR ciudadHotel = 'Córdoba' ) THEN
-                        DELETE FROM magnos1.fragmentoEmpleado E WHERE E.idEmpleado=arg_idEmpleado;
-
-        ELSE
-            RAISE_APPLICATION_ERROR(-24002, 'ciudad de Hotel errónea');
-        END IF;
-    END;
-/
-*/
-
-
 -- 1. Dar de alta a un nuevo empleado. --
 CREATE OR REPLACE PROCEDURE altaEmpleado(
     arg_idEmpleado    fragmentoEmpleado.idEmpleado%TYPE,
@@ -143,22 +110,23 @@ CREATE OR REPLACE PROCEDURE altaHotel (
     arg_idHotel    fragmentoHotel.idHotel%TYPE,
     arg_nombre  fragmentoHotel.nombre%TYPE,
     arg_ciudad  fragmentoHotel.ciudad%TYPE,
-    arg_ciudad fragmentoHotel.ciudad%TYPE,
+    arg_provincia fragmentoHotel.provincia%TYPE,
     arg_sencillasLibres fragmentoHotel.sencillasLibres%TYPE,
     arg_doblesLibres  fragmentoHotel.doblesLibres%TYPE ) AS
 BEGIN
-    IF ( arg_ciudad = 'Cádiz' OR arg_ciudad = 'Huelva' ) THEN
-        INSERT INTO magnos1.fragmentoHotel(idHotel,nombre,ciudad,ciudad,sencillasLibres,sencillasDobles)
-        VALUES (arg_idHotel,arg_nombre,arg_ciudad,arg_ciudad,arg_sencillasLibres,arg_sencillasDobles);
-    ELSIF ( arg_ciudad = 'Granada' OR arg_ciudad = 'Jaén' ) THEN
-        INSERT INTO magnos2.fragmentoHotel(idHotel,nombre,ciudad,ciudad,sencillasLibres,sencillasDobles)
-        VALUES (arg_idHotel,arg_nombre,arg_ciudad,arg_ciudad,arg_sencillasLibres,arg_sencillasDobles);
-    ELSIF ( arg_ciudad = 'Málaga' OR arg_ciudad = 'Almería' ) THEN
-        INSERT INTO magnos3.fragmentoHotel(idHotel,nombre,ciudad,ciudad,sencillasLibres,sencillasDobles)
-        VALUES (arg_idHotel,arg_nombre,arg_ciudad,arg_ciudad,arg_sencillasLibres,arg_sencillasDobles);
-    ELSIF ( arg_ciudad = 'Sevilla' OR arg_ciudad = 'Córdoba' ) THEN
-        INSERT INTO magnos4.fragmentoHotel(idHotel,nombre,ciudad,ciudad,sencillasLibres,sencillasDobles)
-        VALUES (arg_idHotel,arg_nombre,arg_ciudad,arg_ciudad,arg_sencillasLibres,arg_sencillasDobles);
+	DBMS_OUTPUT.PUT_LINE('Alta hotel en: ' || arg_provincia || ' marchando');
+    IF ( arg_provincia = 'Cádiz' OR arg_provincia = 'Huelva' ) THEN
+        INSERT INTO magnos1.fragmentoHotel(idHotel,nombre,provincia,ciudad,ciudad,sencillasLibres,sencillasDobles)
+        VALUES (arg_idHotel,arg_nombre,arg_provincia,arg_ciudad,arg_sencillasLibres,arg_sencillasDobles);
+    ELSIF ( arg_provincia = 'Granada' OR arg_provincia = 'Jaén' ) THEN
+        INSERT INTO magnos2.fragmentoHotel(idHotel,nombre,provincia,ciudad,ciudad,sencillasLibres,sencillasDobles)
+        VALUES (arg_idHotel,arg_nombre,arg_provincia,arg_ciudad,arg_sencillasLibres,arg_sencillasDobles);
+    ELSIF ( arg_provincia = 'Málaga' OR arg_provincia = 'Almería' ) THEN
+        INSERT INTO magnos3.fragmentoHotel(idHotel,nombre,provincia,ciudad,ciudad,sencillasLibres,sencillasDobles)
+        VALUES (arg_idHotel,arg_nombre,arg_provincia,arg_ciudad,arg_sencillasLibres,arg_sencillasDobles);
+    ELSIF ( arg_provincia = 'Sevilla' OR arg_provincia = 'Córdoba' ) THEN
+        INSERT INTO magnos4.fragmentoHotel(idHotel,nombre,provincia,ciudad,ciudad,sencillasLibres,sencillasDobles)
+        VALUES (arg_idHotel,arg_nombre,arg_provincia,arg_ciudad,arg_sencillasLibres,arg_sencillasDobles);
     ELSE
         RAISE_APPLICATION_ERROR(-24010, 'Ciudad errónea');
     END IF;
@@ -171,7 +139,6 @@ CREATE OR REPLACE PROCEDURE cambiarDirector (
 
     numDirectores   NUMBER;
     numHoteles      NUMBER;
-    ciudadHotel     hotel.ciudad%TYPE;
 BEGIN
     -- Si el director ya dirige un hotel, error.
     SELECT COUNT(*) INTO numDirectores
