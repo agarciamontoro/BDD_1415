@@ -1,4 +1,4 @@
--- 1. Dar de alta a un nuevo empleado. --
+/*-- 1. Dar de alta a un nuevo empleado. --
 CREATE OR REPLACE PROCEDURE altaEmpleado(
     arg_idEmpleado    fragmentoEmpleado.idEmpleado%TYPE,
     arg_dni fragmentoEmpleado.dni%TYPE,
@@ -41,16 +41,36 @@ BEGIN
     END IF;
 END;
 /
-
+*/
 -- 2. Dar de baja a un empleado. --
 CREATE OR REPLACE PROCEDURE bajaEmpleado (
     arg_idEmpleado fragmentoEmpleado.idEmpleado%TYPE ) AS
+
+    provinciaEmp hotel.provincia%TYPE;
 BEGIN
-    DELETE FROM trabaja WHERE idEmpleado = arg_idEmpleado;
-    DELETE FROM empleado WHERE idEmpleado = arg_idEmpleado;
+    SELECT provincia INTO provinciaEmp FROM trabaja, hotel
+    WHERE   trabaja.idEmpleado = arg_idEmpleado
+            AND
+            trabaja.idHotel = hotel.idHotel;
+
+    IF ( provinciaEmp = 'Cadiz' OR provinciaEmp = 'Huelva' ) THEN
+        DELETE FROM magnos1.fragmentoTrabaja WHERE idEmpleado = arg_idEmpleado;
+        DELETE FROM magnos1.fragmentoEmpleado WHERE idEmpleado = arg_idEmpleado;
+    ELSIF ( provinciaEmp = 'Granada' OR provinciaEmp = 'Jaen' ) THEN
+        DELETE FROM magnos2.fragmentoTrabaja WHERE idEmpleado = arg_idEmpleado;
+        DELETE FROM magnos2.fragmentoEmpleado WHERE idEmpleado = arg_idEmpleado;
+    ELSIF ( provinciaEmp = 'Malaga' OR provinciaEmp = 'Almeria' ) THEN
+        DELETE FROM magnos3.fragmentoTrabaja WHERE idEmpleado = arg_idEmpleado;
+        DELETE FROM magnos3.fragmentoEmpleado WHERE idEmpleado = arg_idEmpleado;
+    ELSIF ( provinciaEmp = 'Sevilla' OR provinciaEmp = 'Cordoba' ) THEN
+        DELETE FROM magnos4.fragmentoTrabaja WHERE idEmpleado = arg_idEmpleado;
+        DELETE FROM magnos4.fragmentoEmpleado WHERE idEmpleado = arg_idEmpleado;
+    ELSE
+        RAISE_APPLICATION_ERROR(-20401, 'Provincia vacia en bajaEmpleado');
+    END IF;
 END;
 /
-
+/*
 -- 3. Modificar el salario de un empleado. --
 CREATE OR REPLACE PROCEDURE modificarSalario (
     arg_idEmpleado fragmentoEmpleado.idEmpleado%TYPE,
@@ -450,5 +470,5 @@ BEGIN
   DELETE FROM magnos4.articulo WHERE idArticulo=arg_idArticulo;
 END;
 /
-
+*/
 COMMIT;

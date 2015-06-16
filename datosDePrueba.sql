@@ -187,3 +187,48 @@ execute actualizarReserva(9,1,'Sencilla',80,TO_DATE('13-09-2014','DD-MM-YYYY'),T
 execute actualizarReserva(10,7,'Doble',75,TO_DATE('1-09-2014','DD-MM-YYYY'),TO_DATE('12-09-2014','DD-MM-YYYY'));
 
 COMMIT;
+
+-------------------------------------------------------------------------------------------------
+--Funciona:
+execute bajaEmpleado(1);
+--No funciona:
+--execute bajaEmpleado(21);
+
+-------------------------------------------------------------------------------------------------
+--Funciona:
+execute modificarSalario(1, 2.000);
+--No funciona (se lo disminuimos)
+execute modificarSalario(2, 1.500);
+/*
+-------------------------------------------------------------------------------------------------
+--Funciona:
+execute trasladarEmpleado(20,5,"Direccion1",999887766);
+execute trasladarEmpleado(20,4,"Direccion2");
+execute trasladarEmpleado(20,3);
+--No funciona (lo llevamos a un hotel inexistente):
+execute trasladarEmpleado(20,40,"Direccion1",999887766);
+
+-------------------------------------------------------------------------------------------------
+--Funciona:
+execute anularReserva(1,6,TO_DATE('20-07-2014','DD-MM-YYYY'),TO_DATE('31-07-2014','DD-MM-YYYY'));
+--No funciona (anulamos una reserva que no existe)
+execute anularReserva(1,5,TO_DATE('20-07-2014','DD-MM-YYYY'),TO_DATE('31-07-2014','DD-MM-YYYY'));
+
+-------------------------------------------------------------------------------------------------
+--Funciona:
+execute bajaProveedor(1);
+--No funciona (este proveedor no existe):
+execute bajaProveedor(15);
+
+-------------------------------------------------------------------------------------------------
+--Funciona:
+execute bajaSuministros(1,1,6,TO_DATE('20-05-2014','DD-MM-YYYY'));
+--No funciona(no existe)
+execute bajaSuministros(1,1,6,TO_DATE('20-05-9014','DD-MM-YYYY'));
+
+-------------------------------------------------------------------------------------------------
+--Funciona:
+execute bajaArticulo(1);
+--No funciona(no existe)
+execute bajaArticulo(100);
+*/
