@@ -33,7 +33,7 @@ do
 	echo "  SELECT COUNT(*) INTO numTuplas FROM ${VISTAS[$i]}" >> disparadoresInsercion.sql
 	echo "  WHERE ${LLAVES[$i]};" >> disparadoresInsercion.sql >> disparadoresInsercion.sql
 	echo "	IF numTuplas > 0 THEN" >> disparadoresInsercion.sql
-	echo "  	RAISE_APPLICATION_ERROR(-1000$i,'Restricción de llave única violada: la llave ya existe en la tabla');" >> disparadoresInsercion.sql
+	echo "  	RAISE_APPLICATION_ERROR(-2020$i,'Restricción de llave única violada: la llave ya existe en la tabla');" >> disparadoresInsercion.sql
 	echo "  END IF;" >> disparadoresInsercion.sql
 	echo "END;" >> disparadoresInsercion.sql
 	echo "/" >> disparadoresInsercion.sql

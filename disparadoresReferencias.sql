@@ -9,7 +9,7 @@ BEGIN
   WHERE empleado.idEmpleado = :NEW.idDirector;
 
   IF numEmpleados = 0 THEN
-      RAISE_APPLICATION_ERROR(-31001,'Error de integridad referencial: el director especificado no existe en la base de datos');
+      RAISE_APPLICATION_ERROR(-20300,'Error de integridad referencial: el director especificado no existe en la base de datos');
   END IF;
 
 END;
