@@ -54,11 +54,34 @@ END;
 -- 3. Modificar el salario de un empleado. --
 CREATE OR REPLACE PROCEDURE modificarSalario (
     arg_idEmpleado fragmentoEmpleado.idEmpleado%TYPE,
-    arg_salariorio fragmentoEmpleado.salario%TYPE) AS
+    arg_salario fragmentoEmpleado.salario%TYPE) AS
+
+    provinciaEmpleado fragmentoHotel.provincia%TYPE;
 BEGIN
-    UPDATE empleado
-    SET salario = arg_salariorio
-    WHERE idEmpleado = arg_idEmpleado;
+   SELECT provincia
+   INTO provinciaEmpleado
+   FROM trabaja, hotel
+   WHERE trabaja.idEmpleado = arg_idEmpleado
+      AND trabaja.idHotel = id_Hotel;
+
+   IF ( provinciaEmpleado = 'Cadiz' OR provinciaEmpleado = 'Huelva' ) THEN
+      UPDATE magnos1.fragmentoEmpleado
+      SET salario = arg_salario
+      WHERE idEmpleado = arg_idEmpleado;
+   ELSIF ( provinciaEmpleado = 'Granada' OR provinciaEmpleado = 'Jaen' ) THEN
+      UPDATE magnos2.fragmentoEmpleado
+      SET salario = arg_salario
+      WHERE idEmpleado = arg_idEmpleado;
+   ELSIF ( provinciaEmpleado = 'Malaga' OR provinciaEmpleado = 'Almeria' ) THEN
+      UPDATE magnos3.fragmentoEmpleado
+      SET salario = arg_salario
+      WHERE idEmpleado = arg_idEmpleado;
+   ELSIF ( provinciaEmpleado = 'Sevilla' OR provinciaEmpleado = 'Cordoba' ) THEN
+      UPDATE magnos4.fragmentoEmpleado
+      SET salario = arg_salario
+      WHERE idEmpleado = arg_idEmpleado;
+   END IF;
+
 END;
 /
 
@@ -130,6 +153,7 @@ CREATE OR REPLACE PROCEDURE cambiarDirector (
 
     numDirectores   NUMBER;
     numHoteles      NUMBER;
+    provinciaHotel  fragmentoHotel.provincia%TYPE;
 BEGIN
     -- Si el director ya dirige un hotel, error.
     SELECT COUNT(*) INTO numDirectores
@@ -149,10 +173,28 @@ BEGIN
     IF numHoteles = 0 THEN
         RAISE_APPLICATION_ERROR(-20404, 'Este hotel no existe en la base de datos');
     ELSE
-        UPDATE Hotel
-        SET idDirector = arg_idDirector
-        WHERE idHotel = arg_idHotel;
-    END IF;
+      SELECT provincia
+      INTO provinciaHotel
+      FROM hotel
+      WHERE hotel.idHotel = arg_idHotel;
+
+      IF ( provinciaHotel = 'Cadiz' OR provinciaHotel = 'Huelva' ) THEN
+         UPDATE magnos1.fragmentoHotel
+         SET idDirector = arg_idDirector
+         WHERE idHotel = arg_idHotel;
+      ELSIF ( provinciaHotel = 'Granada' OR provinciaHotel = 'Jaen' ) THEN
+         UPDATE magnos2.fragmentoHotel
+         SET idDirector = arg_idDirector
+         WHERE idHotel = arg_idHotel;
+      ELSIF ( provinciaHotel = 'Malaga' OR provinciaHotel = 'Almeria' ) THEN
+         UPDATE magnos3.fragmentoHotel
+         SET idDirector = arg_idDirector
+         WHERE idHotel = arg_idHotel;
+      ELSIF ( provinciaHotel = 'Sevilla' OR provinciaHotel = 'Cordoba' ) THEN
+         UPDATE magnos4.fragmentoHotel
+         SET idDirector = arg_idDirector
+         WHERE idHotel = arg_idHotel;
+      END IF;
 END;
 /
 
