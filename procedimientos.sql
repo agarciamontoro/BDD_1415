@@ -102,6 +102,8 @@ BEGIN
       UPDATE magnos4.fragmentoEmpleado
       SET salario = arg_salario
       WHERE idEmpleado = arg_idEmpleado;
+   ELSE
+      RAISE_APPLICATION_ERROR(-20411, 'Resultado vacío de la consulta');
    END IF;
    COMMIT;
 END;
@@ -515,11 +517,18 @@ END;
 CREATE OR REPLACE PROCEDURE bajaArticulo (
     arg_idArticulo  articulo.idArticulo%TYPE ) AS
 BEGIN
-  DELETE FROM magnos2.fragmentoSuministro WHERE idArticulo=arg_idArticulo;
-  DELETE FROM magnos4.fragmentoSuministro WHERE idArticulo=arg_idArticulo;
+  SELECT COUNT(*) INTO existe FROM suministro
+  WHERE suminsitro.idArticulo = arg_idArticulo;
 
-  DELETE FROM magnos2.articulo WHERE idArticulo=arg_idArticulo;
-  DELETE FROM magnos4.articulo WHERE idArticulo=arg_idArticulo;
+  IF existe = 0 THEN
+   RAISE_APPLICATION_ERROR(-20415, 'No es posible dar de baja el artículo pues no existe en la base de datos');
+  ELSIF
+     DELETE FROM magnos2.fragmentoSuministro WHERE idArticulo=arg_idArticulo;
+     DELETE FROM magnos4.fragmentoSuministro WHERE idArticulo=arg_idArticulo;
+
+     DELETE FROM magnos2.articulo WHERE idArticulo=arg_idArticulo;
+     DELETE FROM magnos4.articulo WHERE idArticulo=arg_idArticulo;
+  END IF;
   COMMIT;
 END;
 /
