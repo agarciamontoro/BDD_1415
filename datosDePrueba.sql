@@ -226,10 +226,9 @@ execute bajaProveedor(15);
 execute bajaSuministros(1,1,6,TO_DATE('20-05-2014','DD-MM-YYYY'));
 --No funciona(no existe)
 execute bajaSuministros(1,1,6,TO_DATE('20-05-9014','DD-MM-YYYY'));
-/*
+
 -------------------------------------------------------------------------------------------------
 --Funciona:
 execute bajaArticulo(1);
 --No funciona(no existe)
 execute bajaArticulo(100);
-*/

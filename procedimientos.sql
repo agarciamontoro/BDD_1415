@@ -342,7 +342,6 @@ CREATE OR REPLACE PROCEDURE altaProveedor(
     arg_nombre  magnos2.fragmentoProveedor.nombre%TYPE,
     arg_provincia magnos2.fragmentoProveedor.provincia%TYPE) AS
 BEGIN
-    DBMS_OUTPUT.PUT_LINE('Metiendo proveedor');
     CASE arg_provincia
         WHEN 'Granada'THEN
             INSERT INTO magnos2.fragmentoProveedor(idProveedor,nombre,provincia)
@@ -353,7 +352,6 @@ BEGIN
         ELSE
             RAISE_APPLICATION_ERROR(-20407, 'Provincia erronea');
     END CASE;
-    DBMS_OUTPUT.PUT_LINE('Proveedor metido');
     COMMIT;
 END;
 /
@@ -421,54 +419,66 @@ CREATE OR REPLACE PROCEDURE bajaSuministros (
     arg_fecha       suministro.fecha%TYPE DEFAULT NULL ) AS
 
     provinciaProveedor proveedor.provincia%TYPE;
+    existe NUMBER;
 BEGIN
     SELECT provincia INTO provinciaProveedor FROM proveedor
     WHERE proveedor.idProveedor = arg_idProveedor;
 
-    -- Si no hay fecha, eliminamos todas las que tengan los otros dos parametros
-    IF arg_fecha IS NULL THEN
-        CASE provinciaProveedor
-            WHEN 'Granada'THEN
-                DELETE FROM magnos2.fragmentoSuministro
-                WHERE   idHotel = arg_idHotel
-                        AND
-                        idArticulo = arg_idArticulo
-                        AND
-                        idProveedor = arg_idProveedor;
-            WHEN 'Sevilla' THEN
-                DELETE FROM magnos4.fragmentoSuministro
-                WHERE   idHotel = arg_idHotel
-                        AND
-                        idArticulo = arg_idArticulo
-                        AND
-                        idProveedor = arg_idProveedor;
-            ELSE
-                RAISE_APPLICATION_ERROR(-20407, 'Provincia erronea');
-        END CASE;
-    -- Si hay fecha, eliminamos esa en concreto
+    SELECT COUNT(*) INTO existe FROM suministro
+    WHERE   idHotel = arg_idHotel
+            AND
+            idArticulo = arg_idArticulo
+            AND
+            idProveedor = arg_idProveedor;
+
+    IF existe = 0 THEN
+        RAISE_APPLICATION_ERROR(-20412, 'No se puede dar de baja el suministro porque no existe');
     ELSE
-        CASE provinciaProveedor
-            WHEN 'Granada'THEN
-                DELETE FROM magnos2.fragmentoSuministro
-                WHERE   idHotel = arg_idHotel
-                        AND
-                        idArticulo = arg_idArticulo
-                        AND
-                        idProveedor = arg_idProveedor
-                        AND
-                        fecha = arg_fecha;
-            WHEN 'Sevilla' THEN
-                DELETE FROM magnos4.fragmentoSuministro
-                WHERE   idHotel = arg_idHotel
-                        AND
-                        idArticulo = arg_idArticulo
-                        AND
-                        idProveedor = arg_idProveedor
-                        AND
-                        fecha = arg_fecha;
-            ELSE
-                RAISE_APPLICATION_ERROR(-20407, 'Provincia erronea');
-        END CASE;
+        -- Si no hay fecha, eliminamos todas las que tengan los otros dos parametros
+        IF arg_fecha IS NULL THEN
+            CASE provinciaProveedor
+                WHEN 'Granada'THEN
+                    DELETE FROM magnos2.fragmentoSuministro
+                    WHERE   idHotel = arg_idHotel
+                            AND
+                            idArticulo = arg_idArticulo
+                            AND
+                            idProveedor = arg_idProveedor;
+                WHEN 'Sevilla' THEN
+                    DELETE FROM magnos4.fragmentoSuministro
+                    WHERE   idHotel = arg_idHotel
+                            AND
+                            idArticulo = arg_idArticulo
+                            AND
+                            idProveedor = arg_idProveedor;
+                ELSE
+                    RAISE_APPLICATION_ERROR(-20407, 'Provincia erronea');
+            END CASE;
+        -- Si hay fecha, eliminamos esa en concreto
+        ELSE
+            CASE provinciaProveedor
+                WHEN 'Granada'THEN
+                    DELETE FROM magnos2.fragmentoSuministro
+                    WHERE   idHotel = arg_idHotel
+                            AND
+                            idArticulo = arg_idArticulo
+                            AND
+                            idProveedor = arg_idProveedor
+                            AND
+                            fecha = arg_fecha;
+                WHEN 'Sevilla' THEN
+                    DELETE FROM magnos4.fragmentoSuministro
+                    WHERE   idHotel = arg_idHotel
+                            AND
+                            idArticulo = arg_idArticulo
+                            AND
+                            idProveedor = arg_idProveedor
+                            AND
+                            fecha = arg_fecha;
+                ELSE
+                    RAISE_APPLICATION_ERROR(-20407, 'Provincia erronea');
+            END CASE;
+        END IF;
     END IF;
     COMMIT;
 END;
@@ -516,20 +526,31 @@ END;
 -- 15. Dar de baja un articulo. --
 CREATE OR REPLACE PROCEDURE bajaArticulo (
     arg_idArticulo  articulo.idArticulo%TYPE ) AS
+    
+    numSuministros NUMBER;
+    existe NUMBER;
 BEGIN
-  SELECT COUNT(*) INTO existe FROM suministro
-  WHERE suminsitro.idArticulo = arg_idArticulo;
+    SELECT COUNT(*) INTO numSuministros
+    FROM suministro
+    WHERE idArticulo=arg_idArticulo AND cantidad>0;
 
-  IF existe = 0 THEN
-   RAISE_APPLICATION_ERROR(-20415, 'No es posible dar de baja el artículo pues no existe en la base de datos');
-  ELSIF
-     DELETE FROM magnos2.fragmentoSuministro WHERE idArticulo=arg_idArticulo;
-     DELETE FROM magnos4.fragmentoSuministro WHERE idArticulo=arg_idArticulo;
+    IF numSuministros > 0 THEN
+        RAISE_APPLICATION_ERROR(-20450,'El artículo tiene suministros');
+    END IF;
 
-     DELETE FROM magnos2.articulo WHERE idArticulo=arg_idArticulo;
-     DELETE FROM magnos4.articulo WHERE idArticulo=arg_idArticulo;
-  END IF;
-  COMMIT;
+    SELECT COUNT(*) INTO existe FROM suministro
+    WHERE suministro.idArticulo = arg_idArticulo;
+
+    IF existe = 0 THEN
+        RAISE_APPLICATION_ERROR(-20415, 'No es posible dar de baja el artículo pues no existe en la base de datos');
+    ELSE
+        DELETE FROM magnos2.fragmentoSuministro WHERE idArticulo=arg_idArticulo;
+        DELETE FROM magnos4.fragmentoSuministro WHERE idArticulo=arg_idArticulo;
+
+        DELETE FROM magnos2.articulo WHERE idArticulo=arg_idArticulo;
+        DELETE FROM magnos4.articulo WHERE idArticulo=arg_idArticulo;
+    END IF;
+    COMMIT;
 END;
 /
 

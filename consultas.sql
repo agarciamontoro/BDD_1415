@@ -1,12 +1,5 @@
--- Ejemplo de consulta paramétrica
-SELECT numEmp, nombreEmp, salario, numDept
-FROM Empleados
-WHERE numEmp = &Num_Emp;
--- Fin ejemplo
-
-
--- Ej 1
-SELECT H.nombre,H.ciudad,P.nombre,P.ciudad
+-- Consulta 1
+SELECT H.nombre,H.ciudad,P.nombre,P.provincia
 FROM hotel H, proveedor P, suministro S, articulo A
 WHERE
 	(H.ciudad = 'Granada' OR H.ciudad = 'Huelva' OR H.ciudad = 'Almeria')
@@ -16,8 +9,7 @@ WHERE
 	AND to_date('28/05/2014','DD/MM/YYYY');
 
 
-
--- Ej 2
+-- Consulta 2
 SELECT A.nombre, H.nombre, H.ciudad, SUM(Cantidad)
 FROM articulo A, hotel H, suministro S
 WHERE S.idHotel = H.idHotel AND S.idArticulo = A.idArticulo AND S.idProveedor = &pIdentificador
@@ -25,7 +17,7 @@ GROUP BY A.nombre, H.nombre, H.ciudad
 HAVING H.ciudad = 'Jaen' OR H.ciudad = 'Almeria';
 
 
--- Ej 3
+-- Consulta 3
 SELECT C.nombre, C.telefono
 FROM cliente C, reserva R
 WHERE C.idCliente = R.idCliente
