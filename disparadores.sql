@@ -44,7 +44,7 @@ BEGIN
 END;
 /
 
-/*
+
  -- Restricción 5 --
 -- Antes de hacer una nueva reserva, se comprueba que la fecha de entrada sea menor que la de
 -- salida, en caso contrario se rechaza la inserción.
@@ -92,7 +92,7 @@ END;
 /
 
 -- Sólo ejectar en magnos2 y magnos4
-
+/*
 
 -- Restricción 12 --
 -- Antes de hacer un nuevo suministro, vemos el precioUnidad minimo en los suministros
@@ -141,14 +141,16 @@ BEGIN
         WHEN 'Granada' THEN
             SELECT COUNT(*) INTO nVecesSuministrado
             FROM suministro, magnos2.fragmentoProveedor
-            WHERE (suministro.idProveedor = magnos2.fragmentoProveedor.idProveedor
-                AND suministro.idArticulo = :NEW.idArticulo );
+            WHERE (suministro.idProveedor <> :NEW.idProveedor
+                  AND suministro.idProveedor = magnos2.fragmentoProveedor.idProveedor
+                  AND suministro.idArticulo = :NEW.idArticulo );
 
         WHEN 'Sevilla' THEN
             SELECT COUNT(*) INTO nVecesSuministrado
             FROM suministro, magnos4.fragmentoProveedor
-            WHERE (suministro.idProveedor = magnos4.fragmentoProveedor.idProveedor
-                AND suministro.idArticulo = :new.idArticulo );
+            WHERE (suministro.idProveedor <> :NEW.idProveedor
+                  AND suministro.idProveedor = magnos4.fragmentoProveedor.idProveedor
+                  AND suministro.idArticulo = :new.idArticulo );
 
         ELSE RAISE_APPLICATION_ERROR(-20006, 'Provincia del proveedor errónea');
     END CASE;
@@ -160,6 +162,7 @@ BEGIN
   COMMIT;
 END;
 /
+
 -- Restricciones 15 y 16  --
 -- Antes de hacer un nuevo suministro, vemos la provincia del proveedor que quiere
 -- hacer un nuevo suministro, a contunuación antendiendo a la provincia del proveeedor,
@@ -243,6 +246,5 @@ END;
  	END IF;
  END;
 /
-
 */
 COMMIT;

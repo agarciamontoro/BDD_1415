@@ -150,6 +150,7 @@ execute altaActualizaSuministro(1,3,7,TO_DATE('20-05-2014','DD-MM-YYYY'),300,5);
 execute altaActualizaSuministro(2,3,7,TO_DATE('19-05-2014','DD-MM-YYYY'),100,10);
 execute altaActualizaSuministro(9,4,8,TO_DATE('15-05-2014','DD-MM-YYYY'),600,1);
 execute altaActualizaSuministro(10,4,9,TO_DATE('13-05-2014','DD-MM-YYYY'),200,20);
+--Tiene que fallar porque se le baja el precio:--
 execute altaActualizaSuministro(11,4,10,TO_DATE('27-05-2014','DD-MM-YYYY'),200,15);
 execute altaActualizaSuministro(8,4,8,TO_DATE('23-05-2014','DD-MM-YYYY'),150,2);
 COMMIT;
@@ -206,8 +207,8 @@ execute trasladarEmpleado(20,5,'Direccion1',999887766);
 execute trasladarEmpleado(20,4,'Direccion2');
 execute trasladarEmpleado(20,3);
 --No funciona (lo llevamos a un hotel inexistente):
-execute trasladarEmpleado(20,40,'Direccion1',999887766);
-/*
+--execute trasladarEmpleado(20,40,'Direccion1',999887766);
+
 -------------------------------------------------------------------------------------------------
 --Funciona:
 execute anularReserva(1,6,TO_DATE('20-07-2014','DD-MM-YYYY'),TO_DATE('31-07-2014','DD-MM-YYYY'));
@@ -219,7 +220,7 @@ execute anularReserva(1,5,TO_DATE('20-07-2014','DD-MM-YYYY'),TO_DATE('31-07-2014
 execute bajaProveedor(1);
 --No funciona (este proveedor no existe):
 execute bajaProveedor(15);
-
+/*
 -------------------------------------------------------------------------------------------------
 --Funciona:
 execute bajaSuministros(1,1,6,TO_DATE('20-05-2014','DD-MM-YYYY'));

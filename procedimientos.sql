@@ -1,4 +1,4 @@
-/*-- 1. Dar de alta a un nuevo empleado. --
+-- 1. Dar de alta a un nuevo empleado. --
 CREATE OR REPLACE PROCEDURE altaEmpleado(
     arg_idEmpleado    fragmentoEmpleado.idEmpleado%TYPE,
     arg_dni fragmentoEmpleado.dni%TYPE,
@@ -42,7 +42,7 @@ BEGIN
     COMMIT;
 END;
 /
-*/
+
 -- 2. Dar de baja a un empleado. --
 CREATE OR REPLACE PROCEDURE bajaEmpleado (
     arg_idEmpleado fragmentoEmpleado.idEmpleado%TYPE ) AS
@@ -72,7 +72,7 @@ BEGIN
     COMMIT;
 END;
 /
-/*
+
 -- 3. Modificar el salario de un empleado. --
 CREATE OR REPLACE PROCEDURE modificarSalario (
     arg_idEmpleado fragmentoEmpleado.idEmpleado%TYPE,
@@ -313,7 +313,7 @@ CREATE OR REPLACE PROCEDURE anularReserva (
 
     provinciaHotel fragmentoHotel.provincia%TYPE;
 BEGIN
-    SELECT provincia INTO provinciaHotel FROM fragmentoHotel WHERE idHotel=arg_idHotel;
+    SELECT provincia INTO provinciaHotel FROM Hotel WHERE idHotel=arg_idHotel;
 
     IF ( provinciaHotel = 'Cadiz' OR provinciaHotel = 'Huelva' ) THEN
         DELETE FROM magnos1.fragmentoReserva
@@ -360,8 +360,15 @@ END;
 CREATE OR REPLACE PROCEDURE bajaProveedor(
     arg_idProveedor    magnos2.fragmentoProveedor.idProveedor%TYPE) AS
 BEGIN
-    DELETE FROM magnos2.fragmentoProveedor WHERE idProveedor = arg_idProveedor;
-    DELETE FROM magnos4.fragmentoProveedor WHERE idProveedor = arg_idProveedor;
+    SELECT COUNT(*) INTO existe FROM proveedor
+    WHERE idProveedor = arg_idProveedor;
+
+    IF existe = 0 THEN
+        RAISE_APPLICATION_ERROR(-20410, 'No se ha podido dar de baja el proveedor porque no existe');
+    ELSE
+        DELETE FROM magnos2.fragmentoProveedor WHERE idProveedor = arg_idProveedor;
+        DELETE FROM magnos4.fragmentoProveedor WHERE idProveedor = arg_idProveedor;
+    END IF;
     COMMIT;
 END;
 /
@@ -484,5 +491,5 @@ BEGIN
   COMMIT;
 END;
 /
-*/
+
 COMMIT;
