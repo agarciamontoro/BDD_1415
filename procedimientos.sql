@@ -39,6 +39,7 @@ BEGIN
     ELSE
         RAISE_APPLICATION_ERROR(-20401, 'Provincia de Hotel erronea');
     END IF;
+    COMMIT;
 END;
 /
 */
@@ -68,6 +69,7 @@ BEGIN
     ELSE
         RAISE_APPLICATION_ERROR(-20401, 'Provincia vacia en bajaEmpleado');
     END IF;
+    COMMIT;
 END;
 /
 /*
@@ -101,7 +103,7 @@ BEGIN
       SET salario = arg_salario
       WHERE idEmpleado = arg_idEmpleado;
    END IF;
-
+   COMMIT;
 END;
 /
 
@@ -135,6 +137,7 @@ BEGIN
                  salarioEmpleado,
                  arg_idHotel
                  );
+    COMMIT;
 END;
 /
 
@@ -163,6 +166,7 @@ BEGIN
     ELSE
         RAISE_APPLICATION_ERROR(-20402, 'Provincia erronea');
     END IF;
+    COMMIT;
 END;
 /
 
@@ -216,6 +220,7 @@ BEGIN
          WHERE idHotel = arg_idHotel;
       END IF;
     END IF;
+    COMMIT;
 END;
 /
 
@@ -238,6 +243,7 @@ BEGIN
     ELSE
         RAISE_APPLICATION_ERROR(-20405,'Este cliente ya existe');
     END IF;
+    COMMIT;
 END;
 /
 
@@ -294,6 +300,7 @@ BEGIN
         VALUES
         (arg_idCliente, arg_idHotel, arg_tipoHab, arg_precio, arg_fechaEntrada, arg_fechaSalida);
     END IF;
+    COMMIT;
 END;
 /
 
@@ -323,6 +330,7 @@ BEGIN
     ELSE
         RAISE_APPLICATION_ERROR(-20406, 'Provincia de Hotel erronea');
     END IF;
+    COMMIT;
 END;
 /
 
@@ -344,6 +352,7 @@ BEGIN
             RAISE_APPLICATION_ERROR(-20407, 'Provincia erronea');
     END CASE;
     DBMS_OUTPUT.PUT_LINE('Proveedor metido');
+    COMMIT;
 END;
 /
 
@@ -353,6 +362,7 @@ CREATE OR REPLACE PROCEDURE bajaProveedor(
 BEGIN
     DELETE FROM magnos2.fragmentoProveedor WHERE idProveedor = arg_idProveedor;
     DELETE FROM magnos4.fragmentoProveedor WHERE idProveedor = arg_idProveedor;
+    COMMIT;
 END;
 /
 
@@ -389,6 +399,7 @@ BEGIN
         ELSE
             RAISE_APPLICATION_ERROR(-20408, 'Provincia erronea');
     END CASE;
+    COMMIT;
 END;
 /
 
@@ -418,6 +429,7 @@ BEGIN
                 AND
                 fecha = arg_fecha;
     END IF;
+    COMMIT;
 END;
 /
 
@@ -456,6 +468,7 @@ BEGIN
         ELSE
             RAISE_APPLICATION_ERROR(-20409, 'Provincia erronea');
     END CASE;
+    COMMIT;
 END;
 /
 
@@ -468,6 +481,7 @@ BEGIN
 
   DELETE FROM magnos2.articulo WHERE idArticulo=arg_idArticulo;
   DELETE FROM magnos4.articulo WHERE idArticulo=arg_idArticulo;
+  COMMIT;
 END;
 /
 */
