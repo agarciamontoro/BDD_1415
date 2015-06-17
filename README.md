@@ -2,7 +2,7 @@
 ## Diagrama entidad-relación
 El diagrama de entidad-relación resultante del análisis del enunciado es el siguiente:
 
-![Diagrama E-R](https://raw.githubusercontent.com/agarciamontoro/BDD_1415/master/Diagramas/EntidadRelacion.png)
+![Diagrama E-R](https://github.com/agarciamontoro/BDD_1415/blob/master/Diagramas/EntidadRelacion.png)
 
 ### Alternativas
 **Modelar director como una entidad hija de empleado**
