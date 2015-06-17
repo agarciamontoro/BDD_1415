@@ -359,6 +359,7 @@ END;
 -- 11. Dar de baja a un proveedor. --
 CREATE OR REPLACE PROCEDURE bajaProveedor(
     arg_idProveedor    magnos2.fragmentoProveedor.idProveedor%TYPE) AS
+    existe NUMBER;
 BEGIN
     SELECT COUNT(*) INTO existe FROM proveedor
     WHERE idProveedor = arg_idProveedor;
