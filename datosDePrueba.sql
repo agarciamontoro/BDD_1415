@@ -196,18 +196,18 @@ execute bajaEmpleado(1);
 
 -------------------------------------------------------------------------------------------------
 --Funciona:
-execute modificarSalario(1, 2.000);
+execute modificarSalario(2, 2.000);
 --No funciona (se lo disminuimos)
-execute modificarSalario(2, 1.500);
-/*
+--execute modificarSalario(3, 1.500);
+
 -------------------------------------------------------------------------------------------------
 --Funciona:
-execute trasladarEmpleado(20,5,"Direccion1",999887766);
-execute trasladarEmpleado(20,4,"Direccion2");
+execute trasladarEmpleado(20,5,'Direccion1',999887766);
+execute trasladarEmpleado(20,4,'Direccion2');
 execute trasladarEmpleado(20,3);
 --No funciona (lo llevamos a un hotel inexistente):
-execute trasladarEmpleado(20,40,"Direccion1",999887766);
-
+execute trasladarEmpleado(20,40,'Direccion1',999887766);
+/*
 -------------------------------------------------------------------------------------------------
 --Funciona:
 execute anularReserva(1,6,TO_DATE('20-07-2014','DD-MM-YYYY'),TO_DATE('31-07-2014','DD-MM-YYYY'));
