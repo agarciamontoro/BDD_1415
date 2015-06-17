@@ -220,13 +220,13 @@ execute anularReserva(1,5,TO_DATE('20-07-2014','DD-MM-YYYY'),TO_DATE('31-07-2014
 execute bajaProveedor(1);
 --No funciona (este proveedor no existe):
 execute bajaProveedor(15);
-/*
+
 -------------------------------------------------------------------------------------------------
 --Funciona:
 execute bajaSuministros(1,1,6,TO_DATE('20-05-2014','DD-MM-YYYY'));
 --No funciona(no existe)
 execute bajaSuministros(1,1,6,TO_DATE('20-05-9014','DD-MM-YYYY'));
-
+/*
 -------------------------------------------------------------------------------------------------
 --Funciona:
 execute bajaArticulo(1);

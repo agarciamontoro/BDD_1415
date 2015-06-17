@@ -417,25 +417,56 @@ CREATE OR REPLACE PROCEDURE bajaSuministros (
     arg_idProveedor suministro.idProveedor%TYPE,
     arg_idArticulo  suministro.idArticulo%TYPE,
     arg_fecha       suministro.fecha%TYPE DEFAULT NULL ) AS
+
+    provinciaProveedor proveedor.provincia%TYPE;
 BEGIN
+    SELECT provincia INTO provinciaProveedor FROM proveedor
+    WHERE proveedor.idProveedor = arg_idProveedor;
+
     -- Si no hay fecha, eliminamos todas las que tengan los otros dos parametros
     IF arg_fecha IS NULL THEN
-        DELETE FROM Suministro
-        WHERE   idHotel = arg_idHotel
-                AND
-                idArticulo = arg_idArticulo
-                AND
-                idProveedor = arg_idProveedor;
+        CASE provinciaProveedor
+            WHEN 'Granada'THEN
+                DELETE FROM magnos2.fragmentoSuministro
+                WHERE   idHotel = arg_idHotel
+                        AND
+                        idArticulo = arg_idArticulo
+                        AND
+                        idProveedor = arg_idProveedor;
+            WHEN 'Sevilla' THEN
+                DELETE FROM magnos4.fragmentoSuministro
+                WHERE   idHotel = arg_idHotel
+                        AND
+                        idArticulo = arg_idArticulo
+                        AND
+                        idProveedor = arg_idProveedor;
+            ELSE
+                RAISE_APPLICATION_ERROR(-20407, 'Provincia erronea');
+        END CASE;
     -- Si hay fecha, eliminamos esa en concreto
     ELSE
-        DELETE FROM Suministro
-        WHERE   idHotel = arg_idHotel
-                AND
-                idArticulo = arg_idArticulo
-                AND
-                idProveedor = arg_idProveedor
-                AND
-                fecha = arg_fecha;
+        CASE provinciaProveedor
+            WHEN 'Granada'THEN
+                DELETE FROM magnos2.fragmentoSuministro
+                WHERE   idHotel = arg_idHotel
+                        AND
+                        idArticulo = arg_idArticulo
+                        AND
+                        idProveedor = arg_idProveedor
+                        AND
+                        fecha = arg_fecha;
+            WHEN 'Sevilla' THEN
+                DELETE FROM magnos4.fragmentoSuministro
+                WHERE   idHotel = arg_idHotel
+                        AND
+                        idArticulo = arg_idArticulo
+                        AND
+                        idProveedor = arg_idProveedor
+                        AND
+                        fecha = arg_fecha;
+            ELSE
+                RAISE_APPLICATION_ERROR(-20407, 'Provincia erronea');
+        END CASE;
     END IF;
     COMMIT;
 END;
