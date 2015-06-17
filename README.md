@@ -1778,7 +1778,7 @@ WHERE
 -- Consulta 2
 SELECT A.nombre, H.nombre, H.ciudad, SUM(Cantidad)
 FROM articulo A, hotel H, suministro S
-WHERE S.idHotel = H.idHotel AND S.idArticulo = A.idArticulo AND S.idProveedor = &pIdentificador
+WHERE S.idHotel = H.idHotel AND S.idArticulo = A.idArticulo AND S.idProveedor = &idProveedor
 GROUP BY A.nombre, H.nombre, H.ciudad
 HAVING H.ciudad = 'Jaen' OR H.ciudad = 'Almeria';
 
@@ -1786,7 +1786,7 @@ HAVING H.ciudad = 'Jaen' OR H.ciudad = 'Almeria';
 -- Consulta 3
 SELECT C.nombre, C.telefono
 FROM cliente C, reserva R
-WHERE C.idCliente = R.idCliente
+WHERE C.idCliente = R.idCliente AND R.idHotel = &idHotel
 GROUP BY C.nombre, C.telefono
 HAVING COUNT(*)>1;
 ```
