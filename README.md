@@ -1,8 +1,10 @@
 # Diseño conceptual y lógico de la base de datos
-## Diagrama entidad-relación
-El diagrama de entidad-relación resultante del análisis del enunciado es el siguiente:
+## Autores
+Alejandro García Montoro
 
-![Diagrama E-R](https://github.com/agarciamontoro/BDD_1415/blob/master/Diagramas/EntidadRelacion.png)
+Alejandro Torres Aguilera
+## Diagrama entidad-relación
+El diagrama de entidad-relación resultante del análisis del enunciado se adjunta por separado para su mejor visualización.
 
 ### Alternativas
 **Modelar director como una entidad hija de empleado**
